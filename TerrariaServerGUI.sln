@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrariaServerCSGUI", "TerrariaServerCSGUI.csproj", "{C4CA24A8-97F1-4C9E-A296-04F77A9DD46D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrariaServerCSGUI", "TerrariaServerCSGUI\TerrariaServerCSGUI.csproj", "{C4CA24A8-97F1-4C9E-A296-04F77A9DD46D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrariaServerCS", "..\TerrariaServerCS\TerrariaServerCS.csproj", "{E52E93EC-0448-4D69-85E5-EB1A1157CA3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerrariaServerCS", "TerrariaServerCS\TerrariaServerCS.csproj", "{E52E93EC-0448-4D69-85E5-EB1A1157CA3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
