@@ -7,15 +7,10 @@ using System.IO;
 
 namespace TerrariaServerCS
 {
-    /// <summary>
-    /// T is the class inheriting this abstract class
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class absTerrariaServerArguments<T>
+    public abstract class absTerrariaServerArguments
     {
         #region Properties
         public virtual string _ConfigFileLocation { get { return "TerrariaServerConfig.txt"; } }
-        public abstract T _DefaultValues { get; }
         #endregion
 
         #region methods - public
@@ -69,12 +64,10 @@ namespace TerrariaServerCS
             // Get the properties for the current type
             toCurrentProperties = toCurrentType.GetProperties().Where(p => !p.Name.StartsWith("_")).ToArray();
 
-            // For each property, create an argument for it if it doesn't not equal the default value
-            TerrariaServerArguments toEmptyArgs = new TerrariaServerArguments();
             foreach (PropertyInfo toCurrentProperty in toCurrentProperties)
             {
                 // Get the property value
-                object toPropertyValue = toCurrentProperty.GetValue(this, null) ?? toCurrentProperty.GetValue(this._DefaultValues, null);
+                object toPropertyValue = toCurrentProperty.GetValue(this, null);
                 
                 // Add the name and value to the text file
                 toOutput.Add(string.Format("{0}={1}", toCurrentProperty.Name, toPropertyValue));

@@ -19,7 +19,8 @@ namespace TerrariaServerGUI
             stopped,
             stopping,
             started,
-            starting
+            starting,
+            error
         }
         #endregion
 
@@ -48,13 +49,12 @@ namespace TerrariaServerGUI
         private void initialize()
         {
             // Set the default form state
-            setFormState(enumFormState.stopped);
+            doUpdateFormState(enumFormState.stopped);
 
             // Initialize classes
             moTerrariaServer = new TerrariaServer();
-            moTerrariaServer.DataRecievedOutput += new TerrariaServer.TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
-            moTerrariaServer.DataRecievedError += new TerrariaServer.TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
-            moTerrariaServer.ServerExited += new TerrariaServer.ServerExitEventHandler(moTerrariaServer_ServerExited);
+            moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
+            moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
         }
 
         /// <summary>
@@ -93,12 +93,25 @@ namespace TerrariaServerGUI
         }
 
         /// <summary>
+        /// Update the main status bar with an error message
+        /// </summary>
+        /// <param name="psMessage"></param>
+        private void doTSUpdateStatusError(string psMessage)
+        {
+            doTSUpdateStatus(psMessage, -1);
+        }
+
+        /// <summary>
         /// Updates the main status bar.
         /// </summary>
         /// <param name="psMessage"></param>
         /// <param name="piPercentComplete">A percentage complete between 0 and 100.</param>
         private void doTSUpdateStatus(string psMessage, int piPercentComplete)
         {
+            // Check for an error command
+            if (piPercentComplete == -1)
+                doUpdateFormState(enumFormState.error);
+
             // Cap the parameters
             if (psMessage.Length > 20) psMessage = psMessage.Substring(0, 17) + "...";
             if (piPercentComplete < 0) piPercentComplete = 0;
@@ -115,16 +128,18 @@ namespace TerrariaServerGUI
             });
         }
 
-        private void setFormState(enumFormState poState)
+        private void doUpdateFormState(enumFormState poState)
         {
             List<Control> toControlList = new List<Control>(){
-                button_StartServer
+                button_StartServer,
+                toolStrip_Footer
             };
             
             // Suspend drawing until layout changes are complete
             toControlList.ForEach(c => c.SuspendLayout());
 
             // Reset the controls
+            button_StartServer.Enabled = true;
             button_StartServer.Text = "Start Server";
 
             // Refresh the bunny icon
@@ -135,10 +150,13 @@ namespace TerrariaServerGUI
             {
                 case enumFormState.started:
                         toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                        button_StartServer.Enabled = true;
+                        button_StartServer.Text = "Stop Server";
                     break;
 
                 case enumFormState.starting:
                         toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                        button_StartServer.Enabled = false;
                     break;
 
                 case enumFormState.stopped:
@@ -147,6 +165,12 @@ namespace TerrariaServerGUI
 
                 case enumFormState.stopping:
                         toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                        button_StartServer.Enabled = false;
+                        button_StartServer.Text = "Stop Server";
+                    break;
+
+                case enumFormState.error:
+                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Corrupt;
                     break;
 
                 default:
@@ -184,6 +208,9 @@ namespace TerrariaServerGUI
         {
             // Run the server
             moTerrariaServer.run();
+
+            // Set the form state
+            doUpdateFormState(enumFormState.starting);
         }
         #endregion
 
@@ -212,13 +239,17 @@ namespace TerrariaServerGUI
             // If the server is running, command it to stop and don't allow this application to close
             if (moTerrariaServer.IsServerRunning)
             {
+                moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerExited);
                 moTerrariaServer.doCommand("exit");
                 e.Cancel = true;
             }
         }
 
-        void moTerrariaServer_ServerExited()
+        void moTerrariaServer_ServerExited(object sender, TerrariaServerEventArgs e)
         {
+            // Update the form state
+            doUpdateFormState(enumFormState.stopped);
+
             // If the "exit" command is pending, close once the server has exited
             if (mbPendingExit)
                 Application.Exit();

@@ -7,31 +7,8 @@ using System.IO;
 
 namespace TerrariaServerCS
 {
-    public class TerrariaServerArguments : absTerrariaServerArguments<TerrariaServerArguments>
+    public class TerrariaServerArguments : absTerrariaServerArguments
     {
-        #region variables
-        public static readonly TerrariaServerArguments mDefaultValues = new TerrariaServerArguments()
-        {
-            Players = 8,
-            World = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\world2.wld",
-            Port = 7777,
-            Password = "terraria",
-            MOTD = "Welcome to terraria",
-            WorldPath = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\",
-            AutoCreate = 1,
-            WorldName = "World",
-            BanList = "banlist.txt",
-            Secure = 1
-        };
-        #endregion
-
-        #region properties - required
-        public override TerrariaServerArguments _DefaultValues
-        {
-            get { return mDefaultValues; }
-        }
-        #endregion
-
         #region properties - custom
         /// <summary>
         /// Specifies the port to listen on.
@@ -95,5 +72,20 @@ namespace TerrariaServerCS
         /// </summary>
         public int? Secure { get; set; }
         #endregion
+
+        public TerrariaServerArguments()
+        {
+            // Setup default values
+            Players = 8;
+            World = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\world2.wld";
+            Port = 7777;
+            Password = "terraria";
+            MOTD = "Welcome to terraria";
+            WorldPath = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\";
+            AutoCreate = 1;
+            WorldName = "World";
+            BanList = "banlist.txt";
+            Secure = 1;
+        }
     }
 }

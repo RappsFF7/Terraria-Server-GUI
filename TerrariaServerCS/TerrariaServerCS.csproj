@@ -8,8 +8,8 @@
     <ProjectGuid>{E52E93EC-0448-4D69-85E5-EB1A1157CA3B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TerriaServerCS</RootNamespace>
-    <AssemblyName>TerriaServerCS</AssemblyName>
+    <RootNamespace>TerrariaServerCS</RootNamespace>
+    <AssemblyName>TerrariaServerCS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,10 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="absTerrariaServer.cs" />
     <Compile Include="absTerrariaServerArguments.cs" />
+    <Compile Include="TerrariaServer.cs" />
     <Compile Include="TerrariaServerEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TerrariaServer.cs" />
     <Compile Include="TerrariaServerArguments.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
