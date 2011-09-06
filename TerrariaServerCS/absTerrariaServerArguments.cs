@@ -71,13 +71,14 @@ namespace TerrariaServerCS
 
             // For each property, create an argument for it if it doesn't not equal the default value
             TerrariaServerArguments toEmptyArgs = new TerrariaServerArguments();
-            toCurrentProperties.ToList().ForEach(p =>
-                    toOutput.Add(string.Format("{0}={1}", 
-                                    p.Name, 
-                                    (p.GetValue(this, null) != null ? p.GetValue(this, null) : p.GetValue(this._DefaultValues, null))
-                                )
-                    )
-            );
+            foreach (PropertyInfo toCurrentProperty in toCurrentProperties)
+            {
+                // Get the property value
+                object toPropertyValue = toCurrentProperty.GetValue(this, null) ?? toCurrentProperty.GetValue(this._DefaultValues, null);
+                
+                // Add the name and value to the text file
+                toOutput.Add(string.Format("{0}={1}", toCurrentProperty.Name, toPropertyValue));
+            }
 
             return toOutput;
         }

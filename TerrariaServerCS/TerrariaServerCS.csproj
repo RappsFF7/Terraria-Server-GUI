@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="absTerrariaServerArguments.cs" />
+    <Compile Include="TerrariaServerEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TerrariaServer.cs" />
     <Compile Include="TerrariaServerArguments.cs" />

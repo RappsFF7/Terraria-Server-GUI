@@ -9,25 +9,26 @@ namespace TerrariaServerCS
 {
     public class TerrariaServerArguments : absTerrariaServerArguments<TerrariaServerArguments>
     {
+        #region variables
+        public static readonly TerrariaServerArguments mDefaultValues = new TerrariaServerArguments()
+        {
+            Players = 8,
+            World = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\world2.wld",
+            Port = 7777,
+            Password = "terraria",
+            MOTD = "Welcome to terraria",
+            WorldPath = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\",
+            AutoCreate = 1,
+            WorldName = "World",
+            BanList = "banlist.txt",
+            Secure = 1
+        };
+        #endregion
+
         #region properties - required
         public override TerrariaServerArguments _DefaultValues
         {
-            get 
-            {
-                return (new TerrariaServerArguments()
-                {
-                    Players = 8,
-                    World = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\world2.wld",
-                    Port = 7777,
-                    Password = "terraria",
-                    MOTD = "Welcome to terraria",
-                    WorldPath = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\",
-                    AutoCreate = 1,
-                    WorldName = "World",
-                    BanList = "banlist.txt",
-                    Secure = 1
-                });
-            }
+            get { return mDefaultValues; }
         }
         #endregion
 
@@ -36,14 +37,14 @@ namespace TerrariaServerCS
         /// Specifies the port to listen on.
         /// Usage: port {port number}
         /// </summary>
-        public int Port { get; set; }
+        public int? Port { get; set; }
 
         /// <summary>
         /// Sets the max number of players.
         /// Usage: players {number}
         /// Alias: maxplayers {number}
         /// </summary>
-        public int Players { get; set; }
+        public int? Players { get; set; }
 
         /// <summary>
         /// Sets the server password.
@@ -62,7 +63,7 @@ namespace TerrariaServerCS
         /// Creates a world if none is found in the path specified by -world. World size is specified by: 1(small), 2(medium), and 3(large).
         /// Usage: autocreate {#}
         /// </summary>
-        public int AutoCreate { get; set; }
+        public int? AutoCreate { get; set; }
 
         /// <summary>
         /// Set the message of the day
@@ -92,7 +93,7 @@ namespace TerrariaServerCS
         /// Adds addition cheat protection to the server.
         /// Usage: secure {1 | 0}
         /// </summary>
-        public int Secure { get; set; }
+        public int? Secure { get; set; }
         #endregion
     }
 }

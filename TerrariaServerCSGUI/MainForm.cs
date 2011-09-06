@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TerrariaServerCS;
+using TerrariaServerCS.Classes;
 
 namespace TerrariaServerGUI
 {
@@ -51,8 +52,8 @@ namespace TerrariaServerGUI
 
             // Initialize classes
             moTerrariaServer = new TerrariaServer();
-            moTerrariaServer.DataRecievedOutput += new System.Diagnostics.DataReceivedEventHandler(moTerrariaServer_DataRecievedOutput);
-            moTerrariaServer.DataRecievedError += new System.Diagnostics.DataReceivedEventHandler(moTerrariaServer_DataRecievedError);
+            moTerrariaServer.DataRecievedOutput += new TerrariaServer.TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
+            moTerrariaServer.DataRecievedError += new TerrariaServer.TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
             moTerrariaServer.ServerExited += new TerrariaServer.ServerExitEventHandler(moTerrariaServer_ServerExited);
         }
 
@@ -62,6 +63,15 @@ namespace TerrariaServerGUI
         /// <param name="psMessage"></param>
         void doTSOutput(string psMessage)
         {
+            doTSOutput(psMessage, Color.Black);
+        }
+
+        /// <summary>
+        /// Outputs to the main form console
+        /// </summary>
+        /// <param name="psMessage"></param>
+        void doTSOutput(string psMessage, Color poColor)
+        {
             this.Invoke((MethodInvoker)delegate
             {
                 if (psMessage == null) psMessage = "";
@@ -70,7 +80,7 @@ namespace TerrariaServerGUI
                 //psMessage = psMessage.Replace(moTerrariaServer.TerrariaServerProcess.StandardInput.NewLine, "p\r\n");
 
                 // Out the data to the console
-                richTextBox_Console.AppendText(psMessage);
+                richTextBox_Console.AppendText(psMessage, poColor);
 
                 // Limit the console length
                 if (richTextBox_Console.Text.Length > 5000)
@@ -152,14 +162,14 @@ namespace TerrariaServerGUI
         #endregion
 
         #region events - callbacks
-        void moTerrariaServer_DataRecievedOutput(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        void moTerrariaServer_DataRecievedOutput(object sender, TerrariaServerEventArgs e)
         {
             doTSOutput(e.Data + Environment.NewLine);
         }
 
-        void moTerrariaServer_DataRecievedError(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        void moTerrariaServer_DataRecievedError(object sender, TerrariaServerEventArgs e)
         {
-            doTSOutput(e.Data);
+            doTSOutput(e.Data + Environment.NewLine, Color.Red);
         }
         #endregion
 
@@ -177,11 +187,30 @@ namespace TerrariaServerGUI
         }
         #endregion
 
+        #region events - server
+        private void button_Execute_Click(object sender, EventArgs e)
+        {
+            // Send the command to the server
+            moTerrariaServer.doCommand(textBox_Execute.Text);
+        }
+
+        private void textBox_Execute_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                // Send the command when enter is clicked
+                case Keys.Enter:
+                    button_Execute_Click(sender, null);
+                    break;
+            }
+        }
+        #endregion
+
         #region events - misc
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // If the server is running, command it to stop and don't allow this application to close
-            if (!moTerrariaServer.IsServerRunning)
+            if (moTerrariaServer.IsServerRunning)
             {
                 moTerrariaServer.doCommand("exit");
                 e.Cancel = true;

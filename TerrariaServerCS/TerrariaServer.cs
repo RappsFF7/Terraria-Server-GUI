@@ -36,9 +36,10 @@ namespace TerrariaServerCS
 
         #region delegates & events
         public delegate void ServerExitEventHandler();
+        public delegate void TerrariaServerEventHandler(object sender, TerrariaServerEventArgs e);
 
-        public event DataReceivedEventHandler DataRecievedOutput;
-        public event DataReceivedEventHandler DataRecievedError;
+        public event TerrariaServerEventHandler DataRecievedOutput;
+        public event TerrariaServerEventHandler DataRecievedError;
 
         public event ServerExitEventHandler ServerExited;
         #endregion
@@ -100,15 +101,31 @@ namespace TerrariaServerCS
         /// <param name="psCommand"></param>
         public void doCommand(string psCommand)
         {
-            moTerrariaServerProcess.StandardInput.WriteLine(psCommand);
+            if (IsServerRunning)
+                moTerrariaServerProcess.StandardInput.WriteLine(psCommand);
+            else
+                doDataRecievedOutput(this, new TerrariaServerEventArgs("Cannot run command. Server is not running."));
         }
         #endregion
 
         #region events
+        void doDataRecievedOutput(object sender, TerrariaServerEventArgs e)
+        {
+            DataRecievedOutput(sender, e);
+        }
+
+        void doDataRecievedError(object sender, TerrariaServerEventArgs e)
+        {
+            DataRecievedError(sender, e);
+        }
+
         void moTerrariaServerProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (DataRecievedOutput != null) DataRecievedOutput.Invoke(sender, e);
+            // Convert the event args to a custom (editable) object
+            if (DataRecievedOutput != null) 
+                doDataRecievedOutput(sender, new TerrariaServerEventArgs(e));
         }
+
         void moTerrariaServerProcess_OutputDataReceived_Exit(object sender, DataReceivedEventArgs e)
         {
             if (e.Data.ToLower().Contains("resetting"))
@@ -129,7 +146,9 @@ namespace TerrariaServerCS
 
         void moTerrariaServerProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if (DataRecievedError != null) DataRecievedError.Invoke(sender, e);
+            // Convert the event args to a custom (editable) object
+            if (DataRecievedError != null) 
+                doDataRecievedError(sender, new TerrariaServerEventArgs(e));
         }
         #endregion
     }

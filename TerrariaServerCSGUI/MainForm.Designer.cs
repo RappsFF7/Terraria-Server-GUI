@@ -37,6 +37,8 @@
             this.toolStripDropDownButton_File = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
+            this.button_Execute = new System.Windows.Forms.Button();
+            this.textBox_Execute = new System.Windows.Forms.TextBox();
             this.button_StartServer = new System.Windows.Forms.Button();
             this.richTextBox_Console = new System.Windows.Forms.RichTextBox();
             this.toolStrip_Footer.SuspendLayout();
@@ -113,9 +115,6 @@
             // 
             // splitContainer_Main
             // 
-            this.splitContainer_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer_Main.Location = new System.Drawing.Point(0, 25);
             this.splitContainer_Main.Name = "splitContainer_Main";
             this.splitContainer_Main.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -126,15 +125,35 @@
             // 
             // splitContainer_Main.Panel2
             // 
+            this.splitContainer_Main.Panel2.Controls.Add(this.button_Execute);
             this.splitContainer_Main.Panel2.Controls.Add(this.richTextBox_Console);
+            this.splitContainer_Main.Panel2.Controls.Add(this.textBox_Execute);
             this.splitContainer_Main.Size = new System.Drawing.Size(408, 253);
             this.splitContainer_Main.SplitterDistance = 122;
             this.splitContainer_Main.TabIndex = 2;
             // 
+            // button_Execute
+            // 
+            this.button_Execute.Location = new System.Drawing.Point(330, 104);
+            this.button_Execute.Name = "button_Execute";
+            this.button_Execute.Size = new System.Drawing.Size(75, 20);
+            this.button_Execute.TabIndex = 2;
+            this.button_Execute.Text = "Execute";
+            this.button_Execute.UseVisualStyleBackColor = true;
+            this.button_Execute.Click += new System.EventHandler(this.button_Execute_Click);
+            // 
+            // textBox_Execute
+            // 
+            this.textBox_Execute.Location = new System.Drawing.Point(3, 104);
+            this.textBox_Execute.Name = "textBox_Execute";
+            this.textBox_Execute.Size = new System.Drawing.Size(320, 20);
+            this.textBox_Execute.TabIndex = 1;
+            this.textBox_Execute.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Execute_KeyDown);
+            // 
             // button_StartServer
             // 
             this.button_StartServer.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button_StartServer.Location = new System.Drawing.Point(167, 97);
+            this.button_StartServer.Location = new System.Drawing.Point(167, 71);
             this.button_StartServer.Name = "button_StartServer";
             this.button_StartServer.Size = new System.Drawing.Size(75, 22);
             this.button_StartServer.TabIndex = 0;
@@ -144,10 +163,10 @@
             // 
             // richTextBox_Console
             // 
-            this.richTextBox_Console.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_Console.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox_Console.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.richTextBox_Console.Name = "richTextBox_Console";
-            this.richTextBox_Console.Size = new System.Drawing.Size(408, 127);
+            this.richTextBox_Console.Size = new System.Drawing.Size(408, 101);
             this.richTextBox_Console.TabIndex = 0;
             this.richTextBox_Console.Text = "";
             // 
@@ -168,6 +187,7 @@
             this.toolStrip_Header.PerformLayout();
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
+            this.splitContainer_Main.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).EndInit();
             this.splitContainer_Main.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -187,6 +207,8 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton_File;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Exit;
         private System.Windows.Forms.RichTextBox richTextBox_Console;
+        private System.Windows.Forms.Button button_Execute;
+        private System.Windows.Forms.TextBox textBox_Execute;
     }
 }
 
