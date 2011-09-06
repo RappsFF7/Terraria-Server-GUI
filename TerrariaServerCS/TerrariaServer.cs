@@ -11,5 +11,17 @@ namespace TerrariaServerCS
         {
             initialize(getServerLocationDefault(), new TerrariaServerArguments());
         }
+
+        protected override void doCommandComplete(string psCommand)
+        {
+            switch (psCommand.ToLower())
+            {
+                case "exit":
+                    IsServerRunning = false;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

@@ -28,7 +28,6 @@ namespace TerrariaServerGUI
         #endregion
 
         #region variables
-        private bool mbPendingExit = false;
         private enumFormState moFormState;
         private TerrariaServer moTerrariaServer;
         #endregion
@@ -48,13 +47,11 @@ namespace TerrariaServerGUI
         /// </summary>
         private void initialize()
         {
-            // Set the default form state
-            doUpdateFormState(enumFormState.stopped);
-
             // Initialize classes
             moTerrariaServer = new TerrariaServer();
             moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
             moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
+            moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
         }
 
         /// <summary>
@@ -110,7 +107,7 @@ namespace TerrariaServerGUI
         {
             // Check for an error command
             if (piPercentComplete == -1)
-                doUpdateFormState(enumFormState.error);
+                doTSUpdateFormState(enumFormState.error);
 
             // Cap the parameters
             if (psMessage.Length > 20) psMessage = psMessage.Substring(0, 17) + "...";
@@ -128,60 +125,63 @@ namespace TerrariaServerGUI
             });
         }
 
-        private void doUpdateFormState(enumFormState poState)
+        private void doTSUpdateFormState(enumFormState poState)
         {
             List<Control> toControlList = new List<Control>(){
                 button_StartServer,
                 toolStrip_Footer
             };
             
-            // Suspend drawing until layout changes are complete
-            toControlList.ForEach(c => c.SuspendLayout());
-
-            // Reset the controls
-            button_StartServer.Enabled = true;
-            button_StartServer.Text = "Start Server";
-
-            // Refresh the bunny icon
-            toolStripButton_StatusIcon.Image = null;
-
-            // Apply selected state
-            switch (poState)
+            this.Invoke((MethodInvoker)delegate
             {
-                case enumFormState.started:
-                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                        button_StartServer.Enabled = true;
-                        button_StartServer.Text = "Stop Server";
-                    break;
+                // Suspend drawing until layout changes are complete
+                toControlList.ForEach(c => c.SuspendLayout());
 
-                case enumFormState.starting:
-                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                        button_StartServer.Enabled = false;
-                    break;
+                // Reset the controls
+                button_StartServer.Enabled = true;
+                button_StartServer.Text = "Start Server";
 
-                case enumFormState.stopped:
-                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny;
-                    break;
+                // Refresh the bunny icon
+                toolStripButton_StatusIcon.Image = null;
 
-                case enumFormState.stopping:
-                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                        button_StartServer.Enabled = false;
-                        button_StartServer.Text = "Stop Server";
-                    break;
+                // Apply selected state
+                switch (poState)
+                {
+                    case enumFormState.started:
+                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                            button_StartServer.Enabled = true;
+                            button_StartServer.Text = "Stop Server";
+                        break;
 
-                case enumFormState.error:
-                        toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Corrupt;
-                    break;
+                    case enumFormState.starting:
+                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                            button_StartServer.Enabled = false;
+                        break;
 
-                default:
-                    throw new NotImplementedException("No code for state change: " + poState);
-            }
+                    case enumFormState.stopped:
+                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny;
+                        break;
 
-            // Set the new state
-            moFormState = poState;
+                    case enumFormState.stopping:
+                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                            button_StartServer.Enabled = false;
+                            button_StartServer.Text = "Stop Server";
+                        break;
 
-            // Force the controls to redraw
-            toControlList.ForEach(c => c.ResumeLayout(true));
+                    case enumFormState.error:
+                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Corrupt;
+                        break;
+
+                    default:
+                        throw new NotImplementedException("No code for state change: " + poState);
+                }
+
+                // Set the new state
+                moFormState = poState;
+
+                // Force the controls to redraw
+                toControlList.ForEach(c => c.ResumeLayout(true));
+            });
         }
         #endregion
 
@@ -194,6 +194,14 @@ namespace TerrariaServerGUI
         void moTerrariaServer_DataRecievedError(object sender, TerrariaServerEventArgs e)
         {
             doTSOutput(e.Data + Environment.NewLine, Color.Red);
+        }
+
+        void moTerrariaServer_ServerCommandComplete(object sender, TerrariaServerEventArgs e)
+        {
+            if (moTerrariaServer.IsServerRunning)
+                doTSUpdateFormState(enumFormState.started);
+            else
+                doTSUpdateFormState(enumFormState.stopped);
         }
         #endregion
 
@@ -210,7 +218,7 @@ namespace TerrariaServerGUI
             moTerrariaServer.run();
 
             // Set the form state
-            doUpdateFormState(enumFormState.starting);
+            doTSUpdateFormState(enumFormState.starting);
         }
         #endregion
 
@@ -236,23 +244,21 @@ namespace TerrariaServerGUI
         #region events - misc
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // If the server is running, command it to stop and don't allow this application to close
+            // If the server is running, command it to stop before allowing the application to close
             if (moTerrariaServer.IsServerRunning)
             {
-                moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerExited);
+                // Close the application upon executing the callback
+                moTerrariaServer.ServerCommandComplete += (pSender, pE) => { Application.Exit(); };
+
+                // Save and exit the server
                 moTerrariaServer.doCommand("exit");
+
+                // Update the GUI
+                doTSUpdateFormState(enumFormState.stopping);
+
+                // Cancel the close operation on the application
                 e.Cancel = true;
             }
-        }
-
-        void moTerrariaServer_ServerExited(object sender, TerrariaServerEventArgs e)
-        {
-            // Update the form state
-            doUpdateFormState(enumFormState.stopped);
-
-            // If the "exit" command is pending, close once the server has exited
-            if (mbPendingExit)
-                Application.Exit();
         }
         #endregion
     }
