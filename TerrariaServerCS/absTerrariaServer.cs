@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.IO;
 
 namespace TerrariaServerCS
 {
@@ -81,17 +82,23 @@ namespace TerrariaServerCS
 
         protected virtual string getServerLocationDefault()
         {
+            char PS = Path.DirectorySeparatorChar;
+
             // Try to get the server path from Steam
-            string tsServerPath = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
+            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
 
             // If found, transform to get server location
-            if (tsServerPath != "")
-                tsServerPath += @"\steamapps\common\terraria\TerrariaServer.exe";
-            else
-                tsServerPath = "";
+            if (tsServerFile != "")
+            {
+                // Convert the file path string to use the system's file separators
+                tsServerFile = new FileInfo(tsServerFile).FullName;
+
+                // Add the default path for the server
+                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}TerrariaServer.exe", PS, tsServerFile);
+            }
 
             // Return
-            return tsServerPath;
+            return tsServerFile;
         }
         #endregion
 
@@ -107,11 +114,15 @@ namespace TerrariaServerCS
             moTerrariaServerProcess.StartInfo.RedirectStandardOutput = true;
             moTerrariaServerProcess.StartInfo.RedirectStandardError = true;
             moTerrariaServerProcess.StartInfo.RedirectStandardInput = true;
-            moTerrariaServerProcess.Start();
 
+            // Starting the process doesn't run through the command method, so we fake the start command
+            msCommandLast = "start";
+            moTerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
+
+            // Start the server
+            moTerrariaServerProcess.Start();
             moTerrariaServerProcess.BeginOutputReadLine();
             moTerrariaServerProcess.BeginErrorReadLine();
-
             IsServerRunning = true;
         }
 
@@ -133,9 +144,6 @@ namespace TerrariaServerCS
 
             // Execute the command
             doCommandExecute(psCommand);
-
-            // Capture the output until the command is complete
-            moTerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
         }
 
         /// <summary>
@@ -148,7 +156,8 @@ namespace TerrariaServerCS
             {
                 // Write the command verbatim to the server input stream
                 default:
-                    this.TerrariaServerProcess.StandardInput.WriteLine(psCommand);
+                    TerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
+                    TerrariaServerProcess.StandardInput.WriteLine(psCommand);
                     break;
             }
         }
@@ -157,7 +166,25 @@ namespace TerrariaServerCS
         /// Called after a command is completed
         /// </summary>
         /// <param name="psCommand"></param>
-        protected abstract void doCommandComplete(string psCommand);
+        protected virtual void doCommandComplete(string psCommand, DataReceivedEventArgs e)
+        {
+            // Stop tracking output
+            TerrariaServerProcess.OutputDataReceived -= moTerrariaServerProcess_OutputDataReceived_Command;
+
+            // Format the command name
+            string tsCommand = psCommand.ToLower();
+
+            // Check for specific server events
+            if (tsCommand.StartsWith("exit"))
+                IsServerRunning = false;
+
+            else if (tsCommand.StartsWith("start"))
+                IsServerRunning = true;
+
+            // Trigger the event
+            if (ServerCommandComplete != null)
+                ServerCommandComplete(this, new TerrariaServerEventArgs(e));
+        }
         #endregion
 
         #region events
@@ -165,20 +192,18 @@ namespace TerrariaServerCS
         {
             // Convert the event args to a custom (editable) object
             if (DataRecievedOutput != null)
+            {
                 DataRecievedOutput(sender, new TerrariaServerEventArgs(e));
+            }
         }
 
-        void moTerrariaServerProcess_OutputDataReceived_Command(object sender, DataReceivedEventArgs e)
+        private void moTerrariaServerProcess_OutputDataReceived_Command(object sender, DataReceivedEventArgs e)
         {
             // Watch for the command to complete
             if (e.Data == null)
             {
                 // Call the complete operation before triggering the event
-                doCommandComplete(msCommandLast);
-
-                // Trigger the event
-                if (ServerCommandComplete != null)
-                    ServerCommandComplete(sender, new TerrariaServerEventArgs(e));
+                doCommandComplete(msCommandLast, e);
             }
         }
 

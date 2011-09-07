@@ -52,6 +52,13 @@ namespace TerrariaServerGUI
             moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
             moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
             moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
+
+            // Load drop downs
+            comboBox_ServerType.DataSource = Enum.GetNames(typeof(enumTerrariaServer));
+            comboBox_ServerType.SelectedIndex = 0;
+
+            // Load the default server location
+            textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
         }
 
         /// <summary>
@@ -214,6 +221,9 @@ namespace TerrariaServerGUI
 
         private void button_StartServer_Click(object sender, EventArgs e)
         {
+            // Update the server path
+            moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
+
             // Run the server
             moTerrariaServer.run();
 
@@ -238,6 +248,19 @@ namespace TerrariaServerGUI
                     button_Execute_Click(sender, null);
                     break;
             }
+        }
+
+        private void button_ServerPath_Click(object sender, EventArgs e)
+        {
+            // Setup the callback to collect the file the user selects
+            openFileDialog_Main.FileOk += (poSender, poEventArgs) => { textBox_ServerPath.Text = openFileDialog_Main.FileName; };
+            
+            // Make the dialog open at the currently selected file location
+            if (textBox_ServerPath.Text != "")
+                openFileDialog_Main.InitialDirectory = (new System.IO.FileInfo(textBox_ServerPath.Text)).DirectoryName;
+
+            // Open the dialog
+            openFileDialog_Main.ShowDialog();
         }
         #endregion
 
