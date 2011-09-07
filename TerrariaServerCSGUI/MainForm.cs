@@ -76,24 +76,30 @@ namespace TerrariaServerGUI
         /// <param name="psMessage"></param>
         void doTSOutput(string psMessage, Color poColor)
         {
-            this.Invoke((MethodInvoker)delegate
-            {
-                if (psMessage == null) psMessage = "";
-                
-                // Format the message for a rich text box
-                //psMessage = psMessage.Replace(moTerrariaServer.TerrariaServerProcess.StandardInput.NewLine, "p\r\n");
+            // Check if this is null in the rare case an output is sent after the form closed
+            if (this != null)
+                this.Invoke((MethodInvoker)delegate
+                {
+                    if (psMessage == null) psMessage = "";
 
-                // Out the data to the console
-                richTextBox_Console.AppendText(psMessage, poColor);
+                    // Pause the refresh of the console until after all output is complete
+                    // (otherwise it may blink)
+                    richTextBox_Console.SuspendLayout();
 
-                // Limit the console length
-                if (richTextBox_Console.Text.Length > 5000)
-                    richTextBox_Console.Text = richTextBox_Console.Text.Substring(richTextBox_Console.Text.Length - 5000);
+                    // Out the data to the console
+                    richTextBox_Console.AppendText(psMessage, poColor);
 
-                // Auto scroll to text box
-                richTextBox_Console.SelectionStart = richTextBox_Console.Text.Length;
-                richTextBox_Console.ScrollToCaret();
-            });
+                    // Limit the console length
+                    if (richTextBox_Console.Text.Length > 5000)
+                        richTextBox_Console.Text = richTextBox_Console.Text.Substring(richTextBox_Console.Text.Length - 5000);
+
+                    // Auto scroll to text box
+                    richTextBox_Console.SelectionStart = richTextBox_Console.Text.Length;
+                    richTextBox_Console.ScrollToCaret();
+
+                    // Resume painting the text box
+                    richTextBox_Console.ResumeLayout();
+                });
         }
 
         /// <summary>
@@ -121,15 +127,17 @@ namespace TerrariaServerGUI
             if (piPercentComplete < 0) piPercentComplete = 0;
             if (piPercentComplete > 100) piPercentComplete = 100;
 
-            this.Invoke((MethodInvoker)delegate
-            {
-                // Update the GUI
-                toolStripLabel_StatusText.Text = psMessage;
-                toolStripProgressBar_Main.Value = piPercentComplete;
+            // Check if the object is null in case the command is executed after the form closed
+            if (this != null)
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // Update the GUI
+                    toolStripLabel_StatusText.Text = psMessage;
+                    toolStripProgressBar_Main.Value = piPercentComplete;
 
-                // Hide the progress bar if the progress is not active
-                toolStripProgressBar_Main.Visible = !(piPercentComplete == 0 || piPercentComplete == 100);
-            });
+                    // Hide the progress bar if the progress is not active
+                    toolStripProgressBar_Main.Visible = !(piPercentComplete == 0 || piPercentComplete == 100);
+                });
         }
 
         private void doTSUpdateFormState(enumFormState poState)
@@ -139,56 +147,58 @@ namespace TerrariaServerGUI
                 toolStrip_Footer
             };
             
-            this.Invoke((MethodInvoker)delegate
-            {
-                // Suspend drawing until layout changes are complete
-                toControlList.ForEach(c => c.SuspendLayout());
-
-                // Reset the controls
-                button_StartServer.Enabled = true;
-                button_StartServer.Text = "Start Server";
-
-                // Refresh the bunny icon
-                toolStripButton_StatusIcon.Image = null;
-
-                // Apply selected state
-                switch (poState)
+            // Check to make sure the object is not null in the case that a command is processed after the form closed
+            if (this != null)
+                this.Invoke((MethodInvoker)delegate
                 {
-                    case enumFormState.started:
-                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                            button_StartServer.Enabled = true;
-                            button_StartServer.Text = "Stop Server";
-                        break;
+                    // Suspend drawing until layout changes are complete
+                    toControlList.ForEach(c => c.SuspendLayout());
 
-                    case enumFormState.starting:
-                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                            button_StartServer.Enabled = false;
-                        break;
+                    // Reset the controls
+                    button_StartServer.Enabled = true;
+                    button_StartServer.Text = "Start Server";
 
-                    case enumFormState.stopped:
-                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny;
-                        break;
+                    // Refresh the bunny icon
+                    toolStripButton_StatusIcon.Image = null;
 
-                    case enumFormState.stopping:
-                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                            button_StartServer.Enabled = false;
-                            button_StartServer.Text = "Stop Server";
-                        break;
+                    // Apply selected state
+                    switch (poState)
+                    {
+                        case enumFormState.started:
+                                toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                                button_StartServer.Enabled = true;
+                                button_StartServer.Text = "Stop Server";
+                            break;
 
-                    case enumFormState.error:
-                            toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Corrupt;
-                        break;
+                        case enumFormState.starting:
+                                toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                                button_StartServer.Enabled = false;
+                            break;
 
-                    default:
-                        throw new NotImplementedException("No code for state change: " + poState);
-                }
+                        case enumFormState.stopped:
+                                toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny;
+                            break;
 
-                // Set the new state
-                moFormState = poState;
+                        case enumFormState.stopping:
+                                toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
+                                button_StartServer.Enabled = false;
+                                button_StartServer.Text = "Stop Server";
+                            break;
 
-                // Force the controls to redraw
-                toControlList.ForEach(c => c.ResumeLayout(true));
-            });
+                        case enumFormState.error:
+                                toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Corrupt;
+                            break;
+
+                        default:
+                            throw new NotImplementedException("No code for state change: " + poState);
+                    }
+
+                    // Set the new state
+                    moFormState = poState;
+
+                    // Force the controls to redraw
+                    toControlList.ForEach(c => c.ResumeLayout(true));
+                });
         }
         #endregion
 
@@ -221,14 +231,20 @@ namespace TerrariaServerGUI
 
         private void button_StartServer_Click(object sender, EventArgs e)
         {
-            // Update the server path
-            moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
+            if (moFormState == enumFormState.stopped)
+            {
+                // Update the server path
+                moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
 
-            // Run the server
-            moTerrariaServer.run();
+                // Run the server
+                moTerrariaServer.run();
 
-            // Set the form state
-            doTSUpdateFormState(enumFormState.starting);
+                // Set the form state
+                doTSUpdateFormState(enumFormState.starting);
+            }
+            else if (moFormState == enumFormState.started)
+            {
+            }
         }
         #endregion
 

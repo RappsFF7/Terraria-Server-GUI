@@ -200,7 +200,7 @@ namespace TerrariaServerCS
         private void moTerrariaServerProcess_OutputDataReceived_Command(object sender, DataReceivedEventArgs e)
         {
             // Watch for the command to complete
-            if (e.Data == null)
+            if (e.Data == null || e.Data.ToLower().Contains("server started"))
             {
                 // Call the complete operation before triggering the event
                 doCommandComplete(msCommandLast, e);
