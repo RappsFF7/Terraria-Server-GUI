@@ -37,14 +37,14 @@
             this.toolStripDropDownButton_File = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer_Main = new System.Windows.Forms.SplitContainer();
+            this.comboBox_ServerType = new System.Windows.Forms.ComboBox();
+            this.label_ServerType = new System.Windows.Forms.Label();
+            this.button_ServerPath = new System.Windows.Forms.Button();
+            this.textBox_ServerPath = new System.Windows.Forms.TextBox();
             this.button_StartServer = new System.Windows.Forms.Button();
             this.button_Execute = new System.Windows.Forms.Button();
             this.richTextBox_Console = new System.Windows.Forms.RichTextBox();
             this.textBox_Execute = new System.Windows.Forms.TextBox();
-            this.textBox_ServerPath = new System.Windows.Forms.TextBox();
-            this.button_ServerPath = new System.Windows.Forms.Button();
-            this.label_ServerType = new System.Windows.Forms.Label();
-            this.comboBox_ServerType = new System.Windows.Forms.ComboBox();
             this.openFileDialog_Main = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip_Footer.SuspendLayout();
             this.toolStrip_Header.SuspendLayout();
@@ -144,10 +144,50 @@
             this.splitContainer_Main.SplitterDistance = 122;
             this.splitContainer_Main.TabIndex = 2;
             // 
+            // comboBox_ServerType
+            // 
+            this.comboBox_ServerType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox_ServerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_ServerType.FormattingEnabled = true;
+            this.comboBox_ServerType.Location = new System.Drawing.Point(349, 6);
+            this.comboBox_ServerType.Name = "comboBox_ServerType";
+            this.comboBox_ServerType.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_ServerType.TabIndex = 4;
+            // 
+            // label_ServerType
+            // 
+            this.label_ServerType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_ServerType.AutoSize = true;
+            this.label_ServerType.Location = new System.Drawing.Point(309, 9);
+            this.label_ServerType.Name = "label_ServerType";
+            this.label_ServerType.Size = new System.Drawing.Size(34, 13);
+            this.label_ServerType.TabIndex = 3;
+            this.label_ServerType.Text = "Type:";
+            // 
+            // button_ServerPath
+            // 
+            this.button_ServerPath.Location = new System.Drawing.Point(4, 4);
+            this.button_ServerPath.Name = "button_ServerPath";
+            this.button_ServerPath.Size = new System.Drawing.Size(75, 23);
+            this.button_ServerPath.TabIndex = 2;
+            this.button_ServerPath.Text = "Server Path:";
+            this.button_ServerPath.UseVisualStyleBackColor = true;
+            this.button_ServerPath.Click += new System.EventHandler(this.button_ServerPath_Click);
+            // 
+            // textBox_ServerPath
+            // 
+            this.textBox_ServerPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_ServerPath.Location = new System.Drawing.Point(85, 6);
+            this.textBox_ServerPath.Name = "textBox_ServerPath";
+            this.textBox_ServerPath.Size = new System.Drawing.Size(218, 20);
+            this.textBox_ServerPath.TabIndex = 1;
+            // 
             // button_StartServer
             // 
             this.button_StartServer.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button_StartServer.Location = new System.Drawing.Point(199, 97);
+            this.button_StartServer.Location = new System.Drawing.Point(199, 101);
+            this.button_StartServer.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.button_StartServer.Name = "button_StartServer";
             this.button_StartServer.Size = new System.Drawing.Size(75, 22);
             this.button_StartServer.TabIndex = 0;
@@ -171,10 +211,12 @@
             this.richTextBox_Console.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox_Console.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox_Console.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.richTextBox_Console.BackColor = System.Drawing.SystemColors.Window;
+            this.richTextBox_Console.Location = new System.Drawing.Point(3, 0);
+            this.richTextBox_Console.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.richTextBox_Console.Name = "richTextBox_Console";
-            this.richTextBox_Console.Size = new System.Drawing.Size(473, 101);
+            this.richTextBox_Console.ReadOnly = true;
+            this.richTextBox_Console.Size = new System.Drawing.Size(467, 101);
             this.richTextBox_Console.TabIndex = 0;
             this.richTextBox_Console.Text = "";
             // 
@@ -188,53 +230,16 @@
             this.textBox_Execute.TabIndex = 1;
             this.textBox_Execute.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Execute_KeyDown);
             // 
-            // textBox_ServerPath
-            // 
-            this.textBox_ServerPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_ServerPath.Location = new System.Drawing.Point(85, 6);
-            this.textBox_ServerPath.Name = "textBox_ServerPath";
-            this.textBox_ServerPath.Size = new System.Drawing.Size(218, 20);
-            this.textBox_ServerPath.TabIndex = 1;
-            // 
-            // button_ServerPath
-            // 
-            this.button_ServerPath.Location = new System.Drawing.Point(4, 4);
-            this.button_ServerPath.Name = "button_ServerPath";
-            this.button_ServerPath.Size = new System.Drawing.Size(75, 23);
-            this.button_ServerPath.TabIndex = 2;
-            this.button_ServerPath.Text = "Server Path:";
-            this.button_ServerPath.UseVisualStyleBackColor = true;
-            this.button_ServerPath.Click += new System.EventHandler(this.button_ServerPath_Click);
-            // 
-            // label_ServerType
-            // 
-            this.label_ServerType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_ServerType.AutoSize = true;
-            this.label_ServerType.Location = new System.Drawing.Point(309, 9);
-            this.label_ServerType.Name = "label_ServerType";
-            this.label_ServerType.Size = new System.Drawing.Size(34, 13);
-            this.label_ServerType.TabIndex = 3;
-            this.label_ServerType.Text = "Type:";
-            // 
-            // comboBox_ServerType
-            // 
-            this.comboBox_ServerType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox_ServerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_ServerType.FormattingEnabled = true;
-            this.comboBox_ServerType.Location = new System.Drawing.Point(349, 6);
-            this.comboBox_ServerType.Name = "comboBox_ServerType";
-            this.comboBox_ServerType.Size = new System.Drawing.Size(121, 21);
-            this.comboBox_ServerType.TabIndex = 4;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(473, 303);
             this.Controls.Add(this.splitContainer_Main);
             this.Controls.Add(this.toolStrip_Header);
             this.Controls.Add(this.toolStrip_Footer);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Terraria Server GUI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

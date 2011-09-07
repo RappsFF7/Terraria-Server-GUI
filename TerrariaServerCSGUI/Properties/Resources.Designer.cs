@@ -80,5 +80,12 @@ namespace TerrariaServerCS.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Icon BunnyIcon {
+            get {
+                object obj = ResourceManager.GetObject("BunnyIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
