@@ -168,7 +168,6 @@ namespace TerrariaServerGUI
         private void doUpdateFormState(enumFormState poState)
         {
             List<Control> toControlList = new List<Control>(){
-                button_StartServer,
                 toolStrip_Footer
             };
 
@@ -176,8 +175,8 @@ namespace TerrariaServerGUI
             toControlList.ForEach(c => c.SuspendLayout());
 
             // Reset the controls
-            button_StartServer.Enabled = true;
-            button_StartServer.Text = "Start Server";
+            toolStripButton_StartServer.Enabled = true;
+            toolStripButton_StartServer.Text = "Start Server";
 
             // Refresh the bunny icon
             toolStripButton_StatusIcon.Image = null;
@@ -187,13 +186,13 @@ namespace TerrariaServerGUI
             {
                 case enumFormState.started:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                    button_StartServer.Enabled = true;
-                    button_StartServer.Text = "Stop Server";
+                    toolStripButton_StartServer.Enabled = true;
+                    toolStripButton_StartServer.Text = "Stop Server";
                     break;
 
                 case enumFormState.starting:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                    button_StartServer.Enabled = false;
+                    toolStripButton_StartServer.Enabled = false;
                     break;
 
                 case enumFormState.stopped:
@@ -202,8 +201,8 @@ namespace TerrariaServerGUI
 
                 case enumFormState.stopping:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
-                    button_StartServer.Enabled = false;
-                    button_StartServer.Text = "Stop Server";
+                    toolStripButton_StartServer.Enabled = false;
+                    toolStripButton_StartServer.Text = "Stop Server";
                     break;
 
                 case enumFormState.error:
@@ -272,24 +271,6 @@ namespace TerrariaServerGUI
             // Exit the application
             Application.Exit();
         }
-
-        private void button_StartServer_Click(object sender, EventArgs e)
-        {
-            if (moFormState == enumFormState.stopped)
-            {
-                // Update the server path
-                moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
-
-                // Run the server
-                moTerrariaServer.run();
-
-                // Set the form state
-                doTSUpdateFormState(enumFormState.starting);
-            }
-            else if (moFormState == enumFormState.started)
-            {
-            }
-        }
         #endregion
 
         #region events - server
@@ -321,6 +302,24 @@ namespace TerrariaServerGUI
 
             // Open the dialog
             openFileDialog_Main.ShowDialog();
+        }
+
+        private void toolStripButton_StartServer_Click(object sender, EventArgs e)
+        {
+            if (moFormState == enumFormState.stopped)
+            {
+                // Update the server path
+                moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
+
+                // Run the server
+                moTerrariaServer.run();
+
+                // Set the form state
+                doTSUpdateFormState(enumFormState.starting);
+            }
+            else if (moFormState == enumFormState.started)
+            {
+            }
         }
         #endregion
 
