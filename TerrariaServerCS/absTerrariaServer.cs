@@ -142,24 +142,11 @@ namespace TerrariaServerCS
             // Record the command
             msCommandLast = psCommand;
 
-            // Execute the command
-            doCommandExecute(psCommand);
-        }
+            // Setup a callback capturing method
+            TerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
 
-        /// <summary>
-        /// Called when a command is sent while the server is running
-        /// </summary>
-        /// <param name="psCommand"></param>
-        protected virtual void doCommandExecute(string psCommand)
-        {
-            switch (psCommand.ToLower())
-            {
-                // Write the command verbatim to the server input stream
-                default:
-                    TerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
-                    TerrariaServerProcess.StandardInput.WriteLine(psCommand);
-                    break;
-            }
+            // Execute the command
+            TerrariaServerProcess.StandardInput.WriteLine(psCommand);
         }
 
         /// <summary>
@@ -168,23 +155,19 @@ namespace TerrariaServerCS
         /// <param name="psCommand"></param>
         protected virtual void doCommandComplete(string psCommand, DataReceivedEventArgs e)
         {
-            // Stop tracking output
-            TerrariaServerProcess.OutputDataReceived -= moTerrariaServerProcess_OutputDataReceived_Command;
-
-            // Format the command name
-            string tsCommand = psCommand.ToLower();
-
-            // Check for specific server events
-            if (tsCommand.StartsWith("exit"))
-                IsServerRunning = false;
-
-            else if (tsCommand.StartsWith("start"))
-                IsServerRunning = true;
-
             // Trigger the event
             if (ServerCommandComplete != null)
                 ServerCommandComplete(this, new TerrariaServerEventArgs(e));
         }
+
+        /// <summary>
+        /// This method is called while the server is sending output after a command is sent.
+        /// The server's output must be interpreted and determined if the command has completed.
+        /// </summary>
+        /// <param name="psCommand"></param>
+        /// <param name="poLastServerOutput"></param>
+        /// <returns>True if the command has completed</returns>
+        protected abstract bool getIsCommandComplete(string psCommand, DataReceivedEventArgs poLastServerOutput);
         #endregion
 
         #region events
@@ -200,15 +183,17 @@ namespace TerrariaServerCS
         private void moTerrariaServerProcess_OutputDataReceived_Command(object sender, DataReceivedEventArgs e)
         {
             // Watch for the command to complete
-            if (e.Data == null || e.Data.ToLower().Contains("server started"))
-            {
+            if (getIsCommandComplete(msCommandLast, e))
+
                 // Call the complete operation before triggering the event
                 doCommandComplete(msCommandLast, e);
-            }
         }
 
         private void moTerrariaServerProcess_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
+            // Stop tracking output
+            TerrariaServerProcess.OutputDataReceived -= moTerrariaServerProcess_OutputDataReceived_Command;
+
             // Convert the event args to a custom (editable) object
             if (DataRecievedError != null)
                 DataRecievedError(sender, new TerrariaServerEventArgs(e));
