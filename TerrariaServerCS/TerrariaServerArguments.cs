@@ -77,11 +77,11 @@ namespace TerrariaServerCS
         {
             // Setup default values
             Players = 8;
-            World = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\world2.wld";
+            World = string.Format(@"{0}\My Games\Terraria\Worlds\world1.wld", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             Port = 7777;
             Password = "terraria";
             MOTD = "Welcome to terraria";
-            WorldPath = @"C:\Users\Rapps\Documents\My Games\Terraria\Worlds\";
+            WorldPath = string.Format(@"{0}\My Games\Terraria\Worlds\", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             AutoCreate = 1;
             WorldName = "World";
             BanList = "banlist.txt";
