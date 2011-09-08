@@ -10,14 +10,13 @@ namespace TerrariaServerCS
         Classic
     }
 
-    public class TerrariaServerFactory
+    public static class TerrariaServerFactory
     {
-        public absTerrariaServer newServer(enumTerrariaServer poServerType, ref absTerrariaServerArguments poOutputServerArguments)
+        public static absTerrariaServer newServer(enumTerrariaServer poServerType)
         {
             switch (poServerType)
             {
                 case enumTerrariaServer.Classic:
-                    poOutputServerArguments = new TerrariaServerArguments();
                     return new TerrariaServer();
 
                 default:

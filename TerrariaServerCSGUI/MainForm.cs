@@ -29,7 +29,7 @@ namespace TerrariaServerGUI
 
         #region variables
         private enumFormState moFormState;
-        private TerrariaServer moTerrariaServer;
+        private absTerrariaServer moTerrariaServer;
         #endregion
 
         #region properties
@@ -47,15 +47,12 @@ namespace TerrariaServerGUI
         /// </summary>
         private void initialize()
         {
-            // Initialize classes
-            moTerrariaServer = new TerrariaServer();
-            moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
-            moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
-            moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
-
             // Load drop downs
             comboBox_ServerType.DataSource = Enum.GetNames(typeof(enumTerrariaServer));
             comboBox_ServerType.SelectedIndex = 0;
+
+            // Initialize the server object (to get the default server path)
+            initializeServerObject((enumTerrariaServer)Enum.Parse(typeof(enumTerrariaServer), comboBox_ServerType.SelectedItem.ToString()));
 
             // Load the default server location
             textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
@@ -308,6 +305,9 @@ namespace TerrariaServerGUI
         {
             if (moFormState == enumFormState.stopped)
             {
+                // Initialize the server object
+                initializeServerObject((enumTerrariaServer)Enum.Parse(typeof(enumTerrariaServer), comboBox_ServerType.SelectedItem.ToString()));
+
                 // Update the server path
                 moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
 
@@ -319,7 +319,23 @@ namespace TerrariaServerGUI
             }
             else if (moFormState == enumFormState.started)
             {
+                // Send command
+                moTerrariaServer.doCommand("exit");
+
+                // Set the form state
+                doTSUpdateFormState(enumFormState.stopping);
             }
+        }
+
+        private void initializeServerObject(enumTerrariaServer toServerType)
+        {
+            // Get a new server object
+            moTerrariaServer = TerrariaServerFactory.newServer(toServerType);
+
+            // Setup callbacks
+            moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
+            moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
+            moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
         }
         #endregion
 
