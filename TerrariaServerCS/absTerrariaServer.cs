@@ -108,32 +108,43 @@ namespace TerrariaServerCS
         /// </summary>
         public void run()
         {
-            moTerrariaServerProcess.StartInfo.Arguments = ServerStartArguments.getArgumentsForCmd();
-            moTerrariaServerProcess.StartInfo.CreateNoWindow = true;
-            moTerrariaServerProcess.StartInfo.UseShellExecute = false;
-            moTerrariaServerProcess.StartInfo.RedirectStandardOutput = true;
-            moTerrariaServerProcess.StartInfo.RedirectStandardError = true;
-            moTerrariaServerProcess.StartInfo.RedirectStandardInput = true;
+            // Start the server with the start arguments
+            absTerrariaServerArguments toArgs = ServerStartArguments;
+            doCommand_StartServer(ref toArgs);
 
-            // Starting the process doesn't run through the command method, so we fake the start command
-            msCommandLast = "start";
-            moTerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
+            // Setup the process
+            TerrariaServerProcess.StartInfo.Arguments = toArgs.getArgumentsForCmd();
+            TerrariaServerProcess.StartInfo.CreateNoWindow = true;
+            TerrariaServerProcess.StartInfo.UseShellExecute = false;
+            TerrariaServerProcess.StartInfo.RedirectStandardOutput = true;
+            TerrariaServerProcess.StartInfo.RedirectStandardError = true;
+            TerrariaServerProcess.StartInfo.RedirectStandardInput = true;
 
-            // Start the server
-            moTerrariaServerProcess.Start();
-            moTerrariaServerProcess.BeginOutputReadLine();
-            moTerrariaServerProcess.BeginErrorReadLine();
+            // Start the process
+            TerrariaServerProcess.Start();
+            TerrariaServerProcess.BeginOutputReadLine();
+            TerrariaServerProcess.BeginErrorReadLine();
             IsServerRunning = true;
         }
 
         /// <summary>
-        /// Writes a line to the server's input stream
+        /// Creates a listener and writes a line to the server's input stream.
         /// </summary>
-        /// <param name="psCommand"></param>
         public void doCommand(string psCommand)
         {
+            doCommand(psCommand, false);
+        }
+
+        /// <summary>
+        /// Creates a listener and writes a line to the server's input stream.
+        /// If instructed to be "fake" the command still start up a listener but not send the actual input to the server.
+        /// (this is used if the command will be sent manually to the server by some other means)
+        /// </summary>
+        /// <param name="psCommand"></param>
+        public void doCommand(string psCommand, bool pbFake)
+        {
             // Exit if the server is not running
-            if (!IsServerRunning)
+            if (!IsServerRunning && !pbFake)
             {
                 DataRecievedOutput(this, new TerrariaServerEventArgs("Cannot run command. Server is not running."));
                 return;
@@ -146,7 +157,8 @@ namespace TerrariaServerCS
             TerrariaServerProcess.OutputDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_OutputDataReceived_Command);
 
             // Execute the command
-            TerrariaServerProcess.StandardInput.WriteLine(psCommand);
+            if (!pbFake)
+                TerrariaServerProcess.StandardInput.WriteLine(psCommand);
         }
 
         /// <summary>
@@ -168,6 +180,9 @@ namespace TerrariaServerCS
         /// <param name="poLastServerOutput"></param>
         /// <returns>True if the command has completed</returns>
         protected abstract bool getIsCommandComplete(string psCommand, DataReceivedEventArgs poLastServerOutput);
+
+        public abstract void doCommand_StartServer(ref absTerrariaServerArguments poArgs);
+        public abstract void doCommand_StopServer(bool pbSave);
         #endregion
 
         #region events

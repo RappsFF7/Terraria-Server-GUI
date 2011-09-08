@@ -320,7 +320,7 @@ namespace TerrariaServerGUI
             else if (moFormState == enumFormState.started)
             {
                 // Send command
-                moTerrariaServer.doCommand("exit");
+                moTerrariaServer.doCommand_StopServer(true);
 
                 // Set the form state
                 doTSUpdateFormState(enumFormState.stopping);
@@ -349,7 +349,7 @@ namespace TerrariaServerGUI
                 moTerrariaServer.ServerCommandComplete += (pSender, pE) => { Application.Exit(); };
 
                 // Save and exit the server
-                moTerrariaServer.doCommand("exit");
+                moTerrariaServer.doCommand_StopServer(true);
 
                 // Update the GUI
                 doTSUpdateFormState(enumFormState.stopping);

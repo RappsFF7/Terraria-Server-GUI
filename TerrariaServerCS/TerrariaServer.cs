@@ -54,5 +54,19 @@ namespace TerrariaServerCS
             // No success condition was found, return false
             return false;
         }
+
+        public override void doCommand_StartServer(ref absTerrariaServerArguments poArgs)
+        {
+            // Starting the process manually, but setup the listener by issues doCommand with the fake flag set to true
+            doCommand("start", true);
+        }
+
+        public override void doCommand_StopServer(bool pbSave)
+        {
+            if (pbSave)
+                doCommand("exit");
+            else
+                doCommand("exit-nosave");
+        }
     }
 }
