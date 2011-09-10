@@ -78,9 +78,12 @@
             this.toolStripProgressBar_Main = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStrip_Config = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_ConfigFile = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem_ConfigFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox_ConfigFile = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButton_ConfigFileSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripMenuItem_ConfigFileRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton_ConfigFileSaveAs = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripButton_ConfigFileDelete = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -210,10 +213,10 @@
             // 
             // textBox_Password
             // 
-            this.textBox_Password.Location = new System.Drawing.Point(388, 33);
+            this.textBox_Password.Location = new System.Drawing.Point(408, 33);
             this.textBox_Password.Name = "textBox_Password";
             this.textBox_Password.PasswordChar = '*';
-            this.textBox_Password.Size = new System.Drawing.Size(100, 20);
+            this.textBox_Password.Size = new System.Drawing.Size(80, 20);
             this.textBox_Password.TabIndex = 20;
             // 
             // textBox_BanList
@@ -388,7 +391,7 @@
             this.tabPage_AutoCreation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_AutoCreation.Name = "tabPage_AutoCreation";
             this.tabPage_AutoCreation.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.tabPage_AutoCreation.Size = new System.Drawing.Size(494, 145);
+            this.tabPage_AutoCreation.Size = new System.Drawing.Size(494, 163);
             this.tabPage_AutoCreation.TabIndex = 1;
             this.tabPage_AutoCreation.Text = "AutoCreation";
             this.tabPage_AutoCreation.UseVisualStyleBackColor = true;
@@ -453,7 +456,7 @@
             this.tabPage_Backup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Backup.Name = "tabPage_Backup";
             this.tabPage_Backup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Backup.Size = new System.Drawing.Size(494, 145);
+            this.tabPage_Backup.Size = new System.Drawing.Size(494, 163);
             this.tabPage_Backup.TabIndex = 2;
             this.tabPage_Backup.Text = "Backup";
             this.tabPage_Backup.UseVisualStyleBackColor = true;
@@ -525,7 +528,7 @@
             // toolStripMenuItem_Exit
             // 
             this.toolStripMenuItem_Exit.Name = "toolStripMenuItem_Exit";
-            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(92, 22);
+            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
@@ -607,7 +610,9 @@
             this.toolStrip_Config.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton_ConfigFile,
             this.toolStripComboBox_ConfigFile,
-            this.toolStripButton_ConfigFileSave});
+            this.toolStripButton_ConfigFileSave,
+            this.toolStripButton_ConfigFileSaveAs,
+            this.toolStripButton_ConfigFileDelete});
             this.toolStrip_Config.Location = new System.Drawing.Point(0, 25);
             this.toolStrip_Config.Name = "toolStrip_Config";
             this.toolStrip_Config.Size = new System.Drawing.Size(502, 25);
@@ -625,27 +630,59 @@
             this.toolStripButton_ConfigFile.Size = new System.Drawing.Size(77, 22);
             this.toolStripButton_ConfigFile.Text = "Config File";
             // 
-            // toolStripMenuItem_ConfigFileRename
-            // 
-            this.toolStripMenuItem_ConfigFileRename.Name = "toolStripMenuItem_ConfigFileRename";
-            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(117, 22);
-            this.toolStripMenuItem_ConfigFileRename.Text = "Rename";
-            // 
             // toolStripComboBox_ConfigFile
             // 
             this.toolStripComboBox_ConfigFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox_ConfigFile.DropDownWidth = 350;
+            this.toolStripComboBox_ConfigFile.DropDownWidth = 250;
+            this.toolStripComboBox_ConfigFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBox_ConfigFile.Name = "toolStripComboBox_ConfigFile";
             this.toolStripComboBox_ConfigFile.Size = new System.Drawing.Size(250, 25);
+            this.toolStripComboBox_ConfigFile.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox_ConfigFile_SelectedIndexChanged);
             // 
             // toolStripButton_ConfigFileSave
             // 
             this.toolStripButton_ConfigFileSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton_ConfigFileSave.Enabled = false;
             this.toolStripButton_ConfigFileSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ConfigFileSave.Image")));
             this.toolStripButton_ConfigFileSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_ConfigFileSave.Name = "toolStripButton_ConfigFileSave";
             this.toolStripButton_ConfigFileSave.Size = new System.Drawing.Size(35, 22);
             this.toolStripButton_ConfigFileSave.Text = "Save";
+            this.toolStripButton_ConfigFileSave.Click += new System.EventHandler(this.toolStripButton_ConfigFileSave_Click);
+            // 
+            // toolStripMenuItem_ConfigFileRename
+            // 
+            this.toolStripMenuItem_ConfigFileRename.Enabled = false;
+            this.toolStripMenuItem_ConfigFileRename.Name = "toolStripMenuItem_ConfigFileRename";
+            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem_ConfigFileRename.Text = "Rename";
+            // 
+            // toolStripButton_ConfigFileSaveAs
+            // 
+            this.toolStripButton_ConfigFileSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton_ConfigFileSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ConfigFileSaveAs.Image")));
+            this.toolStripButton_ConfigFileSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_ConfigFileSaveAs.Name = "toolStripButton_ConfigFileSaveAs";
+            this.toolStripButton_ConfigFileSaveAs.Size = new System.Drawing.Size(51, 22);
+            this.toolStripButton_ConfigFileSaveAs.Text = "Save As";
+            this.toolStripButton_ConfigFileSaveAs.Click += new System.EventHandler(this.toolStripButton_ConfigFileSaveAs_Click);
+            // 
+            // saveFileDialog_Config
+            // 
+            this.saveFileDialog_Config.DefaultExt = "tsg";
+            this.saveFileDialog_Config.FileName = "TerrariaServerGUIConfig";
+            this.saveFileDialog_Config.Filter = "Terraria Server GUI Config File|*.tsg";
+            // 
+            // toolStripButton_ConfigFileDelete
+            // 
+            this.toolStripButton_ConfigFileDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton_ConfigFileDelete.Enabled = false;
+            this.toolStripButton_ConfigFileDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ConfigFileDelete.Image")));
+            this.toolStripButton_ConfigFileDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_ConfigFileDelete.Name = "toolStripButton_ConfigFileDelete";
+            this.toolStripButton_ConfigFileDelete.Size = new System.Drawing.Size(44, 22);
+            this.toolStripButton_ConfigFileDelete.Text = "Delete";
+            this.toolStripButton_ConfigFileDelete.Click += new System.EventHandler(this.toolStripButton_ConfigFileDelete_Click);
             // 
             // MainForm
             // 
@@ -741,6 +778,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileSave;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton_ConfigFile;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConfigFileRename;
+        private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileSaveAs;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog_Config;
+        private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileDelete;
     }
 }
 

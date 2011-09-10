@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using TerrariaServerCS;
 using TerrariaServerCS.Classes;
+using System.IO;
 
 namespace TerrariaServerGUI
 {
@@ -59,6 +60,9 @@ namespace TerrariaServerGUI
 
             // Initialize the world creation size drop down
             comboBox_AutoCreateSize.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServerSize));
+        
+            // Load the available config files
+            refreshConfigFileList("");
 
             // Load config data from the config file
             loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
@@ -72,25 +76,42 @@ namespace TerrariaServerGUI
             // Get a new server object
             moTerrariaServer = TerrariaServerFactory.newServer(toServerType);
 
-            // Setup callbacks
+            // Setup server process callbacks
             moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
             moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
             moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
+
+            // Setup form field callbacks
+            textBox_ServerPath.TextChanged += saveableOption_OnChange;
+            textBox_World.TextChanged += saveableOption_OnChange;
+            textBox_MODT.TextChanged += saveableOption_OnChange;
+            textBox_BanList.TextChanged += saveableOption_OnChange;
+            comboBox_ServerType.SelectedIndexChanged += saveableOption_OnChange;
+            textBox_Password.TextChanged += saveableOption_OnChange;
+            numericUpDown_Players.ValueChanged += saveableOption_OnChange;
+            numericUpDown_Port.ValueChanged += saveableOption_OnChange;
+            checkBox_Secure.CheckStateChanged += saveableOption_OnChange;
+            textBox_WorldName.TextChanged += saveableOption_OnChange;
+            textBox_WorldPath.TextChanged += saveableOption_OnChange;
+            comboBox_AutoCreateSize.SelectedIndexChanged += saveableOption_OnChange;
         }
 
         private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
         {
             // Populate the form
-            numericUpDown_Players.Value = poArgs.Players.Value;
+            numericUpDown_Players.Value = poArgs.Players;
             textBox_World.Text = poArgs.World;
-            numericUpDown_Port.Value = poArgs.Port.Value;
+            numericUpDown_Port.Value = poArgs.Port;
             textBox_Password.Text = poArgs.Password;
             textBox_MODT.Text = poArgs.MOTD;
             textBox_WorldPath.Text = poArgs.WorldPath;
-            comboBox_ServerType.SelectedIndex = poArgs.AutoCreate.Value - 1;
+            comboBox_AutoCreateSize.SelectedIndex = poArgs.AutoCreate;
             textBox_WorldName.Text = poArgs.WorldName;
             textBox_BanList.Text = poArgs.BanList;
-            checkBox_Secure.Checked = (poArgs.Secure.Value == 0 ? false : true);
+            checkBox_Secure.Checked = (poArgs.Secure == 0 ? false : true);
+
+            // Disable the save button as the most recent file info is now displayed in the form
+            toolStripButton_ConfigFileSave.Enabled = false;
         }
 
         private void saveArgumentsToObject(absTerrariaServerArguments poArgs)
@@ -106,6 +127,43 @@ namespace TerrariaServerGUI
             poArgs.WorldName = textBox_WorldName.Text;
             poArgs.BanList = textBox_BanList.Text;
             poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
+        }
+
+        /// <summary>
+        /// Refreshes the current config file list. 
+        /// Passing in a string will attempt to change the selection to that item after the refresh instead of restoring the current selection.
+        /// </summary>
+        /// <param name="psNewSelection"></param>
+        private void refreshConfigFileList(string psNewSelection)
+        {
+            List<string> tsFileNamesOnly = new List<string>();
+            IEnumerable<string> tsFiles = null;
+            string tsCurrentSelection = "";
+
+            // Get a list of available files
+            tsFiles = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.tsg");
+
+            // Format to only display the name
+            foreach (string tsFileFullPath in tsFiles)
+                tsFileNamesOnly.Add((new FileInfo(tsFileFullPath).Name));
+
+            // Save the currently select text because the list needs to be recreated
+            if (toolStripComboBox_ConfigFile.SelectedItem != null)
+                tsCurrentSelection = toolStripComboBox_ConfigFile.SelectedItem.ToString();
+
+            // If a new selection was supplied, use that instead of the current
+            if (psNewSelection.Trim().Length > 0)
+                tsCurrentSelection = psNewSelection;
+
+            // Bind the list to the form
+            toolStripComboBox_ConfigFile.Items.Clear();
+            toolStripComboBox_ConfigFile.Items.AddRange(tsFileNamesOnly.ToArray());
+
+            // Restore the last selection
+            if (tsCurrentSelection.Trim().Length > 0)
+                toolStripComboBox_ConfigFile.SelectedItem = tsCurrentSelection;
+            else if (toolStripComboBox_ConfigFile.Items.Count > 0)
+                toolStripComboBox_ConfigFile.SelectedIndex = 0;
         }
         #endregion
 
@@ -336,6 +394,11 @@ namespace TerrariaServerGUI
             else
                 doTSUpdateFormState(enumFormState.stopped);
         }
+
+        private void saveableOption_OnChange(object sender, EventArgs args)
+        {
+            toolStripButton_ConfigFileSave.Enabled = true;
+        }
         #endregion
 
         #region events - toolbar
@@ -343,6 +406,30 @@ namespace TerrariaServerGUI
         {
             // Exit the application
             Application.Exit();
+        }
+
+        private void toolStripButton_ConfigFileSave_Click(object sender, EventArgs e)
+        {
+            // Save the form content to the arguments object
+            saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
+
+            // Save the arguments object to a file
+            moTerrariaServer.ServerStartArguments.saveToFile(toolStripComboBox_ConfigFile.Text);
+
+            // Reload the file after saving to make sure the info got saved (and to trigger any save events)
+            loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
+        }
+
+        private void toolStripComboBox_ConfigFile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Populate the object with the file contents
+            moTerrariaServer.ServerStartArguments.loadFromFile(toolStripComboBox_ConfigFile.Text);
+
+            // Populate the form with the argument object contents
+            loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
+
+            // Enable the save button as a file was selected
+            toolStripButton_ConfigFileDelete.Enabled = true;
         }
         #endregion
 
@@ -375,7 +462,7 @@ namespace TerrariaServerGUI
                 moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
 
                 // Run the server
-                moTerrariaServer.run();
+                moTerrariaServer.run(toolStripComboBox_ConfigFile.Text);
 
                 // Set the form state
                 doTSUpdateFormState(enumFormState.starting);
@@ -387,6 +474,55 @@ namespace TerrariaServerGUI
 
                 // Set the form state
                 doTSUpdateFormState(enumFormState.stopping);
+            }
+        }
+
+        private void toolStripButton_ConfigFileSaveAs_Click(object sender, EventArgs e)
+        {
+            // If a config file is currently selected, default the new file to that name
+            if (toolStripComboBox_ConfigFile.Selected)
+                saveFileDialog_Config.FileName = toolStripComboBox_ConfigFile.SelectedItem.ToString();
+
+            // Set the initial directory to the current directory
+            if (saveFileDialog_Config.InitialDirectory == "")
+                saveFileDialog_Config.InitialDirectory = Environment.CurrentDirectory;
+
+            // Show the dialog
+            if (saveFileDialog_Config.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                // Save the current form objects into the arguments object
+                saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
+
+                // Save the arguments to the selected file
+                moTerrariaServer.ServerStartArguments.saveToFile(saveFileDialog_Config.FileName);
+
+                // Load the newly saved file
+                refreshConfigFileList((new FileInfo(saveFileDialog_Config.FileName)).Name);
+            }
+        }
+
+        private void toolStripButton_ConfigFileDelete_Click(object sender, EventArgs e)
+        {
+            DialogResult toDeleteConfirm;
+
+            // Confirm the deletion
+            toDeleteConfirm = MessageBox.Show("Are you sure you want to delete this configuration file?", "Delete Config File", MessageBoxButtons.YesNo);
+
+            if (toDeleteConfirm == System.Windows.Forms.DialogResult.Yes)
+            {
+                string tsSelectedFile = "";
+
+                // Get the selected file
+                tsSelectedFile = toolStripComboBox_ConfigFile.SelectedItem.ToString();
+
+                // Delete the selected file
+                File.Delete(tsSelectedFile);
+
+                // Disable the delete button now that the current item has been removed
+                toolStripButton_ConfigFileDelete.Enabled = false;
+
+                // Refresh the config file list
+                refreshConfigFileList("");
             }
         }
         #endregion
