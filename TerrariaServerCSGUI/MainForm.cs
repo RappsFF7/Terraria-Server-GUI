@@ -69,6 +69,11 @@ namespace TerrariaServerGUI
 
             // Set initial form state
             doTSUpdateFormState(enumFormState.stopped);
+            
+            // Modify the default settings on the config file save dialog
+            saveFileDialog_Config.DefaultExt = moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
+            saveFileDialog_Config.FileName = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation;
+            saveFileDialog_Config.Filter = "Terraria Server GUI Config File|*." + moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
         }
 
         private void initializeServerObject(enumTerrariaServer toServerType)
@@ -129,6 +134,37 @@ namespace TerrariaServerGUI
             poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
         }
 
+        public void saveConfigFile()
+        {
+            saveConfigFile("");
+        }
+
+        /// <summary>
+        /// Saves the current options to the server object and then to a config file.
+        /// Supplying an empty string for the file will draw from the currently selected config file in the application.
+        /// </summary>
+        /// <param name="tsConfigFile"></param>
+        private void saveConfigFile(string tsConfigFilePathAndName)
+        {
+            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation;
+
+            // Save to the selected file if possible
+            if (toolStripComboBox_ConfigFile.Selected)
+                tsConfigFile = toolStripComboBox_ConfigFile.Text;
+
+            // Save the form content to the arguments object
+            saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
+
+            // Save the arguments object to a file
+            moTerrariaServer.ServerStartArguments.saveToFile(tsConfigFile);
+
+            // Reload the file after saving to make sure the info got saved (and to trigger any save events)
+            loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
+
+            // Refresh the config file list
+            refreshConfigFileList(tsConfigFile);
+        }
+
         /// <summary>
         /// Refreshes the current config file list. 
         /// Passing in a string will attempt to change the selection to that item after the refresh instead of restoring the current selection.
@@ -141,7 +177,7 @@ namespace TerrariaServerGUI
             string tsCurrentSelection = "";
 
             // Get a list of available files
-            tsFiles = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.tsg");
+            tsFiles = Directory.EnumerateFiles(Environment.CurrentDirectory, "*." + moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention);
 
             // Format to only display the name
             foreach (string tsFileFullPath in tsFiles)
@@ -410,14 +446,7 @@ namespace TerrariaServerGUI
 
         private void toolStripButton_ConfigFileSave_Click(object sender, EventArgs e)
         {
-            // Save the form content to the arguments object
-            saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
-
-            // Save the arguments object to a file
-            moTerrariaServer.ServerStartArguments.saveToFile(toolStripComboBox_ConfigFile.Text);
-
-            // Reload the file after saving to make sure the info got saved (and to trigger any save events)
-            loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
+            saveConfigFile();
         }
 
         private void toolStripComboBox_ConfigFile_SelectedIndexChanged(object sender, EventArgs e)
@@ -461,6 +490,9 @@ namespace TerrariaServerGUI
                 // Update the server path
                 moTerrariaServer.ServerExecutableLocation = textBox_ServerPath.Text;
 
+                // Save the config file
+                saveConfigFile();
+
                 // Run the server
                 moTerrariaServer.run(toolStripComboBox_ConfigFile.Text);
 
@@ -490,14 +522,8 @@ namespace TerrariaServerGUI
             // Show the dialog
             if (saveFileDialog_Config.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                // Save the current form objects into the arguments object
-                saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
-
-                // Save the arguments to the selected file
-                moTerrariaServer.ServerStartArguments.saveToFile(saveFileDialog_Config.FileName);
-
-                // Load the newly saved file
-                refreshConfigFileList((new FileInfo(saveFileDialog_Config.FileName)).Name);
+                // Save the info to the config file
+                saveConfigFile(saveFileDialog_Config.FileName);
             }
         }
 

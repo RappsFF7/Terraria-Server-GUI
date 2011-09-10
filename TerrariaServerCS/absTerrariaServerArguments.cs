@@ -18,19 +18,20 @@ namespace TerrariaServerCS
 
     public abstract class absTerrariaServerArguments
     {
-        private string msConfigFileLocation = "TerrariaServerGUIConfig.tsg";
-
         /// <summary>
         /// If a config file line starts with this string, the line is skipped (treated as a comment line)
         /// </summary>
         public string msConfigFileComment = "#";
 
         #region properties
-        /*public virtual string _ConfigFileLocation 
+        public string _DefaultConfigFileExtention
         {
-            get { return msConfigFileLocation; }
-            set { msConfigFileLocation = value; }
-        }*/
+            get { return "txt"; }
+        }
+        public virtual string _DefaultConfigFileLocation 
+        {
+            get { return "TerrariaServerGUIConfig"; }
+        }
         #endregion
 
         #region properties - file

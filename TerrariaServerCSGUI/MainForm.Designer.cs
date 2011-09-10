@@ -64,9 +64,10 @@
             this.textBox_WorldName = new System.Windows.Forms.TextBox();
             this.label_WorldName = new System.Windows.Forms.Label();
             this.tabPage_Backup = new System.Windows.Forms.TabPage();
-            this.button_Execute = new System.Windows.Forms.Button();
+            this.splitContainer_Console = new System.Windows.Forms.SplitContainer();
             this.richTextBox_Console = new System.Windows.Forms.RichTextBox();
             this.textBox_Execute = new System.Windows.Forms.TextBox();
+            this.button_Execute = new System.Windows.Forms.Button();
             this.toolStrip_Header = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton_File = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,12 +79,12 @@
             this.toolStripProgressBar_Main = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStrip_Config = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_ConfigFile = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem_ConfigFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox_ConfigFile = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButton_ConfigFileSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripMenuItem_ConfigFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton_ConfigFileSaveAs = new System.Windows.Forms.ToolStripButton();
-            this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.toolStripButton_ConfigFileDelete = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -93,6 +94,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Port)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Players)).BeginInit();
             this.tabPage_AutoCreation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Console)).BeginInit();
+            this.splitContainer_Console.Panel1.SuspendLayout();
+            this.splitContainer_Console.Panel2.SuspendLayout();
+            this.splitContainer_Console.SuspendLayout();
             this.toolStrip_Header.SuspendLayout();
             this.toolStripContainer_Main.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer_Main.ContentPanel.SuspendLayout();
@@ -154,9 +159,7 @@
             // 
             // splitContainer_Main.Panel2
             // 
-            this.splitContainer_Main.Panel2.Controls.Add(this.button_Execute);
-            this.splitContainer_Main.Panel2.Controls.Add(this.richTextBox_Console);
-            this.splitContainer_Main.Panel2.Controls.Add(this.textBox_Execute);
+            this.splitContainer_Main.Panel2.Controls.Add(this.splitContainer_Console);
             this.splitContainer_Main.Size = new System.Drawing.Size(502, 312);
             this.splitContainer_Main.SplitterDistance = 189;
             this.splitContainer_Main.SplitterWidth = 1;
@@ -461,44 +464,64 @@
             this.tabPage_Backup.Text = "Backup";
             this.tabPage_Backup.UseVisualStyleBackColor = true;
             // 
-            // button_Execute
+            // splitContainer_Console
             // 
-            this.button_Execute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button_Execute.Location = new System.Drawing.Point(412, 98);
-            this.button_Execute.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.button_Execute.Name = "button_Execute";
-            this.button_Execute.Size = new System.Drawing.Size(90, 22);
-            this.button_Execute.TabIndex = 2;
-            this.button_Execute.Text = "Execute";
-            this.button_Execute.UseVisualStyleBackColor = true;
-            this.button_Execute.Click += new System.EventHandler(this.button_Execute_Click);
+            this.splitContainer_Console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer_Console.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer_Console.Name = "splitContainer_Console";
+            this.splitContainer_Console.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer_Console.Panel1
+            // 
+            this.splitContainer_Console.Panel1.Controls.Add(this.richTextBox_Console);
+            // 
+            // splitContainer_Console.Panel2
+            // 
+            this.splitContainer_Console.Panel2.Controls.Add(this.textBox_Execute);
+            this.splitContainer_Console.Panel2.Controls.Add(this.button_Execute);
+            this.splitContainer_Console.Size = new System.Drawing.Size(502, 122);
+            this.splitContainer_Console.SplitterDistance = 85;
+            this.splitContainer_Console.SplitterWidth = 1;
+            this.splitContainer_Console.TabIndex = 3;
             // 
             // richTextBox_Console
             // 
-            this.richTextBox_Console.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox_Console.BackColor = System.Drawing.SystemColors.Window;
             this.richTextBox_Console.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox_Console.Location = new System.Drawing.Point(0, -2);
+            this.richTextBox_Console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_Console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_Console.Margin = new System.Windows.Forms.Padding(0);
             this.richTextBox_Console.Name = "richTextBox_Console";
             this.richTextBox_Console.ReadOnly = true;
-            this.richTextBox_Console.Size = new System.Drawing.Size(502, 102);
+            this.richTextBox_Console.Size = new System.Drawing.Size(502, 85);
             this.richTextBox_Console.TabIndex = 0;
             this.richTextBox_Console.Text = "";
             // 
             // textBox_Execute
             // 
-            this.textBox_Execute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.textBox_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Execute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_Execute.Location = new System.Drawing.Point(0, 100);
-            this.textBox_Execute.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+            this.textBox_Execute.Location = new System.Drawing.Point(0, 2);
+            this.textBox_Execute.Margin = new System.Windows.Forms.Padding(0, 2, 0, 4);
             this.textBox_Execute.Multiline = true;
             this.textBox_Execute.Name = "textBox_Execute";
-            this.textBox_Execute.Size = new System.Drawing.Size(412, 18);
+            this.textBox_Execute.Size = new System.Drawing.Size(412, 30);
             this.textBox_Execute.TabIndex = 1;
             this.textBox_Execute.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Execute_KeyDown);
+            // 
+            // button_Execute
+            // 
+            this.button_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_Execute.Location = new System.Drawing.Point(412, 0);
+            this.button_Execute.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.button_Execute.Name = "button_Execute";
+            this.button_Execute.Size = new System.Drawing.Size(90, 34);
+            this.button_Execute.TabIndex = 2;
+            this.button_Execute.Text = "Execute";
+            this.button_Execute.UseVisualStyleBackColor = true;
+            this.button_Execute.Click += new System.EventHandler(this.button_Execute_Click);
             // 
             // toolStrip_Header
             // 
@@ -528,7 +551,7 @@
             // toolStripMenuItem_Exit
             // 
             this.toolStripMenuItem_Exit.Name = "toolStripMenuItem_Exit";
-            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(92, 22);
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
@@ -630,6 +653,13 @@
             this.toolStripButton_ConfigFile.Size = new System.Drawing.Size(77, 22);
             this.toolStripButton_ConfigFile.Text = "Config File";
             // 
+            // toolStripMenuItem_ConfigFileRename
+            // 
+            this.toolStripMenuItem_ConfigFileRename.Enabled = false;
+            this.toolStripMenuItem_ConfigFileRename.Name = "toolStripMenuItem_ConfigFileRename";
+            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(117, 22);
+            this.toolStripMenuItem_ConfigFileRename.Text = "Rename";
+            // 
             // toolStripComboBox_ConfigFile
             // 
             this.toolStripComboBox_ConfigFile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -650,13 +680,6 @@
             this.toolStripButton_ConfigFileSave.Text = "Save";
             this.toolStripButton_ConfigFileSave.Click += new System.EventHandler(this.toolStripButton_ConfigFileSave_Click);
             // 
-            // toolStripMenuItem_ConfigFileRename
-            // 
-            this.toolStripMenuItem_ConfigFileRename.Enabled = false;
-            this.toolStripMenuItem_ConfigFileRename.Name = "toolStripMenuItem_ConfigFileRename";
-            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem_ConfigFileRename.Text = "Rename";
-            // 
             // toolStripButton_ConfigFileSaveAs
             // 
             this.toolStripButton_ConfigFileSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -666,12 +689,6 @@
             this.toolStripButton_ConfigFileSaveAs.Size = new System.Drawing.Size(51, 22);
             this.toolStripButton_ConfigFileSaveAs.Text = "Save As";
             this.toolStripButton_ConfigFileSaveAs.Click += new System.EventHandler(this.toolStripButton_ConfigFileSaveAs_Click);
-            // 
-            // saveFileDialog_Config
-            // 
-            this.saveFileDialog_Config.DefaultExt = "tsg";
-            this.saveFileDialog_Config.FileName = "TerrariaServerGUIConfig";
-            this.saveFileDialog_Config.Filter = "Terraria Server GUI Config File|*.tsg";
             // 
             // toolStripButton_ConfigFileDelete
             // 
@@ -697,7 +714,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
-            this.splitContainer_Main.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).EndInit();
             this.splitContainer_Main.ResumeLayout(false);
             this.tabControl_Main.ResumeLayout(false);
@@ -707,6 +723,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Players)).EndInit();
             this.tabPage_AutoCreation.ResumeLayout(false);
             this.tabPage_AutoCreation.PerformLayout();
+            this.splitContainer_Console.Panel1.ResumeLayout(false);
+            this.splitContainer_Console.Panel2.ResumeLayout(false);
+            this.splitContainer_Console.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Console)).EndInit();
+            this.splitContainer_Console.ResumeLayout(false);
             this.toolStrip_Header.ResumeLayout(false);
             this.toolStrip_Header.PerformLayout();
             this.toolStripContainer_Main.BottomToolStripPanel.ResumeLayout(false);
@@ -781,6 +802,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileSaveAs;
         private System.Windows.Forms.SaveFileDialog saveFileDialog_Config;
         private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileDelete;
+        private System.Windows.Forms.SplitContainer splitContainer_Console;
     }
 }
 
