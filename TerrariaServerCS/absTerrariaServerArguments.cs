@@ -7,10 +7,88 @@ using System.IO;
 
 namespace TerrariaServerCS
 {
+    #region enums
+    public enum enumTerrariaServerSize
+    {
+        Small = 1,
+        Medium = 2,
+        Large = 3
+    }
+    #endregion
+
     public abstract class absTerrariaServerArguments
     {
-        #region Properties
+        /// <summary>
+        /// If a config file line starts with this string, the line is skipped (treated as a comment line)
+        /// </summary>
+        public string msConfigFileComment = "#";
+
+        #region properties
         public virtual string _ConfigFileLocation { get { return "TerrariaServerConfig.txt"; } }
+        #endregion
+
+        #region properties - file
+        /// <summary>
+        /// Specifies the port to listen on.
+        /// Usage: port {port number}
+        /// </summary>
+        public int? Port { get; set; }
+
+        /// <summary>
+        /// Sets the max number of players.
+        /// Usage: players {number}
+        /// Alias: maxplayers {number}
+        /// </summary>
+        public int? Players { get; set; }
+
+        /// <summary>
+        /// Sets the server password.
+        /// Usage: password {password}
+        /// Alias: pass {password}
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Load a world and automatically start the server.
+        /// Usage: world {world file}
+        /// </summary>
+        public string World { get; set; }
+
+        /// <summary>
+        /// Creates a world if none is found in the path specified by -world. World size is specified by: 1(small), 2(medium), and 3(large).
+        /// Usage: autocreate {#}
+        /// </summary>
+        public int? AutoCreate { get; set; }
+
+        /// <summary>
+        /// Set the message of the day
+        /// Usage: motd {message} 
+        /// </summary>
+        public string MOTD { get; set; }
+
+        /// <summary>
+        /// Specifies the location of the banlist. Defaults to "banlist.txt" in the working directory.
+        /// Usage: banlist {path}
+        /// </summary>
+        public string BanList { get; set; }
+
+        /// <summary>
+        /// Sets the name of the world when using -autocreate.
+        /// Usage: worldname {world name}
+        /// </summary>
+        public string WorldName { get; set; }
+
+        /// <summary>
+        /// Sets the folder where world files will be stored
+        /// Usage: worldpath {full folder path}
+        /// </summary>
+        public string WorldPath { get; set; }
+
+        /// <summary>
+        /// Adds addition cheat protection to the server.
+        /// Usage: secure {1 | 0}
+        /// </summary>
+        public int? Secure { get; set; }
         #endregion
 
         #region methods - public
@@ -36,12 +114,65 @@ namespace TerrariaServerCS
             string tsResult = "";
 
             // Output a config file
-            File.WriteAllText(_ConfigFileLocation, getArgumentsForFile());
+            saveToFile(_ConfigFileLocation);
 
             // Create a command to read from the config file
             tsResult = string.Format("-config {0}", _ConfigFileLocation);
 
             return tsResult;
+        }
+        #endregion
+
+        #region methods - protected
+        protected virtual void loadFromFile(string psFilename)
+        {
+            StreamReader toReader = null;
+            string tsFileLine = "";
+            int tiLineCount = 0;
+
+            // Open the file for reading
+            toReader = File.OpenText(_ConfigFileLocation);
+            
+            // Parse the file
+            while (!toReader.EndOfStream)
+            {
+                // Read the line
+                tsFileLine = toReader.ReadLine().Trim();
+                tiLineCount++;
+
+                // Check for empty and commented out lines
+                if (tsFileLine.Length > 0 && !tsFileLine.StartsWith(msConfigFileComment))
+                {
+                    PropertyInfo toProperty;
+                    string[] tsConfigLine;
+                    string tsKey;
+                    string tsValue;
+                    
+                    // Split the line into key and value
+                    tsConfigLine = tsFileLine.Split('=');
+
+                    // Check that the data meets the required structure
+                    if (tsConfigLine.Length < 2)
+                        throw new Exception("Error reading config file line: " + tiLineCount);
+
+                    tsKey = tsConfigLine[0];
+                    tsValue = tsConfigLine[1];
+
+                    // Get the property
+                    toProperty = this.GetType().GetProperty(tsKey);
+
+                    if (toProperty == null)
+                        throw new Exception("Error, no property exists by the name: " + tsKey);
+
+                    // Set the property
+                    toProperty.SetValue(this, tsValue, null);
+                }
+            }
+        }
+
+        protected virtual void saveToFile(string psFilename)
+        {
+            File.WriteAllText(_ConfigFileLocation, getArgumentsForFile());
         }
         #endregion
 

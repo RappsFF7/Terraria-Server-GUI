@@ -41,7 +41,7 @@ namespace TerrariaServerGUI
             initialize();
         }
 
-        #region methods - private
+        #region methods - intializers and loads
         /// <summary>
         /// Initialize code that was not auto generated
         /// </summary>
@@ -57,10 +57,59 @@ namespace TerrariaServerGUI
             // Load the default server location
             textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
 
+            // Initialize the world creation size drop down
+            comboBox_AutoCreateSize.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServerSize));
+
+            // Load config data from the config file
+            loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
+
             // Set initial form state
             doTSUpdateFormState(enumFormState.stopped);
         }
 
+        private void initializeServerObject(enumTerrariaServer toServerType)
+        {
+            // Get a new server object
+            moTerrariaServer = TerrariaServerFactory.newServer(toServerType);
+
+            // Setup callbacks
+            moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
+            moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
+            moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
+        }
+
+        private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
+        {
+            // Populate the form
+            numericUpDown_Players.Value = poArgs.Players.Value;
+            textBox_World.Text = poArgs.World;
+            numericUpDown_Port.Value = poArgs.Port.Value;
+            textBox_Password.Text = poArgs.Password;
+            textBox_MODT.Text = poArgs.MOTD;
+            textBox_WorldPath.Text = poArgs.WorldPath;
+            comboBox_ServerType.SelectedIndex = poArgs.AutoCreate.Value - 1;
+            textBox_WorldName.Text = poArgs.WorldName;
+            textBox_BanList.Text = poArgs.BanList;
+            checkBox_Secure.Checked = (poArgs.Secure.Value == 0 ? false : true);
+        }
+
+        private void saveArgumentsToObject(absTerrariaServerArguments poArgs)
+        {
+            // Populate the form
+            poArgs.Players = Convert.ToInt32(numericUpDown_Players.Value);
+            poArgs.World = textBox_World.Text;
+            poArgs.Port = Convert.ToInt32(numericUpDown_Port.Value);
+            poArgs.Password = textBox_Password.Text;
+            poArgs.MOTD = textBox_MODT.Text;
+            poArgs.WorldPath = textBox_WorldPath.Text;
+            poArgs.AutoCreate = comboBox_ServerType.SelectedIndex;
+            poArgs.WorldName = textBox_WorldName.Text;
+            poArgs.BanList = textBox_BanList.Text;
+            poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
+        }
+        #endregion
+
+        #region methods - do commands
         void doOutput(string psMessage, Color poColor)
         {
             if (psMessage == null) psMessage = "";
@@ -242,6 +291,33 @@ namespace TerrariaServerGUI
         }
         #endregion
 
+        #region methods - misc
+        private void doOpenFileOrDirectoryDialog(Control psControl, bool pbDirectoryOnly)
+        {
+            // Setup the callback to collect the selected item
+            //openFileDialog_Main.FileOk += (poSender, poEventArgs) => { psControl.Text = openFileDialog_Main.FileName; };
+
+            // Make the dialog open at the currently selected location
+            if (psControl.Text != "")
+            {
+                folderBrowserDialog_Main.SelectedPath = (new System.IO.DirectoryInfo(psControl.Text)).FullName;
+                openFileDialog_Main.InitialDirectory = (new System.IO.FileInfo(psControl.Text)).FullName;
+            }
+
+            // Open the dialog
+            if (pbDirectoryOnly)
+            {
+                if (folderBrowserDialog_Main.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    psControl.Text = folderBrowserDialog_Main.SelectedPath;
+            }
+            else
+            {
+                if (openFileDialog_Main.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    psControl.Text = openFileDialog_Main.FileName;
+            }
+        }
+        #endregion
+
         #region events - callbacks
         void moTerrariaServer_DataRecievedOutput(object sender, TerrariaServerEventArgs e)
         {
@@ -288,19 +364,6 @@ namespace TerrariaServerGUI
             }
         }
 
-        private void button_ServerPath_Click(object sender, EventArgs e)
-        {
-            // Setup the callback to collect the file the user selects
-            openFileDialog_Main.FileOk += (poSender, poEventArgs) => { textBox_ServerPath.Text = openFileDialog_Main.FileName; };
-            
-            // Make the dialog open at the currently selected file location
-            if (textBox_ServerPath.Text != "")
-                openFileDialog_Main.InitialDirectory = (new System.IO.FileInfo(textBox_ServerPath.Text)).DirectoryName;
-
-            // Open the dialog
-            openFileDialog_Main.ShowDialog();
-        }
-
         private void toolStripButton_StartServer_Click(object sender, EventArgs e)
         {
             if (moFormState == enumFormState.stopped)
@@ -326,17 +389,6 @@ namespace TerrariaServerGUI
                 doTSUpdateFormState(enumFormState.stopping);
             }
         }
-
-        private void initializeServerObject(enumTerrariaServer toServerType)
-        {
-            // Get a new server object
-            moTerrariaServer = TerrariaServerFactory.newServer(toServerType);
-
-            // Setup callbacks
-            moTerrariaServer.DataRecievedOutput += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedOutput);
-            moTerrariaServer.DataRecievedError += new TerrariaServerEventHandler(moTerrariaServer_DataRecievedError);
-            moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
-        }
         #endregion
 
         #region events - main form
@@ -357,6 +409,26 @@ namespace TerrariaServerGUI
                 // Cancel the close operation on the application
                 e.Cancel = true;
             }
+        }
+
+        private void button_ServerPath_Click(object sender, EventArgs e)
+        {
+            doOpenFileOrDirectoryDialog(textBox_ServerPath, false);
+        }
+
+        private void button_World_Click(object sender, EventArgs e)
+        {
+            doOpenFileOrDirectoryDialog(textBox_World, false);
+        }
+
+        private void button_BanList_Click(object sender, EventArgs e)
+        {
+            doOpenFileOrDirectoryDialog(textBox_BanList, false);
+        }
+
+        private void button_WorldPath_Click(object sender, EventArgs e)
+        {
+            doOpenFileOrDirectoryDialog(textBox_WorldPath, true);
         }
         #endregion
     }
