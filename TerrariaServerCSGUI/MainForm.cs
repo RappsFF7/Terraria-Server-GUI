@@ -236,9 +236,9 @@ namespace TerrariaServerGUI
             // Calculate the delay factor
             int tiAutosaveDelayFactor = 1000 /*1 second*/ * 60 /*1 minute*/;
 
-            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)2)
+            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)1)
                 tiAutosaveDelayFactor *= 60; /*1 hour*/
-            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)3)
+            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)2)
                 tiAutosaveDelayFactor *= 24; /*1 day*/
 
             // Reset the interval
@@ -380,16 +380,19 @@ namespace TerrariaServerGUI
                 case enumFormState.starting:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
                     toolStripButton_StartServer.Enabled = false;
+                    label_AutosaveTimeRemainingData.Text = "<server not running>";
                     break;
 
                 case enumFormState.stopped:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny;
+                    label_AutosaveTimeRemainingData.Text = "<server not running>";
                     break;
 
                 case enumFormState.stopping:
                     toolStripButton_StatusIcon.Image = TerrariaServerCS.Properties.Resources.Bunny_Animated;
                     toolStripButton_StartServer.Enabled = false;
                     toolStripButton_StartServer.Text = "Stop Server";
+                    label_AutosaveTimeRemainingData.Text = "<server not running>";
                     break;
 
                 case enumFormState.error:
@@ -405,6 +408,9 @@ namespace TerrariaServerGUI
 
             // Update the status message
             doTSUpdateStatus(Enum.GetName(typeof(enumFormState), poState), 0);
+
+            // Check if the autosave timer should be running
+            checkBox_AutoSave_CheckedChanged(null, null);
 
             // Force the controls to redraw
             toControlList.ForEach(c => c.ResumeLayout(true));
@@ -612,7 +618,7 @@ namespace TerrariaServerGUI
             comboBox_AutosaveDelayFactor.Enabled = tbEnabled;
 
             // Disable or enable the save timer
-            timer_Autosave.Enabled = tbEnabled;
+            timer_Autosave.Enabled = (tbEnabled && moFormState == enumFormState.started);
 
             // Recalculate the autosave timer
             refreshAutosaveTimer();
@@ -672,28 +678,29 @@ namespace TerrariaServerGUI
         private void timer_Main_Tick(object sender, EventArgs e)
         {
             // Server not running
-            if (!moTerrariaServer.IsServerRunning)
+            if (moFormState != enumFormState.started)
             {
-                // Update the autosave timer
-                label_AutosaveTimeRemainingData.Text = "<server not running>";
             }
             // Server IS running
             else
             {
-                // Update the autosave timer
-                if (tabControl_Main.SelectedIndex == 2 && timer_Autosave.Enabled)
+                if (tabControl_Main.SelectedIndex == 2)
                 {
-                    // Calculations
-                    DateTime toNow = DateTime.Now;
-                    TimeSpan toTimePassed = toNow - moLastAutosave;
-                    int tiMillisecondsTilSave = timer_Autosave.Interval - (int)toTimePassed.TotalMilliseconds;
-                    TimeSpan toTimespanTilSave = (new TimeSpan(0, 0, 0, 0, tiMillisecondsTilSave));
+                    // Update the autosave timer
+                    if (timer_Autosave.Enabled)
+                    {
+                        // Calculations
+                        DateTime toNow = DateTime.Now;
+                        TimeSpan toTimePassed = toNow - moLastAutosave;
+                        int tiMillisecondsTilSave = timer_Autosave.Interval - (int)toTimePassed.TotalMilliseconds;
+                        TimeSpan toTimespanTilSave = (new TimeSpan(0, 0, 0, 0, tiMillisecondsTilSave));
 
-                    // Update the label
-                    label_AutosaveTimeRemainingData.Text = string.Format(@"{0:d\:hh\:mm\:ss}", toTimespanTilSave);
+                        // Update the label
+                        label_AutosaveTimeRemainingData.Text = string.Format(@"{0:d\:hh\:mm\:ss}", toTimespanTilSave);
+                    }
+                    else
+                        label_AutosaveTimeRemainingData.Text = "-------";
                 }
-                else
-                    label_AutosaveTimeRemainingData.Text = "-------";
             }
         }
 
