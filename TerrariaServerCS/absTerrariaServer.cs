@@ -52,14 +52,9 @@ namespace TerrariaServerCS
         public event TerrariaServerEventHandler ServerCommandComplete;
         #endregion
 
-        public absTerrariaServer()
+        public absTerrariaServer(absTerrariaServerArguments poServerStartArguments)
         {
-            initialize(null, null);
-        }
-
-        public absTerrariaServer(string psServerExecutableLocation, absTerrariaServerArguments poServerStartArguments)
-        {
-            initialize(psServerExecutableLocation, poServerStartArguments);
+            initialize(poServerStartArguments);
         }
 
         #region methods - protected
@@ -68,7 +63,7 @@ namespace TerrariaServerCS
         /// </summary>
         /// <param name="psServerExecutableLocation"></param>
         /// <param name="poServerStartArguments"></param>
-        protected void initialize(string psServerExecutableLocation, absTerrariaServerArguments poServerStartArguments)
+        protected void initialize(absTerrariaServerArguments poServerStartArguments)
         {
             // Create the process
             moTerrariaServerProcess = new Process();
@@ -76,29 +71,8 @@ namespace TerrariaServerCS
             moTerrariaServerProcess.ErrorDataReceived += new DataReceivedEventHandler(moTerrariaServerProcess_ErrorDataReceived);
 
             // Save the supplied arguments
-            ServerExecutableLocation = psServerExecutableLocation;
+            ServerExecutableLocation = poServerStartArguments.TSG_ServerPath;
             ServerStartArguments = poServerStartArguments;
-        }
-
-        protected virtual string getServerLocationDefault()
-        {
-            char PS = Path.DirectorySeparatorChar;
-
-            // Try to get the server path from Steam
-            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
-
-            // If found, transform to get server location
-            if (tsServerFile != "")
-            {
-                // Convert the file path string to use the system's file separators
-                tsServerFile = new FileInfo(tsServerFile).FullName;
-
-                // Add the default path for the server
-                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}TerrariaServer.exe", PS, tsServerFile);
-            }
-
-            // Return
-            return tsServerFile;
         }
         #endregion
 
@@ -183,6 +157,7 @@ namespace TerrariaServerCS
 
         public abstract void doCommand_StartServer(ref absTerrariaServerArguments poArgs);
         public abstract void doCommand_StopServer(bool pbSave);
+        public abstract void doCommand_SaveServer();
         #endregion
 
         #region events

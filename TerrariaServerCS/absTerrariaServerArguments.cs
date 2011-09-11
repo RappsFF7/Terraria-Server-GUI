@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using Microsoft.Win32;
 
 namespace TerrariaServerCS
 {
@@ -34,7 +35,34 @@ namespace TerrariaServerCS
         }
         #endregion
 
-        #region properties - file
+        #region properties - gui server config file parameters
+        /// <summary>
+        /// The location of the server executable
+        /// </summary>
+        public string TSG_ServerPath { set; get; }
+
+        /// <summary>
+        /// The type of the server
+        /// </summary>
+        public int TSG_ServerType { get; set; }
+
+        /// <summary>
+        /// Determines if the gui will autosave or not
+        /// </summary>
+        public int TSG_AutoSave { get; set; }
+
+        /// <summary>
+        /// The time between autosaves
+        /// </summary>
+        public int TSG_AutoSaveDelay { get; set; }
+
+        /// <summary>
+        /// The unit the auto save delay is measured in
+        /// </summary>
+        public int TSG_AutoSaveFactor { get; set; }
+        #endregion
+
+        #region properties - official server config file parameters
         /// <summary>
         /// Specifies the port to listen on.
         /// Usage: port {port number}
@@ -181,6 +209,26 @@ namespace TerrariaServerCS
         #endregion
 
         #region methods - protected
+        protected virtual string getServerLocationDefault()
+        {
+            char PS = Path.DirectorySeparatorChar;
+
+            // Try to get the server path from Steam
+            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
+
+            // If found, transform to get server location
+            if (tsServerFile != "")
+            {
+                // Convert the file path string to use the system's file separators
+                tsServerFile = new FileInfo(tsServerFile).FullName;
+
+                // Add the default path for the server
+                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}TerrariaServer.exe", PS, tsServerFile);
+            }
+
+            // Return
+            return tsServerFile;
+        }
         #endregion
 
         #region methods - private

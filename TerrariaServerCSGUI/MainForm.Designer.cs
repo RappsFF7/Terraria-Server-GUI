@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog_Main = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog_Main = new System.Windows.Forms.FolderBrowserDialog();
@@ -64,6 +65,12 @@
             this.textBox_WorldName = new System.Windows.Forms.TextBox();
             this.label_WorldName = new System.Windows.Forms.Label();
             this.tabPage_Backup = new System.Windows.Forms.TabPage();
+            this.label_AutosaveTimeRemaining = new System.Windows.Forms.Label();
+            this.label_AutosaveTimeRemainingData = new System.Windows.Forms.Label();
+            this.comboBox_AutosaveDelayFactor = new System.Windows.Forms.ComboBox();
+            this.label_AutoSaveDelay = new System.Windows.Forms.Label();
+            this.numericUpDown_AutosaveDelay = new System.Windows.Forms.NumericUpDown();
+            this.checkBox_AutoSave = new System.Windows.Forms.CheckBox();
             this.splitContainer_Console = new System.Windows.Forms.SplitContainer();
             this.richTextBox_Console = new System.Windows.Forms.RichTextBox();
             this.textBox_Execute = new System.Windows.Forms.TextBox();
@@ -85,6 +92,8 @@
             this.toolStripButton_ConfigFileSaveAs = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_ConfigFileDelete = new System.Windows.Forms.ToolStripButton();
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
+            this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
+            this.timer_Main = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -94,6 +103,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Port)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Players)).BeginInit();
             this.tabPage_AutoCreation.SuspendLayout();
+            this.tabPage_Backup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Console)).BeginInit();
             this.splitContainer_Console.Panel1.SuspendLayout();
             this.splitContainer_Console.Panel2.SuspendLayout();
@@ -393,7 +404,7 @@
             this.tabPage_AutoCreation.Controls.Add(this.label_WorldName);
             this.tabPage_AutoCreation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_AutoCreation.Name = "tabPage_AutoCreation";
-            this.tabPage_AutoCreation.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.tabPage_AutoCreation.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage_AutoCreation.Size = new System.Drawing.Size(494, 163);
             this.tabPage_AutoCreation.TabIndex = 1;
             this.tabPage_AutoCreation.Text = "AutoCreation";
@@ -402,7 +413,7 @@
             // label_AutoCreateSize
             // 
             this.label_AutoCreateSize.AutoSize = true;
-            this.label_AutoCreateSize.Location = new System.Drawing.Point(365, 12);
+            this.label_AutoCreateSize.Location = new System.Drawing.Point(374, 9);
             this.label_AutoCreateSize.Name = "label_AutoCreateSize";
             this.label_AutoCreateSize.Size = new System.Drawing.Size(30, 13);
             this.label_AutoCreateSize.TabIndex = 17;
@@ -413,21 +424,21 @@
             // 
             this.comboBox_AutoCreateSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_AutoCreateSize.FormattingEnabled = true;
-            this.comboBox_AutoCreateSize.Location = new System.Drawing.Point(401, 9);
+            this.comboBox_AutoCreateSize.Location = new System.Drawing.Point(410, 6);
             this.comboBox_AutoCreateSize.Name = "comboBox_AutoCreateSize";
             this.comboBox_AutoCreateSize.Size = new System.Drawing.Size(78, 21);
             this.comboBox_AutoCreateSize.TabIndex = 18;
             // 
             // textBox_WorldPath
             // 
-            this.textBox_WorldPath.Location = new System.Drawing.Point(83, 35);
+            this.textBox_WorldPath.Location = new System.Drawing.Point(83, 31);
             this.textBox_WorldPath.Name = "textBox_WorldPath";
             this.textBox_WorldPath.Size = new System.Drawing.Size(234, 20);
             this.textBox_WorldPath.TabIndex = 14;
             // 
             // button_WorldPath
             // 
-            this.button_WorldPath.Location = new System.Drawing.Point(3, 32);
+            this.button_WorldPath.Location = new System.Drawing.Point(3, 28);
             this.button_WorldPath.Name = "button_WorldPath";
             this.button_WorldPath.Size = new System.Drawing.Size(74, 24);
             this.button_WorldPath.TabIndex = 16;
@@ -438,7 +449,7 @@
             // 
             // textBox_WorldName
             // 
-            this.textBox_WorldName.Location = new System.Drawing.Point(83, 9);
+            this.textBox_WorldName.Location = new System.Drawing.Point(83, 6);
             this.textBox_WorldName.Name = "textBox_WorldName";
             this.textBox_WorldName.Size = new System.Drawing.Size(106, 20);
             this.textBox_WorldName.TabIndex = 15;
@@ -446,7 +457,7 @@
             // label_WorldName
             // 
             this.label_WorldName.AutoSize = true;
-            this.label_WorldName.Location = new System.Drawing.Point(8, 12);
+            this.label_WorldName.Location = new System.Drawing.Point(6, 9);
             this.label_WorldName.Margin = new System.Windows.Forms.Padding(3);
             this.label_WorldName.Name = "label_WorldName";
             this.label_WorldName.Size = new System.Drawing.Size(69, 13);
@@ -456,6 +467,12 @@
             // 
             // tabPage_Backup
             // 
+            this.tabPage_Backup.Controls.Add(this.label_AutosaveTimeRemaining);
+            this.tabPage_Backup.Controls.Add(this.label_AutosaveTimeRemainingData);
+            this.tabPage_Backup.Controls.Add(this.comboBox_AutosaveDelayFactor);
+            this.tabPage_Backup.Controls.Add(this.label_AutoSaveDelay);
+            this.tabPage_Backup.Controls.Add(this.numericUpDown_AutosaveDelay);
+            this.tabPage_Backup.Controls.Add(this.checkBox_AutoSave);
             this.tabPage_Backup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Backup.Name = "tabPage_Backup";
             this.tabPage_Backup.Padding = new System.Windows.Forms.Padding(3);
@@ -463,6 +480,82 @@
             this.tabPage_Backup.TabIndex = 2;
             this.tabPage_Backup.Text = "Backup";
             this.tabPage_Backup.UseVisualStyleBackColor = true;
+            // 
+            // label_AutosaveTimeRemaining
+            // 
+            this.label_AutosaveTimeRemaining.AutoSize = true;
+            this.label_AutosaveTimeRemaining.Location = new System.Drawing.Point(182, 30);
+            this.label_AutosaveTimeRemaining.Name = "label_AutosaveTimeRemaining";
+            this.label_AutosaveTimeRemaining.Size = new System.Drawing.Size(134, 13);
+            this.label_AutosaveTimeRemaining.TabIndex = 5;
+            this.label_AutosaveTimeRemaining.Text = "Autosave Time Remaining:";
+            // 
+            // label_AutosaveTimeRemainingData
+            // 
+            this.label_AutosaveTimeRemainingData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_AutosaveTimeRemainingData.Location = new System.Drawing.Point(322, 30);
+            this.label_AutosaveTimeRemainingData.Name = "label_AutosaveTimeRemainingData";
+            this.label_AutosaveTimeRemainingData.Size = new System.Drawing.Size(164, 13);
+            this.label_AutosaveTimeRemainingData.TabIndex = 4;
+            this.label_AutosaveTimeRemainingData.Text = "label_AutosaveTimeRemaining";
+            // 
+            // comboBox_AutosaveDelayFactor
+            // 
+            this.comboBox_AutosaveDelayFactor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_AutosaveDelayFactor.FormattingEnabled = true;
+            this.comboBox_AutosaveDelayFactor.Items.AddRange(new object[] {
+            "Minutes",
+            "Hours",
+            "Days"});
+            this.comboBox_AutosaveDelayFactor.Location = new System.Drawing.Point(399, 6);
+            this.comboBox_AutosaveDelayFactor.Name = "comboBox_AutosaveDelayFactor";
+            this.comboBox_AutosaveDelayFactor.Size = new System.Drawing.Size(89, 21);
+            this.comboBox_AutosaveDelayFactor.TabIndex = 3;
+            this.comboBox_AutosaveDelayFactor.SelectedIndexChanged += new System.EventHandler(this.comboBox_AutosaveDelayFactor_SelectedIndexChanged);
+            // 
+            // label_AutoSaveDelay
+            // 
+            this.label_AutoSaveDelay.AutoSize = true;
+            this.label_AutoSaveDelay.Location = new System.Drawing.Point(182, 9);
+            this.label_AutoSaveDelay.Name = "label_AutoSaveDelay";
+            this.label_AutoSaveDelay.Size = new System.Drawing.Size(85, 13);
+            this.label_AutoSaveDelay.TabIndex = 2;
+            this.label_AutoSaveDelay.Text = "Autosave Delay:";
+            // 
+            // numericUpDown_AutosaveDelay
+            // 
+            this.numericUpDown_AutosaveDelay.Location = new System.Drawing.Point(273, 7);
+            this.numericUpDown_AutosaveDelay.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown_AutosaveDelay.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_AutosaveDelay.Name = "numericUpDown_AutosaveDelay";
+            this.numericUpDown_AutosaveDelay.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown_AutosaveDelay.TabIndex = 1;
+            this.numericUpDown_AutosaveDelay.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_AutosaveDelay.ValueChanged += new System.EventHandler(this.numericUpDown_AutosaveDelay_ValueChanged);
+            // 
+            // checkBox_AutoSave
+            // 
+            this.checkBox_AutoSave.AutoSize = true;
+            this.checkBox_AutoSave.Location = new System.Drawing.Point(8, 8);
+            this.checkBox_AutoSave.Name = "checkBox_AutoSave";
+            this.checkBox_AutoSave.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox_AutoSave.Size = new System.Drawing.Size(76, 17);
+            this.checkBox_AutoSave.TabIndex = 0;
+            this.checkBox_AutoSave.Text = "Auto Save";
+            this.checkBox_AutoSave.UseVisualStyleBackColor = true;
+            this.checkBox_AutoSave.CheckedChanged += new System.EventHandler(this.checkBox_AutoSave_CheckedChanged);
             // 
             // splitContainer_Console
             // 
@@ -701,6 +794,18 @@
             this.toolStripButton_ConfigFileDelete.Text = "Delete";
             this.toolStripButton_ConfigFileDelete.Click += new System.EventHandler(this.toolStripButton_ConfigFileDelete_Click);
             // 
+            // timer_Autosave
+            // 
+            this.timer_Autosave.Enabled = true;
+            this.timer_Autosave.Interval = 60000;
+            this.timer_Autosave.Tick += new System.EventHandler(this.timer_Autosave_Tick);
+            // 
+            // timer_Main
+            // 
+            this.timer_Main.Enabled = true;
+            this.timer_Main.Interval = 1000;
+            this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -723,6 +828,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Players)).EndInit();
             this.tabPage_AutoCreation.ResumeLayout(false);
             this.tabPage_AutoCreation.PerformLayout();
+            this.tabPage_Backup.ResumeLayout(false);
+            this.tabPage_Backup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).EndInit();
             this.splitContainer_Console.Panel1.ResumeLayout(false);
             this.splitContainer_Console.Panel2.ResumeLayout(false);
             this.splitContainer_Console.Panel2.PerformLayout();
@@ -803,6 +911,14 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog_Config;
         private System.Windows.Forms.ToolStripButton toolStripButton_ConfigFileDelete;
         private System.Windows.Forms.SplitContainer splitContainer_Console;
+        private System.Windows.Forms.CheckBox checkBox_AutoSave;
+        private System.Windows.Forms.Label label_AutoSaveDelay;
+        private System.Windows.Forms.NumericUpDown numericUpDown_AutosaveDelay;
+        private System.Windows.Forms.ComboBox comboBox_AutosaveDelayFactor;
+        private System.Windows.Forms.Timer timer_Autosave;
+        private System.Windows.Forms.Label label_AutosaveTimeRemaining;
+        private System.Windows.Forms.Label label_AutosaveTimeRemainingData;
+        private System.Windows.Forms.Timer timer_Main;
     }
 }
 

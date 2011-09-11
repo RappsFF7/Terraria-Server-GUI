@@ -31,6 +31,7 @@ namespace TerrariaServerGUI
         #region variables
         private enumFormState moFormState;
         private absTerrariaServer moTerrariaServer;
+        private DateTime moLastAutosave;
         #endregion
 
         #region properties
@@ -57,10 +58,13 @@ namespace TerrariaServerGUI
 
             // Load the default server location
             textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
-
+            
             // Initialize the world creation size drop down
             comboBox_AutoCreateSize.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServerSize));
-        
+
+            // Initialize the server type drop down
+            comboBox_ServerType.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServer));
+            
             // Load the available config files
             refreshConfigFileList("");
 
@@ -74,6 +78,10 @@ namespace TerrariaServerGUI
             saveFileDialog_Config.DefaultExt = moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
             saveFileDialog_Config.FileName = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation;
             saveFileDialog_Config.Filter = "Terraria Server GUI Config File|*." + moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
+        
+            // Start timers
+            moLastAutosave = DateTime.Now;
+            timer_Main.Start();
         }
 
         private void initializeServerObject(enumTerrariaServer toServerType)
@@ -87,6 +95,12 @@ namespace TerrariaServerGUI
             moTerrariaServer.ServerCommandComplete += new TerrariaServerEventHandler(moTerrariaServer_ServerCommandComplete);
 
             // Setup form field callbacks
+            checkBox_AutoSave.CheckedChanged += saveableOption_OnChange;
+            numericUpDown_AutosaveDelay.ValueChanged += saveableOption_OnChange;
+            comboBox_AutosaveDelayFactor.SelectedIndexChanged += saveableOption_OnChange;
+            textBox_ServerPath.TextChanged += saveableOption_OnChange;
+            comboBox_ServerType.SelectedIndexChanged += saveableOption_OnChange;
+
             textBox_ServerPath.TextChanged += saveableOption_OnChange;
             textBox_World.TextChanged += saveableOption_OnChange;
             textBox_MODT.TextChanged += saveableOption_OnChange;
@@ -104,13 +118,19 @@ namespace TerrariaServerGUI
         private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
         {
             // Populate the form
+            checkBox_AutoSave.Checked = (poArgs.TSG_AutoSave == 0 ? false : true);
+            numericUpDown_AutosaveDelay.Value = poArgs.TSG_AutoSaveDelay;
+            comboBox_AutosaveDelayFactor.SelectedIndex = poArgs.TSG_AutoSaveFactor - 1;
+            textBox_ServerPath.Text = poArgs.TSG_ServerPath;
+            comboBox_ServerType.SelectedIndex = poArgs.TSG_ServerType - 1;
+
             numericUpDown_Players.Value = poArgs.Players;
             textBox_World.Text = poArgs.World;
             numericUpDown_Port.Value = poArgs.Port;
             textBox_Password.Text = poArgs.Password;
             textBox_MODT.Text = poArgs.MOTD;
             textBox_WorldPath.Text = poArgs.WorldPath;
-            comboBox_AutoCreateSize.SelectedIndex = poArgs.AutoCreate;
+            comboBox_AutoCreateSize.SelectedIndex = poArgs.AutoCreate - 1;
             textBox_WorldName.Text = poArgs.WorldName;
             textBox_BanList.Text = poArgs.BanList;
             checkBox_Secure.Checked = (poArgs.Secure == 0 ? false : true);
@@ -122,13 +142,19 @@ namespace TerrariaServerGUI
         private void saveArgumentsToObject(absTerrariaServerArguments poArgs)
         {
             // Populate the form
+            poArgs.TSG_AutoSave = (checkBox_AutoSave.Checked ? 1 : 0);
+            poArgs.TSG_AutoSaveDelay = Convert.ToInt32(numericUpDown_AutosaveDelay.Value);
+            poArgs.TSG_AutoSaveFactor = comboBox_AutosaveDelayFactor.SelectedIndex + 1;
+            poArgs.TSG_ServerPath = textBox_ServerPath.Text;
+            poArgs.TSG_ServerType = comboBox_ServerType.SelectedIndex + 1;
+            
             poArgs.Players = Convert.ToInt32(numericUpDown_Players.Value);
             poArgs.World = textBox_World.Text;
             poArgs.Port = Convert.ToInt32(numericUpDown_Port.Value);
             poArgs.Password = textBox_Password.Text;
             poArgs.MOTD = textBox_MODT.Text;
             poArgs.WorldPath = textBox_WorldPath.Text;
-            poArgs.AutoCreate = comboBox_ServerType.SelectedIndex;
+            poArgs.AutoCreate = comboBox_ServerType.SelectedIndex + 1;
             poArgs.WorldName = textBox_WorldName.Text;
             poArgs.BanList = textBox_BanList.Text;
             poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
@@ -146,7 +172,8 @@ namespace TerrariaServerGUI
         /// <param name="tsConfigFile"></param>
         private void saveConfigFile(string tsConfigFilePathAndName)
         {
-            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation;
+            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation + "." +
+                moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
 
             // Save to the selected file if possible
             if (toolStripComboBox_ConfigFile.Selected)
@@ -200,6 +227,26 @@ namespace TerrariaServerGUI
                 toolStripComboBox_ConfigFile.SelectedItem = tsCurrentSelection;
             else if (toolStripComboBox_ConfigFile.Items.Count > 0)
                 toolStripComboBox_ConfigFile.SelectedIndex = 0;
+        }
+
+        private void refreshAutosaveTimer()
+        {
+            int tiAutosaveInterval = 0;
+
+            // Calculate the delay factor
+            int tiAutosaveDelayFactor = 1000 /*1 second*/ * 60 /*1 minute*/;
+
+            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)2)
+                tiAutosaveDelayFactor *= 60; /*1 hour*/
+            if (comboBox_AutosaveDelayFactor.SelectedIndex >= (decimal)3)
+                tiAutosaveDelayFactor *= 24; /*1 day*/
+
+            // Reset the interval
+            tiAutosaveInterval = Convert.ToInt32(numericUpDown_AutosaveDelay.Value) * tiAutosaveDelayFactor;
+            timer_Autosave.Interval = tiAutosaveInterval;
+
+            // Reset the last autosave time
+            moLastAutosave = DateTime.Now;
         }
         #endregion
 
@@ -388,9 +435,6 @@ namespace TerrariaServerGUI
         #region methods - misc
         private void doOpenFileOrDirectoryDialog(Control psControl, bool pbDirectoryOnly)
         {
-            // Setup the callback to collect the selected item
-            //openFileDialog_Main.FileOk += (poSender, poEventArgs) => { psControl.Text = openFileDialog_Main.FileName; };
-
             // Make the dialog open at the currently selected location
             if (psControl.Text != "")
             {
@@ -452,7 +496,14 @@ namespace TerrariaServerGUI
         private void toolStripComboBox_ConfigFile_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Populate the object with the file contents
-            moTerrariaServer.ServerStartArguments.loadFromFile(toolStripComboBox_ConfigFile.Text);
+            try
+            {
+                moTerrariaServer.ServerStartArguments.loadFromFile(toolStripComboBox_ConfigFile.Text);
+            }
+            catch (Exception toE)
+            {
+                doUpdateStatus("Error loading selected config file", 0);
+            }
 
             // Populate the form with the argument object contents
             loadArgumentsToForm(moTerrariaServer.ServerStartArguments);
@@ -512,7 +563,7 @@ namespace TerrariaServerGUI
         private void toolStripButton_ConfigFileSaveAs_Click(object sender, EventArgs e)
         {
             // If a config file is currently selected, default the new file to that name
-            if (toolStripComboBox_ConfigFile.Selected)
+            if (toolStripComboBox_ConfigFile.SelectedItem != null)
                 saveFileDialog_Config.FileName = toolStripComboBox_ConfigFile.SelectedItem.ToString();
 
             // Set the initial directory to the current directory
@@ -550,6 +601,21 @@ namespace TerrariaServerGUI
                 // Refresh the config file list
                 refreshConfigFileList("");
             }
+        }
+
+        private void checkBox_AutoSave_CheckedChanged(object sender, EventArgs e)
+        {
+            bool tbEnabled = checkBox_AutoSave.Checked;
+
+            // Disable or enable other autosave controls if the user changes the autosave checkbox
+            numericUpDown_AutosaveDelay.Enabled = tbEnabled;
+            comboBox_AutosaveDelayFactor.Enabled = tbEnabled;
+
+            // Disable or enable the save timer
+            timer_Autosave.Enabled = tbEnabled;
+
+            // Recalculate the autosave timer
+            refreshAutosaveTimer();
         }
         #endregion
 
@@ -591,6 +657,53 @@ namespace TerrariaServerGUI
         private void button_WorldPath_Click(object sender, EventArgs e)
         {
             doOpenFileOrDirectoryDialog(textBox_WorldPath, true);
+        }
+
+        private void numericUpDown_AutosaveDelay_ValueChanged(object sender, EventArgs e)
+        {
+            refreshAutosaveTimer();
+        }
+
+        private void comboBox_AutosaveDelayFactor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshAutosaveTimer();
+        }
+
+        private void timer_Main_Tick(object sender, EventArgs e)
+        {
+            // Server not running
+            if (!moTerrariaServer.IsServerRunning)
+            {
+                // Update the autosave timer
+                label_AutosaveTimeRemainingData.Text = "<server not running>";
+            }
+            // Server IS running
+            else
+            {
+                // Update the autosave timer
+                if (tabControl_Main.SelectedIndex == 2 && timer_Autosave.Enabled)
+                {
+                    // Calculations
+                    DateTime toNow = DateTime.Now;
+                    TimeSpan toTimePassed = toNow - moLastAutosave;
+                    int tiMillisecondsTilSave = timer_Autosave.Interval - (int)toTimePassed.TotalMilliseconds;
+                    TimeSpan toTimespanTilSave = (new TimeSpan(0, 0, 0, 0, tiMillisecondsTilSave));
+
+                    // Update the label
+                    label_AutosaveTimeRemainingData.Text = string.Format(@"{0:d\:hh\:mm\:ss}", toTimespanTilSave);
+                }
+                else
+                    label_AutosaveTimeRemainingData.Text = "-------";
+            }
+        }
+
+        private void timer_Autosave_Tick(object sender, EventArgs e)
+        {
+            // Save the server
+            moTerrariaServer.doCommand_SaveServer();
+
+            // Refresh the timer
+            refreshAutosaveTimer();
         }
         #endregion
     }

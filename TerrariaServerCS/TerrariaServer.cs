@@ -8,10 +8,8 @@ namespace TerrariaServerCS
 {
     public class TerrariaServer : absTerrariaServer
     {
-        public TerrariaServer()
-        {
-            initialize(getServerLocationDefault(), new TerrariaServerArguments());
-        }
+        public TerrariaServer() : base(new TerrariaServerArguments())
+        { }
 
         protected override bool getIsCommandComplete(string psCommand, System.Diagnostics.DataReceivedEventArgs poLastServerOutput)
         {
@@ -67,6 +65,10 @@ namespace TerrariaServerCS
                 doCommand("exit");
             else
                 doCommand("exit-nosave");
+        }
+        public override void doCommand_SaveServer()
+        {
+            doCommand("save");
         }
     }
 }

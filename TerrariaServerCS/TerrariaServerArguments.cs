@@ -11,7 +11,14 @@ namespace TerrariaServerCS
     {
         public TerrariaServerArguments()
         {
-            // Setup default values
+            // GUI default values
+            TSG_AutoSave = 1;
+            TSG_AutoSaveDelay = 5;
+            TSG_AutoSaveFactor = 1;
+            TSG_ServerPath = getServerLocationDefault();
+            TSG_ServerType = 1;
+
+            // Official server default values
             Players = 8;
             World = string.Format(@"{0}\My Games\Terraria\Worlds\world1.wld", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             Port = 7777;
