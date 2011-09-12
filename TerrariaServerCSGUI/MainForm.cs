@@ -502,8 +502,12 @@ namespace TerrariaServerGUI
             // Make the dialog open at the currently selected location
             if (psControl.Text != "")
             {
-                folderBrowserDialog_Main.SelectedPath = (new System.IO.DirectoryInfo(psControl.Text)).FullName;
-                openFileDialog_Main.InitialDirectory = (new System.IO.FileInfo(psControl.Text)).FullName;
+                DirectoryInfo toDirectory = new System.IO.DirectoryInfo(psControl.Text);
+                FileInfo toFile = new System.IO.FileInfo(psControl.Text);
+
+                folderBrowserDialog_Main.SelectedPath = toDirectory.FullName;
+                openFileDialog_Main.InitialDirectory = toFile.Directory.FullName;
+                openFileDialog_Main.FileName = toFile.Name;
             }
 
             // Open the dialog
