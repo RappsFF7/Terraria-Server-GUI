@@ -71,6 +71,12 @@
             this.label_AutoSaveDelay = new System.Windows.Forms.Label();
             this.numericUpDown_AutosaveDelay = new System.Windows.Forms.NumericUpDown();
             this.checkBox_AutoSave = new System.Windows.Forms.CheckBox();
+            this.tabPage_Logging = new System.Windows.Forms.TabPage();
+            this.label_LogFilenamePrefix = new System.Windows.Forms.Label();
+            this.textBox_LogFilenamePrefix = new System.Windows.Forms.TextBox();
+            this.button_LoggingFolder = new System.Windows.Forms.Button();
+            this.textBox_LogFolder = new System.Windows.Forms.TextBox();
+            this.checkBox_Logging = new System.Windows.Forms.CheckBox();
             this.splitContainer_Console = new System.Windows.Forms.SplitContainer();
             this.richTextBox_Console = new System.Windows.Forms.RichTextBox();
             this.textBox_Execute = new System.Windows.Forms.TextBox();
@@ -94,6 +100,14 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.label_LogFileSizeLimitUnit = new System.Windows.Forms.Label();
+            this.label_LogProcedureWhenFull = new System.Windows.Forms.Label();
+            this.comboBox_LogProcedureWhenFull = new System.Windows.Forms.ComboBox();
+            this.label_LogFileSizeLimitInfo = new System.Windows.Forms.Label();
+            this.numericUpDown_LogFileSizeLimit = new System.Windows.Forms.NumericUpDown();
+            this.label_LogError = new System.Windows.Forms.Label();
+            this.toolStripMenuItem_ConfigFileOpenDirectory = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -105,6 +119,7 @@
             this.tabPage_AutoCreation.SuspendLayout();
             this.tabPage_Backup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).BeginInit();
+            this.tabPage_Logging.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Console)).BeginInit();
             this.splitContainer_Console.Panel1.SuspendLayout();
             this.splitContainer_Console.Panel2.SuspendLayout();
@@ -116,6 +131,7 @@
             this.toolStripContainer_Main.SuspendLayout();
             this.toolStrip_Footer.SuspendLayout();
             this.toolStrip_Config.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -181,6 +197,7 @@
             this.tabControl_Main.Controls.Add(this.tabPage_Startup);
             this.tabControl_Main.Controls.Add(this.tabPage_AutoCreation);
             this.tabControl_Main.Controls.Add(this.tabPage_Backup);
+            this.tabControl_Main.Controls.Add(this.tabPage_Logging);
             this.tabControl_Main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl_Main.Location = new System.Drawing.Point(0, 0);
             this.tabControl_Main.Name = "tabControl_Main";
@@ -503,10 +520,6 @@
             // 
             this.comboBox_AutosaveDelayFactor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_AutosaveDelayFactor.FormattingEnabled = true;
-            this.comboBox_AutosaveDelayFactor.Items.AddRange(new object[] {
-            "Minutes",
-            "Hours",
-            "Days"});
             this.comboBox_AutosaveDelayFactor.Location = new System.Drawing.Point(399, 6);
             this.comboBox_AutosaveDelayFactor.Name = "comboBox_AutosaveDelayFactor";
             this.comboBox_AutosaveDelayFactor.Size = new System.Drawing.Size(89, 21);
@@ -548,14 +561,83 @@
             // checkBox_AutoSave
             // 
             this.checkBox_AutoSave.AutoSize = true;
+            this.checkBox_AutoSave.Checked = true;
+            this.checkBox_AutoSave.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_AutoSave.Location = new System.Drawing.Point(8, 8);
             this.checkBox_AutoSave.Name = "checkBox_AutoSave";
-            this.checkBox_AutoSave.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBox_AutoSave.Size = new System.Drawing.Size(76, 17);
             this.checkBox_AutoSave.TabIndex = 0;
             this.checkBox_AutoSave.Text = "Auto Save";
             this.checkBox_AutoSave.UseVisualStyleBackColor = true;
             this.checkBox_AutoSave.CheckedChanged += new System.EventHandler(this.checkBox_AutoSave_CheckedChanged);
+            // 
+            // tabPage_Logging
+            // 
+            this.tabPage_Logging.Controls.Add(this.label_LogError);
+            this.tabPage_Logging.Controls.Add(this.numericUpDown_LogFileSizeLimit);
+            this.tabPage_Logging.Controls.Add(this.label_LogFileSizeLimitInfo);
+            this.tabPage_Logging.Controls.Add(this.comboBox_LogProcedureWhenFull);
+            this.tabPage_Logging.Controls.Add(this.label_LogProcedureWhenFull);
+            this.tabPage_Logging.Controls.Add(this.label_LogFileSizeLimitUnit);
+            this.tabPage_Logging.Controls.Add(this.label1);
+            this.tabPage_Logging.Controls.Add(this.label_LogFilenamePrefix);
+            this.tabPage_Logging.Controls.Add(this.textBox_LogFilenamePrefix);
+            this.tabPage_Logging.Controls.Add(this.button_LoggingFolder);
+            this.tabPage_Logging.Controls.Add(this.textBox_LogFolder);
+            this.tabPage_Logging.Controls.Add(this.checkBox_Logging);
+            this.tabPage_Logging.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_Logging.Name = "tabPage_Logging";
+            this.tabPage_Logging.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_Logging.Size = new System.Drawing.Size(494, 163);
+            this.tabPage_Logging.TabIndex = 3;
+            this.tabPage_Logging.Text = "Logging";
+            this.tabPage_Logging.UseVisualStyleBackColor = true;
+            // 
+            // label_LogFilenamePrefix
+            // 
+            this.label_LogFilenamePrefix.AutoSize = true;
+            this.label_LogFilenamePrefix.Location = new System.Drawing.Point(76, 32);
+            this.label_LogFilenamePrefix.Name = "label_LogFilenamePrefix";
+            this.label_LogFilenamePrefix.Size = new System.Drawing.Size(102, 13);
+            this.label_LogFilenamePrefix.TabIndex = 4;
+            this.label_LogFilenamePrefix.Text = "Log Filename Prefix:";
+            // 
+            // textBox_LogFilenamePrefix
+            // 
+            this.textBox_LogFilenamePrefix.Location = new System.Drawing.Point(197, 29);
+            this.textBox_LogFilenamePrefix.Name = "textBox_LogFilenamePrefix";
+            this.textBox_LogFilenamePrefix.Size = new System.Drawing.Size(289, 20);
+            this.textBox_LogFilenamePrefix.TabIndex = 3;
+            // 
+            // button_LoggingFolder
+            // 
+            this.button_LoggingFolder.Location = new System.Drawing.Point(79, 3);
+            this.button_LoggingFolder.Name = "button_LoggingFolder";
+            this.button_LoggingFolder.Size = new System.Drawing.Size(75, 23);
+            this.button_LoggingFolder.TabIndex = 2;
+            this.button_LoggingFolder.Text = "Log Folder:";
+            this.button_LoggingFolder.UseVisualStyleBackColor = true;
+            this.button_LoggingFolder.Click += new System.EventHandler(this.button_LoggingFolder_Click);
+            // 
+            // textBox_LogFolder
+            // 
+            this.textBox_LogFolder.Location = new System.Drawing.Point(197, 5);
+            this.textBox_LogFolder.Name = "textBox_LogFolder";
+            this.textBox_LogFolder.Size = new System.Drawing.Size(291, 20);
+            this.textBox_LogFolder.TabIndex = 1;
+            // 
+            // checkBox_Logging
+            // 
+            this.checkBox_Logging.AutoSize = true;
+            this.checkBox_Logging.Checked = true;
+            this.checkBox_Logging.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_Logging.Location = new System.Drawing.Point(9, 7);
+            this.checkBox_Logging.Name = "checkBox_Logging";
+            this.checkBox_Logging.Size = new System.Drawing.Size(64, 17);
+            this.checkBox_Logging.TabIndex = 0;
+            this.checkBox_Logging.Text = "Logging";
+            this.checkBox_Logging.UseVisualStyleBackColor = true;
+            this.checkBox_Logging.CheckedChanged += new System.EventHandler(this.checkBox_Logging_CheckedChanged);
             // 
             // splitContainer_Console
             // 
@@ -592,8 +674,7 @@
             // 
             // textBox_Execute
             // 
-            this.textBox_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBox_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Execute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Execute.Location = new System.Drawing.Point(0, 2);
@@ -739,6 +820,7 @@
             // 
             this.toolStripButton_ConfigFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton_ConfigFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_ConfigFileOpenDirectory,
             this.toolStripMenuItem_ConfigFileRename});
             this.toolStripButton_ConfigFile.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ConfigFile.Image")));
             this.toolStripButton_ConfigFile.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -750,7 +832,7 @@
             // 
             this.toolStripMenuItem_ConfigFileRename.Enabled = false;
             this.toolStripMenuItem_ConfigFileRename.Name = "toolStripMenuItem_ConfigFileRename";
-            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(117, 22);
+            this.toolStripMenuItem_ConfigFileRename.Size = new System.Drawing.Size(202, 22);
             this.toolStripMenuItem_ConfigFileRename.Text = "Rename";
             // 
             // toolStripComboBox_ConfigFile
@@ -806,6 +888,87 @@
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Enabled = false;
+            this.label1.Location = new System.Drawing.Point(76, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Log File Size Limit:";
+            // 
+            // label_LogFileSizeLimitUnit
+            // 
+            this.label_LogFileSizeLimitUnit.AutoSize = true;
+            this.label_LogFileSizeLimitUnit.Enabled = false;
+            this.label_LogFileSizeLimitUnit.Location = new System.Drawing.Point(303, 59);
+            this.label_LogFileSizeLimitUnit.Name = "label_LogFileSizeLimitUnit";
+            this.label_LogFileSizeLimitUnit.Size = new System.Drawing.Size(23, 13);
+            this.label_LogFileSizeLimitUnit.TabIndex = 7;
+            this.label_LogFileSizeLimitUnit.Text = "MB";
+            // 
+            // label_LogProcedureWhenFull
+            // 
+            this.label_LogProcedureWhenFull.AutoSize = true;
+            this.label_LogProcedureWhenFull.Enabled = false;
+            this.label_LogProcedureWhenFull.Location = new System.Drawing.Point(76, 86);
+            this.label_LogProcedureWhenFull.Name = "label_LogProcedureWhenFull";
+            this.label_LogProcedureWhenFull.Size = new System.Drawing.Size(110, 13);
+            this.label_LogProcedureWhenFull.TabIndex = 8;
+            this.label_LogProcedureWhenFull.Text = "Procedure When Full:";
+            // 
+            // comboBox_LogProcedureWhenFull
+            // 
+            this.comboBox_LogProcedureWhenFull.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_LogProcedureWhenFull.Enabled = false;
+            this.comboBox_LogProcedureWhenFull.FormattingEnabled = true;
+            this.comboBox_LogProcedureWhenFull.Location = new System.Drawing.Point(197, 83);
+            this.comboBox_LogProcedureWhenFull.Name = "comboBox_LogProcedureWhenFull";
+            this.comboBox_LogProcedureWhenFull.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_LogProcedureWhenFull.TabIndex = 9;
+            // 
+            // label_LogFileSizeLimitInfo
+            // 
+            this.label_LogFileSizeLimitInfo.AutoSize = true;
+            this.label_LogFileSizeLimitInfo.Enabled = false;
+            this.label_LogFileSizeLimitInfo.Location = new System.Drawing.Point(347, 59);
+            this.label_LogFileSizeLimitInfo.Name = "label_LogFileSizeLimitInfo";
+            this.label_LogFileSizeLimitInfo.Size = new System.Drawing.Size(136, 13);
+            this.label_LogFileSizeLimitInfo.TabIndex = 10;
+            this.label_LogFileSizeLimitInfo.Text = "<- (A value of 0 is unlimited)";
+            this.label_LogFileSizeLimitInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // numericUpDown_LogFileSizeLimit
+            // 
+            this.numericUpDown_LogFileSizeLimit.Enabled = false;
+            this.numericUpDown_LogFileSizeLimit.Location = new System.Drawing.Point(197, 57);
+            this.numericUpDown_LogFileSizeLimit.Maximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.numericUpDown_LogFileSizeLimit.Name = "numericUpDown_LogFileSizeLimit";
+            this.numericUpDown_LogFileSizeLimit.Size = new System.Drawing.Size(100, 20);
+            this.numericUpDown_LogFileSizeLimit.TabIndex = 11;
+            // 
+            // label_LogError
+            // 
+            this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.label_LogError.ForeColor = System.Drawing.Color.Red;
+            this.label_LogError.Location = new System.Drawing.Point(3, 147);
+            this.label_LogError.Name = "label_LogError";
+            this.label_LogError.Size = new System.Drawing.Size(488, 13);
+            this.label_LogError.TabIndex = 12;
+            this.label_LogError.Text = "label_LogError";
+            // 
+            // toolStripMenuItem_ConfigFileOpenDirectory
+            // 
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Name = "toolStripMenuItem_ConfigFileOpenDirectory";
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Size = new System.Drawing.Size(202, 22);
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Text = "Explore Config Directory";
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_ConfigFileOpenDirectory_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -831,6 +994,8 @@
             this.tabPage_Backup.ResumeLayout(false);
             this.tabPage_Backup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).EndInit();
+            this.tabPage_Logging.ResumeLayout(false);
+            this.tabPage_Logging.PerformLayout();
             this.splitContainer_Console.Panel1.ResumeLayout(false);
             this.splitContainer_Console.Panel2.ResumeLayout(false);
             this.splitContainer_Console.Panel2.PerformLayout();
@@ -849,6 +1014,7 @@
             this.toolStrip_Footer.PerformLayout();
             this.toolStrip_Config.ResumeLayout(false);
             this.toolStrip_Config.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -919,6 +1085,20 @@
         private System.Windows.Forms.Label label_AutosaveTimeRemaining;
         private System.Windows.Forms.Label label_AutosaveTimeRemainingData;
         private System.Windows.Forms.Timer timer_Main;
+        private System.Windows.Forms.TabPage tabPage_Logging;
+        private System.Windows.Forms.CheckBox checkBox_Logging;
+        private System.Windows.Forms.Button button_LoggingFolder;
+        private System.Windows.Forms.TextBox textBox_LogFolder;
+        private System.Windows.Forms.Label label_LogFilenamePrefix;
+        private System.Windows.Forms.TextBox textBox_LogFilenamePrefix;
+        private System.Windows.Forms.Label label_LogFileSizeLimitInfo;
+        private System.Windows.Forms.ComboBox comboBox_LogProcedureWhenFull;
+        private System.Windows.Forms.Label label_LogProcedureWhenFull;
+        private System.Windows.Forms.Label label_LogFileSizeLimitUnit;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown numericUpDown_LogFileSizeLimit;
+        private System.Windows.Forms.Label label_LogError;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConfigFileOpenDirectory;
     }
 }
 

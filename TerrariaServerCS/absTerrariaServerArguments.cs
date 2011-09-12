@@ -15,6 +15,19 @@ namespace TerrariaServerCS
         Medium = 2,
         Large = 3
     }
+
+    public enum enumTerrariaBackupFactor
+    {
+        Minutes,
+        Hours,
+        Days
+    }
+
+    public enum enumTerrariaLogFileFullProcedure
+    {
+        Overwrite,
+        New_File
+    }
     #endregion
 
     public abstract class absTerrariaServerArguments
@@ -29,10 +42,12 @@ namespace TerrariaServerCS
         {
             get { return "txt"; }
         }
-        public virtual string _DefaultConfigFileLocation 
+        public virtual string _DefaultConfigFileName 
         {
             get { return "TerrariaServerGUIConfig"; }
         }
+        public virtual string _DefaultGameLocation
+        { get; protected set; }
         #endregion
 
         #region properties - gui server config file parameters
@@ -60,6 +75,26 @@ namespace TerrariaServerCS
         /// The unit the auto save delay is measured in
         /// </summary>
         public int TSG_AutoSaveFactor { get; set; }
+
+        /// <summary>
+        /// The location the log files are stored
+        /// </summary>
+        public string TSG_LogFolder { get; set; }
+
+        /// <summary>
+        /// The prefix used to name the log files
+        /// </summary>
+        public string TSG_LogFilePrefix { get; set; }
+
+        /// <summary>
+        /// The maximum size the log file will be allowed to reach
+        /// </summary>
+        public int TSG_LogFileSizeLimit { get; set; }
+
+        /// <summary>
+        /// The action to take when the log file reaches it's limit
+        /// </summary>
+        public int TSG_LogFileFullProcedure { get; set; }
         #endregion
 
         #region properties - official server config file parameters
@@ -125,6 +160,11 @@ namespace TerrariaServerCS
         /// </summary>
         public int Secure { get; set; }
         #endregion
+
+        protected absTerrariaServerArguments()
+        {
+            _DefaultGameLocation = getGameLocationDefault();
+        }
 
         #region methods - public
         /// <summary>
@@ -209,7 +249,12 @@ namespace TerrariaServerCS
         #endregion
 
         #region methods - protected
-        protected virtual string getServerLocationDefault()
+        /// <summary>
+        /// Looks in the computers registry for the game path from Steam with a trailing directory slash.
+        /// Returns an empty string if no registry entry was found.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string getGameLocationDefault()
         {
             char PS = Path.DirectorySeparatorChar;
 
@@ -223,7 +268,7 @@ namespace TerrariaServerCS
                 tsServerFile = new FileInfo(tsServerFile).FullName;
 
                 // Add the default path for the server
-                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}TerrariaServer.exe", PS, tsServerFile);
+                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}", PS, tsServerFile);
             }
 
             // Return

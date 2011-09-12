@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using TerrariaServerCS;
 using TerrariaServerCS.Classes;
 using System.IO;
+using System.Diagnostics;
 
 namespace TerrariaServerGUI
 {
@@ -59,11 +60,15 @@ namespace TerrariaServerGUI
             // Load the default server location
             textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
             
-            // Initialize the world creation size drop down
+            // Initialize drop downs
+            //  world creation size drop down
             comboBox_AutoCreateSize.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServerSize));
-
-            // Initialize the server type drop down
+            //  server type drop down
             comboBox_ServerType.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServer));
+            //  autosave factor drop down
+            comboBox_AutosaveDelayFactor.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaBackupFactor));
+            //  logging full procedure drop down
+            comboBox_LogProcedureWhenFull.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaLogFileFullProcedure)).Select(s => s.Replace("_", " ")).ToArray();
             
             // Load the available config files
             refreshConfigFileList("");
@@ -76,12 +81,15 @@ namespace TerrariaServerGUI
             
             // Modify the default settings on the config file save dialog
             saveFileDialog_Config.DefaultExt = moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
-            saveFileDialog_Config.FileName = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation;
+            saveFileDialog_Config.FileName = moTerrariaServer.ServerStartArguments._DefaultConfigFileName;
             saveFileDialog_Config.Filter = "Terraria Server GUI Config File|*." + moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
         
             // Start timers
             moLastAutosave = DateTime.Now;
             timer_Main.Start();
+
+            // Clear the log error text
+            label_LogError.Text = "";
         }
 
         private void initializeServerObject(enumTerrariaServer toServerType)
@@ -100,6 +108,10 @@ namespace TerrariaServerGUI
             comboBox_AutosaveDelayFactor.SelectedIndexChanged += saveableOption_OnChange;
             textBox_ServerPath.TextChanged += saveableOption_OnChange;
             comboBox_ServerType.SelectedIndexChanged += saveableOption_OnChange;
+            textBox_LogFolder.TextChanged += saveableOption_OnChange;
+            textBox_LogFilenamePrefix.TextChanged += saveableOption_OnChange;
+            numericUpDown_LogFileSizeLimit.ValueChanged += saveableOption_OnChange;
+            comboBox_LogProcedureWhenFull.SelectedIndexChanged += saveableOption_OnChange;
 
             textBox_ServerPath.TextChanged += saveableOption_OnChange;
             textBox_World.TextChanged += saveableOption_OnChange;
@@ -117,13 +129,18 @@ namespace TerrariaServerGUI
 
         private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
         {
-            // Populate the form
+            // GUI options
             checkBox_AutoSave.Checked = (poArgs.TSG_AutoSave == 0 ? false : true);
             numericUpDown_AutosaveDelay.Value = poArgs.TSG_AutoSaveDelay;
             comboBox_AutosaveDelayFactor.SelectedIndex = poArgs.TSG_AutoSaveFactor - 1;
             textBox_ServerPath.Text = poArgs.TSG_ServerPath;
             comboBox_ServerType.SelectedIndex = poArgs.TSG_ServerType - 1;
+            textBox_LogFolder.Text = poArgs.TSG_LogFolder;
+            textBox_LogFilenamePrefix.Text = poArgs.TSG_LogFilePrefix;
+            numericUpDown_LogFileSizeLimit.Value = poArgs.TSG_LogFileSizeLimit;
+            comboBox_LogProcedureWhenFull.SelectedIndex = poArgs.TSG_LogFileFullProcedure - 1;
 
+            // Server options
             numericUpDown_Players.Value = poArgs.Players;
             textBox_World.Text = poArgs.World;
             numericUpDown_Port.Value = poArgs.Port;
@@ -141,13 +158,18 @@ namespace TerrariaServerGUI
 
         private void saveArgumentsToObject(absTerrariaServerArguments poArgs)
         {
-            // Populate the form
+            // GUI options
             poArgs.TSG_AutoSave = (checkBox_AutoSave.Checked ? 1 : 0);
             poArgs.TSG_AutoSaveDelay = Convert.ToInt32(numericUpDown_AutosaveDelay.Value);
             poArgs.TSG_AutoSaveFactor = comboBox_AutosaveDelayFactor.SelectedIndex + 1;
             poArgs.TSG_ServerPath = textBox_ServerPath.Text;
             poArgs.TSG_ServerType = comboBox_ServerType.SelectedIndex + 1;
+            poArgs.TSG_LogFolder = textBox_LogFolder.Text;
+            poArgs.TSG_LogFilePrefix = textBox_LogFilenamePrefix.Text;
+            poArgs.TSG_LogFileSizeLimit = Convert.ToInt32(numericUpDown_LogFileSizeLimit.Value);
+            poArgs.TSG_LogFileFullProcedure = comboBox_LogProcedureWhenFull.SelectedIndex + 1;
             
+            // Server options
             poArgs.Players = Convert.ToInt32(numericUpDown_Players.Value);
             poArgs.World = textBox_World.Text;
             poArgs.Port = Convert.ToInt32(numericUpDown_Port.Value);
@@ -172,7 +194,7 @@ namespace TerrariaServerGUI
         /// <param name="tsConfigFile"></param>
         private void saveConfigFile(string tsConfigFilePathAndName)
         {
-            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileLocation + "." +
+            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileName + "." +
                 moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
 
             // Save to the selected file if possible
@@ -255,6 +277,9 @@ namespace TerrariaServerGUI
         {
             if (psMessage == null) psMessage = "";
 
+            // Log the message
+            doLog(psMessage);
+
             // Pause the refresh of the console until after all output is complete
             // (otherwise it may blink)
             richTextBox_Console.SuspendLayout();
@@ -272,6 +297,39 @@ namespace TerrariaServerGUI
 
             // Resume painting the text box
             richTextBox_Console.ResumeLayout();
+        }
+
+        void doLog(string psMessage)
+        {
+            if (checkBox_Logging.Checked)
+            {
+                string tsFile = "";
+
+                // Create the log filename
+                tsFile = moTerrariaServer.ServerStartArguments.TSG_LogFolder +
+                    moTerrariaServer.ServerStartArguments.TSG_LogFilePrefix +
+                    ".txt";
+
+                // Prefix the line with a timestamp
+                psMessage = DateTime.Now.ToString() + " - " + psMessage;
+                
+                try
+                {
+                    // Clear the last error message
+                    label_LogError.Text = "";
+
+                    // Check for the log folder location
+                    if (!Directory.Exists(moTerrariaServer.ServerStartArguments.TSG_LogFolder))
+                        Directory.CreateDirectory(moTerrariaServer.ServerStartArguments.TSG_LogFolder);
+
+                    // Write the log contents
+                    File.AppendAllText(tsFile, psMessage);
+                }
+                catch (Exception e)
+                {
+                    label_LogError.Text = "Last Log Attempt Threw an Error: " + e.Message;
+                }
+            }
         }
 
         /// <summary>
@@ -711,6 +769,28 @@ namespace TerrariaServerGUI
 
             // Refresh the timer
             refreshAutosaveTimer();
+        }
+
+        private void button_LoggingFolder_Click(object sender, EventArgs e)
+        {
+            doOpenFileOrDirectoryDialog(textBox_LogFolder, true);
+        }
+
+        private void checkBox_Logging_CheckedChanged(object sender, EventArgs e)
+        {
+            bool tbEnabled = checkBox_Logging.Checked;
+
+            // Enable or disable logging controls
+            button_LoggingFolder.Enabled = tbEnabled;
+            textBox_LogFolder.Enabled = tbEnabled;
+            textBox_LogFilenamePrefix.Enabled = tbEnabled;
+        }
+
+        private void toolStripMenuItem_ConfigFileOpenDirectory_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe" , string.Format(@" ""{0}""",
+                Environment.CurrentDirectory)
+            );
         }
         #endregion
     }
