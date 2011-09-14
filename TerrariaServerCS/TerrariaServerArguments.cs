@@ -25,6 +25,7 @@ namespace TerrariaServerCS
             TSG_LogFilePrefix = "TerrariaServerLog";
             TSG_LogFileSizeLimit = 5;
             TSG_LogFileFullProcedure = 1;
+            TSG_LogPercentagesCollapsed = 1;
 
             // Official server default values
             Players = 8;

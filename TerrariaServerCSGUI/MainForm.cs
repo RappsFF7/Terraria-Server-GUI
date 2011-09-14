@@ -115,6 +115,7 @@ namespace TerrariaServerGUI
             textBox_LogFilenamePrefix.TextChanged += saveableOption_OnChange;
             numericUpDown_LogFileSizeLimit.ValueChanged += saveableOption_OnChange;
             comboBox_LogProcedureWhenFull.SelectedIndexChanged += saveableOption_OnChange;
+            checkBox_LogPercentageCollapsed.CheckedChanged += saveableOption_OnChange;
 
             textBox_ServerPath.TextChanged += saveableOption_OnChange;
             textBox_World.TextChanged += saveableOption_OnChange;
@@ -142,6 +143,7 @@ namespace TerrariaServerGUI
             textBox_LogFilenamePrefix.Text = poArgs.TSG_LogFilePrefix;
             numericUpDown_LogFileSizeLimit.Value = poArgs.TSG_LogFileSizeLimit;
             comboBox_LogProcedureWhenFull.SelectedIndex = poArgs.TSG_LogFileFullProcedure - 1;
+            checkBox_LogPercentageCollapsed.Checked = (poArgs.TSG_LogPercentagesCollapsed == 0 ? false : true);
 
             // Server options
             numericUpDown_Players.Value = poArgs.Players;
@@ -171,6 +173,7 @@ namespace TerrariaServerGUI
             poArgs.TSG_LogFilePrefix = textBox_LogFilenamePrefix.Text;
             poArgs.TSG_LogFileSizeLimit = Convert.ToInt32(numericUpDown_LogFileSizeLimit.Value);
             poArgs.TSG_LogFileFullProcedure = comboBox_LogProcedureWhenFull.SelectedIndex + 1;
+            poArgs.TSG_LogPercentagesCollapsed = (checkBox_LogPercentageCollapsed.Checked ? 1 : 0);
             
             // Server options
             poArgs.Players = Convert.ToInt32(numericUpDown_Players.Value);
@@ -310,6 +313,10 @@ namespace TerrariaServerGUI
             if (checkBox_Logging.Checked)
             {
                 string tsFile = "";
+
+                // Check for collapsed logging
+                if (moTerrariaServer.ServerStartArguments.TSG_LogPercentagesCollapsed == 1 && psMessage.Contains("%"))
+                    return;
 
                 // Create the log filename
                 tsFile = moTerrariaServer.ServerStartArguments.TSG_LogFolder +
@@ -794,6 +801,7 @@ namespace TerrariaServerGUI
             button_LoggingFolder.Enabled = tbEnabled;
             textBox_LogFolder.Enabled = tbEnabled;
             textBox_LogFilenamePrefix.Enabled = tbEnabled;
+            checkBox_LogPercentageCollapsed.Enabled = tbEnabled;
         }
 
         private void toolStripMenuItem_ConfigFileOpenDirectory_Click(object sender, EventArgs e)

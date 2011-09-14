@@ -95,6 +95,12 @@ namespace TerrariaServerCS
         /// The action to take when the log file reaches it's limit
         /// </summary>
         public int TSG_LogFileFullProcedure { get; set; }
+
+        /// <summary>
+        /// Determines if percentages output by the server are logged or not
+        /// (as it tends to clog up the log file)
+        /// </summary>
+        public int TSG_LogPercentagesCollapsed { get; set; }
         #endregion
 
         #region properties - official server config file parameters

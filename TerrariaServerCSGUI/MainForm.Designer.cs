@@ -77,7 +77,6 @@
             this.label_LogFileSizeLimitInfo = new System.Windows.Forms.Label();
             this.comboBox_LogProcedureWhenFull = new System.Windows.Forms.ComboBox();
             this.label_LogProcedureWhenFull = new System.Windows.Forms.Label();
-            this.label_LogFileSizeLimitUnit = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label_LogFilenamePrefix = new System.Windows.Forms.Label();
             this.textBox_LogFilenamePrefix = new System.Windows.Forms.TextBox();
@@ -110,6 +109,8 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
+            this.checkBox_LogPercentageCollapsed = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -575,12 +576,13 @@
             // 
             // tabPage_Logging
             // 
+            this.tabPage_Logging.Controls.Add(this.label2);
+            this.tabPage_Logging.Controls.Add(this.checkBox_LogPercentageCollapsed);
             this.tabPage_Logging.Controls.Add(this.label_LogError);
             this.tabPage_Logging.Controls.Add(this.numericUpDown_LogFileSizeLimit);
             this.tabPage_Logging.Controls.Add(this.label_LogFileSizeLimitInfo);
             this.tabPage_Logging.Controls.Add(this.comboBox_LogProcedureWhenFull);
             this.tabPage_Logging.Controls.Add(this.label_LogProcedureWhenFull);
-            this.tabPage_Logging.Controls.Add(this.label_LogFileSizeLimitUnit);
             this.tabPage_Logging.Controls.Add(this.label1);
             this.tabPage_Logging.Controls.Add(this.label_LogFilenamePrefix);
             this.tabPage_Logging.Controls.Add(this.textBox_LogFilenamePrefix);
@@ -615,26 +617,25 @@
             0,
             0});
             this.numericUpDown_LogFileSizeLimit.Name = "numericUpDown_LogFileSizeLimit";
-            this.numericUpDown_LogFileSizeLimit.Size = new System.Drawing.Size(100, 20);
+            this.numericUpDown_LogFileSizeLimit.Size = new System.Drawing.Size(121, 20);
             this.numericUpDown_LogFileSizeLimit.TabIndex = 11;
             // 
             // label_LogFileSizeLimitInfo
             // 
             this.label_LogFileSizeLimitInfo.AutoSize = true;
             this.label_LogFileSizeLimitInfo.Enabled = false;
-            this.label_LogFileSizeLimitInfo.Location = new System.Drawing.Point(347, 59);
+            this.label_LogFileSizeLimitInfo.Location = new System.Drawing.Point(76, 80);
             this.label_LogFileSizeLimitInfo.Name = "label_LogFileSizeLimitInfo";
-            this.label_LogFileSizeLimitInfo.Size = new System.Drawing.Size(136, 13);
+            this.label_LogFileSizeLimitInfo.Size = new System.Drawing.Size(137, 13);
             this.label_LogFileSizeLimitInfo.TabIndex = 10;
-            this.label_LogFileSizeLimitInfo.Text = "<- (A value of 0 is unlimited)";
-            this.label_LogFileSizeLimitInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label_LogFileSizeLimitInfo.Text = "(A value of 0 is unlimited) /\\";
             // 
             // comboBox_LogProcedureWhenFull
             // 
             this.comboBox_LogProcedureWhenFull.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_LogProcedureWhenFull.Enabled = false;
             this.comboBox_LogProcedureWhenFull.FormattingEnabled = true;
-            this.comboBox_LogProcedureWhenFull.Location = new System.Drawing.Point(197, 83);
+            this.comboBox_LogProcedureWhenFull.Location = new System.Drawing.Point(197, 102);
             this.comboBox_LogProcedureWhenFull.Name = "comboBox_LogProcedureWhenFull";
             this.comboBox_LogProcedureWhenFull.Size = new System.Drawing.Size(121, 21);
             this.comboBox_LogProcedureWhenFull.TabIndex = 9;
@@ -643,21 +644,11 @@
             // 
             this.label_LogProcedureWhenFull.AutoSize = true;
             this.label_LogProcedureWhenFull.Enabled = false;
-            this.label_LogProcedureWhenFull.Location = new System.Drawing.Point(76, 86);
+            this.label_LogProcedureWhenFull.Location = new System.Drawing.Point(76, 105);
             this.label_LogProcedureWhenFull.Name = "label_LogProcedureWhenFull";
             this.label_LogProcedureWhenFull.Size = new System.Drawing.Size(110, 13);
             this.label_LogProcedureWhenFull.TabIndex = 8;
             this.label_LogProcedureWhenFull.Text = "Procedure When Full:";
-            // 
-            // label_LogFileSizeLimitUnit
-            // 
-            this.label_LogFileSizeLimitUnit.AutoSize = true;
-            this.label_LogFileSizeLimitUnit.Enabled = false;
-            this.label_LogFileSizeLimitUnit.Location = new System.Drawing.Point(303, 59);
-            this.label_LogFileSizeLimitUnit.Name = "label_LogFileSizeLimitUnit";
-            this.label_LogFileSizeLimitUnit.Size = new System.Drawing.Size(23, 13);
-            this.label_LogFileSizeLimitUnit.TabIndex = 7;
-            this.label_LogFileSizeLimitUnit.Text = "MB";
             // 
             // label1
             // 
@@ -665,9 +656,9 @@
             this.label1.Enabled = false;
             this.label1.Location = new System.Drawing.Point(76, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.Size = new System.Drawing.Size(119, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Log File Size Limit:";
+            this.label1.Text = "Log File Size Limit (MB):";
             // 
             // label_LogFilenamePrefix
             // 
@@ -699,7 +690,7 @@
             // 
             this.textBox_LogFolder.Location = new System.Drawing.Point(197, 5);
             this.textBox_LogFolder.Name = "textBox_LogFolder";
-            this.textBox_LogFolder.Size = new System.Drawing.Size(291, 20);
+            this.textBox_LogFolder.Size = new System.Drawing.Size(289, 20);
             this.textBox_LogFolder.TabIndex = 1;
             // 
             // checkBox_Logging
@@ -881,7 +872,7 @@
             this.toolStripButton_StatusIcon.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_StatusIcon.Name = "toolStripButton_StatusIcon";
             this.toolStripButton_StatusIcon.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_StatusIcon.Text = "toolStripButton1";
+            this.toolStripButton_StatusIcon.Text = "Server Status";
             // 
             // toolStripLabel_StatusText
             // 
@@ -991,6 +982,27 @@
             this.timer_Main.Enabled = true;
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
+            // 
+            // checkBox_LogPercentageCollapsed
+            // 
+            this.checkBox_LogPercentageCollapsed.AutoSize = true;
+            this.checkBox_LogPercentageCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox_LogPercentageCollapsed.Location = new System.Drawing.Point(327, 60);
+            this.checkBox_LogPercentageCollapsed.Name = "checkBox_LogPercentageCollapsed";
+            this.checkBox_LogPercentageCollapsed.Size = new System.Drawing.Size(159, 17);
+            this.checkBox_LogPercentageCollapsed.TabIndex = 13;
+            this.checkBox_LogPercentageCollapsed.Text = "Collapse Percentage Output";
+            this.checkBox_LogPercentageCollapsed.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(235, 80);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(251, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "(Percentages ouput by the server are not logged) /\\";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // MainForm
             // 
@@ -1117,13 +1129,14 @@
         private System.Windows.Forms.Label label_LogFileSizeLimitInfo;
         private System.Windows.Forms.ComboBox comboBox_LogProcedureWhenFull;
         private System.Windows.Forms.Label label_LogProcedureWhenFull;
-        private System.Windows.Forms.Label label_LogFileSizeLimitUnit;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numericUpDown_LogFileSizeLimit;
         private System.Windows.Forms.Label label_LogError;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConfigFileOpenDirectory;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton_Debug;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ForceGuiState;
+        private System.Windows.Forms.CheckBox checkBox_LogPercentageCollapsed;
+        private System.Windows.Forms.Label label2;
     }
 }
 
