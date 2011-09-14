@@ -72,6 +72,13 @@
             this.numericUpDown_AutosaveDelay = new System.Windows.Forms.NumericUpDown();
             this.checkBox_AutoSave = new System.Windows.Forms.CheckBox();
             this.tabPage_Logging = new System.Windows.Forms.TabPage();
+            this.label_LogError = new System.Windows.Forms.Label();
+            this.numericUpDown_LogFileSizeLimit = new System.Windows.Forms.NumericUpDown();
+            this.label_LogFileSizeLimitInfo = new System.Windows.Forms.Label();
+            this.comboBox_LogProcedureWhenFull = new System.Windows.Forms.ComboBox();
+            this.label_LogProcedureWhenFull = new System.Windows.Forms.Label();
+            this.label_LogFileSizeLimitUnit = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.label_LogFilenamePrefix = new System.Windows.Forms.Label();
             this.textBox_LogFilenamePrefix = new System.Windows.Forms.TextBox();
             this.button_LoggingFolder = new System.Windows.Forms.Button();
@@ -85,6 +92,8 @@
             this.toolStripDropDownButton_File = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton_StartServer = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton_Debug = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem_ForceGuiState = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer_Main = new System.Windows.Forms.ToolStripContainer();
             this.toolStrip_Footer = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_StatusIcon = new System.Windows.Forms.ToolStripButton();
@@ -92,6 +101,7 @@
             this.toolStripProgressBar_Main = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStrip_Config = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_ConfigFile = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem_ConfigFileOpenDirectory = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_ConfigFileRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripComboBox_ConfigFile = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButton_ConfigFileSave = new System.Windows.Forms.ToolStripButton();
@@ -100,14 +110,6 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.label_LogFileSizeLimitUnit = new System.Windows.Forms.Label();
-            this.label_LogProcedureWhenFull = new System.Windows.Forms.Label();
-            this.comboBox_LogProcedureWhenFull = new System.Windows.Forms.ComboBox();
-            this.label_LogFileSizeLimitInfo = new System.Windows.Forms.Label();
-            this.numericUpDown_LogFileSizeLimit = new System.Windows.Forms.NumericUpDown();
-            this.label_LogError = new System.Windows.Forms.Label();
-            this.toolStripMenuItem_ConfigFileOpenDirectory = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -120,6 +122,7 @@
             this.tabPage_Backup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).BeginInit();
             this.tabPage_Logging.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Console)).BeginInit();
             this.splitContainer_Console.Panel1.SuspendLayout();
             this.splitContainer_Console.Panel2.SuspendLayout();
@@ -131,7 +134,6 @@
             this.toolStripContainer_Main.SuspendLayout();
             this.toolStrip_Footer.SuspendLayout();
             this.toolStrip_Config.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // BottomToolStripPanel
@@ -593,6 +595,80 @@
             this.tabPage_Logging.Text = "Logging";
             this.tabPage_Logging.UseVisualStyleBackColor = true;
             // 
+            // label_LogError
+            // 
+            this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.label_LogError.ForeColor = System.Drawing.Color.Red;
+            this.label_LogError.Location = new System.Drawing.Point(3, 147);
+            this.label_LogError.Name = "label_LogError";
+            this.label_LogError.Size = new System.Drawing.Size(488, 13);
+            this.label_LogError.TabIndex = 12;
+            this.label_LogError.Text = "label_LogError";
+            // 
+            // numericUpDown_LogFileSizeLimit
+            // 
+            this.numericUpDown_LogFileSizeLimit.Enabled = false;
+            this.numericUpDown_LogFileSizeLimit.Location = new System.Drawing.Point(197, 57);
+            this.numericUpDown_LogFileSizeLimit.Maximum = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            this.numericUpDown_LogFileSizeLimit.Name = "numericUpDown_LogFileSizeLimit";
+            this.numericUpDown_LogFileSizeLimit.Size = new System.Drawing.Size(100, 20);
+            this.numericUpDown_LogFileSizeLimit.TabIndex = 11;
+            // 
+            // label_LogFileSizeLimitInfo
+            // 
+            this.label_LogFileSizeLimitInfo.AutoSize = true;
+            this.label_LogFileSizeLimitInfo.Enabled = false;
+            this.label_LogFileSizeLimitInfo.Location = new System.Drawing.Point(347, 59);
+            this.label_LogFileSizeLimitInfo.Name = "label_LogFileSizeLimitInfo";
+            this.label_LogFileSizeLimitInfo.Size = new System.Drawing.Size(136, 13);
+            this.label_LogFileSizeLimitInfo.TabIndex = 10;
+            this.label_LogFileSizeLimitInfo.Text = "<- (A value of 0 is unlimited)";
+            this.label_LogFileSizeLimitInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // comboBox_LogProcedureWhenFull
+            // 
+            this.comboBox_LogProcedureWhenFull.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_LogProcedureWhenFull.Enabled = false;
+            this.comboBox_LogProcedureWhenFull.FormattingEnabled = true;
+            this.comboBox_LogProcedureWhenFull.Location = new System.Drawing.Point(197, 83);
+            this.comboBox_LogProcedureWhenFull.Name = "comboBox_LogProcedureWhenFull";
+            this.comboBox_LogProcedureWhenFull.Size = new System.Drawing.Size(121, 21);
+            this.comboBox_LogProcedureWhenFull.TabIndex = 9;
+            // 
+            // label_LogProcedureWhenFull
+            // 
+            this.label_LogProcedureWhenFull.AutoSize = true;
+            this.label_LogProcedureWhenFull.Enabled = false;
+            this.label_LogProcedureWhenFull.Location = new System.Drawing.Point(76, 86);
+            this.label_LogProcedureWhenFull.Name = "label_LogProcedureWhenFull";
+            this.label_LogProcedureWhenFull.Size = new System.Drawing.Size(110, 13);
+            this.label_LogProcedureWhenFull.TabIndex = 8;
+            this.label_LogProcedureWhenFull.Text = "Procedure When Full:";
+            // 
+            // label_LogFileSizeLimitUnit
+            // 
+            this.label_LogFileSizeLimitUnit.AutoSize = true;
+            this.label_LogFileSizeLimitUnit.Enabled = false;
+            this.label_LogFileSizeLimitUnit.Location = new System.Drawing.Point(303, 59);
+            this.label_LogFileSizeLimitUnit.Name = "label_LogFileSizeLimitUnit";
+            this.label_LogFileSizeLimitUnit.Size = new System.Drawing.Size(23, 13);
+            this.label_LogFileSizeLimitUnit.TabIndex = 7;
+            this.label_LogFileSizeLimitUnit.Text = "MB";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Enabled = false;
+            this.label1.Location = new System.Drawing.Point(76, 59);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Log File Size Limit:";
+            // 
             // label_LogFilenamePrefix
             // 
             this.label_LogFilenamePrefix.AutoSize = true;
@@ -703,7 +779,8 @@
             this.toolStrip_Header.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton_File,
-            this.toolStripButton_StartServer});
+            this.toolStripButton_StartServer,
+            this.toolStripDropDownButton_Debug});
             this.toolStrip_Header.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_Header.Name = "toolStrip_Header";
             this.toolStrip_Header.Size = new System.Drawing.Size(502, 25);
@@ -739,6 +816,23 @@
             this.toolStripButton_StartServer.Size = new System.Drawing.Size(70, 22);
             this.toolStripButton_StartServer.Text = "Start Server";
             this.toolStripButton_StartServer.Click += new System.EventHandler(this.toolStripButton_StartServer_Click);
+            // 
+            // toolStripDropDownButton_Debug
+            // 
+            this.toolStripDropDownButton_Debug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton_Debug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_ForceGuiState});
+            this.toolStripDropDownButton_Debug.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton_Debug.Image")));
+            this.toolStripDropDownButton_Debug.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton_Debug.Name = "toolStripDropDownButton_Debug";
+            this.toolStripDropDownButton_Debug.Size = new System.Drawing.Size(55, 22);
+            this.toolStripDropDownButton_Debug.Text = "Debug";
+            // 
+            // toolStripMenuItem_ForceGuiState
+            // 
+            this.toolStripMenuItem_ForceGuiState.Name = "toolStripMenuItem_ForceGuiState";
+            this.toolStripMenuItem_ForceGuiState.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItem_ForceGuiState.Text = "Force GUI State";
             // 
             // toolStripContainer_Main
             // 
@@ -791,9 +885,12 @@
             // 
             // toolStripLabel_StatusText
             // 
+            this.toolStripLabel_StatusText.AutoSize = false;
+            this.toolStripLabel_StatusText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripLabel_StatusText.Name = "toolStripLabel_StatusText";
-            this.toolStripLabel_StatusText.Size = new System.Drawing.Size(139, 22);
+            this.toolStripLabel_StatusText.Size = new System.Drawing.Size(300, 22);
             this.toolStripLabel_StatusText.Text = "toolStripLabel_StatusText";
+            this.toolStripLabel_StatusText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripProgressBar_Main
             // 
@@ -827,6 +924,13 @@
             this.toolStripButton_ConfigFile.Name = "toolStripButton_ConfigFile";
             this.toolStripButton_ConfigFile.Size = new System.Drawing.Size(77, 22);
             this.toolStripButton_ConfigFile.Text = "Config File";
+            // 
+            // toolStripMenuItem_ConfigFileOpenDirectory
+            // 
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Name = "toolStripMenuItem_ConfigFileOpenDirectory";
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Size = new System.Drawing.Size(202, 22);
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Text = "Explore Config Directory";
+            this.toolStripMenuItem_ConfigFileOpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_ConfigFileOpenDirectory_Click);
             // 
             // toolStripMenuItem_ConfigFileRename
             // 
@@ -888,87 +992,6 @@
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Enabled = false;
-            this.label1.Location = new System.Drawing.Point(76, 59);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Log File Size Limit:";
-            // 
-            // label_LogFileSizeLimitUnit
-            // 
-            this.label_LogFileSizeLimitUnit.AutoSize = true;
-            this.label_LogFileSizeLimitUnit.Enabled = false;
-            this.label_LogFileSizeLimitUnit.Location = new System.Drawing.Point(303, 59);
-            this.label_LogFileSizeLimitUnit.Name = "label_LogFileSizeLimitUnit";
-            this.label_LogFileSizeLimitUnit.Size = new System.Drawing.Size(23, 13);
-            this.label_LogFileSizeLimitUnit.TabIndex = 7;
-            this.label_LogFileSizeLimitUnit.Text = "MB";
-            // 
-            // label_LogProcedureWhenFull
-            // 
-            this.label_LogProcedureWhenFull.AutoSize = true;
-            this.label_LogProcedureWhenFull.Enabled = false;
-            this.label_LogProcedureWhenFull.Location = new System.Drawing.Point(76, 86);
-            this.label_LogProcedureWhenFull.Name = "label_LogProcedureWhenFull";
-            this.label_LogProcedureWhenFull.Size = new System.Drawing.Size(110, 13);
-            this.label_LogProcedureWhenFull.TabIndex = 8;
-            this.label_LogProcedureWhenFull.Text = "Procedure When Full:";
-            // 
-            // comboBox_LogProcedureWhenFull
-            // 
-            this.comboBox_LogProcedureWhenFull.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_LogProcedureWhenFull.Enabled = false;
-            this.comboBox_LogProcedureWhenFull.FormattingEnabled = true;
-            this.comboBox_LogProcedureWhenFull.Location = new System.Drawing.Point(197, 83);
-            this.comboBox_LogProcedureWhenFull.Name = "comboBox_LogProcedureWhenFull";
-            this.comboBox_LogProcedureWhenFull.Size = new System.Drawing.Size(121, 21);
-            this.comboBox_LogProcedureWhenFull.TabIndex = 9;
-            // 
-            // label_LogFileSizeLimitInfo
-            // 
-            this.label_LogFileSizeLimitInfo.AutoSize = true;
-            this.label_LogFileSizeLimitInfo.Enabled = false;
-            this.label_LogFileSizeLimitInfo.Location = new System.Drawing.Point(347, 59);
-            this.label_LogFileSizeLimitInfo.Name = "label_LogFileSizeLimitInfo";
-            this.label_LogFileSizeLimitInfo.Size = new System.Drawing.Size(136, 13);
-            this.label_LogFileSizeLimitInfo.TabIndex = 10;
-            this.label_LogFileSizeLimitInfo.Text = "<- (A value of 0 is unlimited)";
-            this.label_LogFileSizeLimitInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // numericUpDown_LogFileSizeLimit
-            // 
-            this.numericUpDown_LogFileSizeLimit.Enabled = false;
-            this.numericUpDown_LogFileSizeLimit.Location = new System.Drawing.Point(197, 57);
-            this.numericUpDown_LogFileSizeLimit.Maximum = new decimal(new int[] {
-            1024,
-            0,
-            0,
-            0});
-            this.numericUpDown_LogFileSizeLimit.Name = "numericUpDown_LogFileSizeLimit";
-            this.numericUpDown_LogFileSizeLimit.Size = new System.Drawing.Size(100, 20);
-            this.numericUpDown_LogFileSizeLimit.TabIndex = 11;
-            // 
-            // label_LogError
-            // 
-            this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.label_LogError.ForeColor = System.Drawing.Color.Red;
-            this.label_LogError.Location = new System.Drawing.Point(3, 147);
-            this.label_LogError.Name = "label_LogError";
-            this.label_LogError.Size = new System.Drawing.Size(488, 13);
-            this.label_LogError.TabIndex = 12;
-            this.label_LogError.Text = "label_LogError";
-            // 
-            // toolStripMenuItem_ConfigFileOpenDirectory
-            // 
-            this.toolStripMenuItem_ConfigFileOpenDirectory.Name = "toolStripMenuItem_ConfigFileOpenDirectory";
-            this.toolStripMenuItem_ConfigFileOpenDirectory.Size = new System.Drawing.Size(202, 22);
-            this.toolStripMenuItem_ConfigFileOpenDirectory.Text = "Explore Config Directory";
-            this.toolStripMenuItem_ConfigFileOpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_ConfigFileOpenDirectory_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -996,6 +1019,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_AutosaveDelay)).EndInit();
             this.tabPage_Logging.ResumeLayout(false);
             this.tabPage_Logging.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).EndInit();
             this.splitContainer_Console.Panel1.ResumeLayout(false);
             this.splitContainer_Console.Panel2.ResumeLayout(false);
             this.splitContainer_Console.Panel2.PerformLayout();
@@ -1014,7 +1038,6 @@
             this.toolStrip_Footer.PerformLayout();
             this.toolStrip_Config.ResumeLayout(false);
             this.toolStrip_Config.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_LogFileSizeLimit)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1099,6 +1122,8 @@
         private System.Windows.Forms.NumericUpDown numericUpDown_LogFileSizeLimit;
         private System.Windows.Forms.Label label_LogError;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ConfigFileOpenDirectory;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton_Debug;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ForceGuiState;
     }
 }
 

@@ -17,7 +17,8 @@ namespace TerrariaServerCS
 
         public TerrariaServerEventArgs(DataReceivedEventArgs Source) 
         {
-            Data = Source.Data;
+            if (Source != null)
+                Data = Source.Data;
         }
     }
 }

@@ -141,6 +141,9 @@ namespace TerrariaServerCS
         /// <param name="psCommand"></param>
         protected virtual void doCommandComplete(string psCommand, DataReceivedEventArgs e)
         {
+            // Call the inherited command before the event is fired
+            doCommandCompleteParent(psCommand, e);
+
             // Trigger the event
             if (ServerCommandComplete != null)
                 ServerCommandComplete(this, new TerrariaServerEventArgs(e));
@@ -154,6 +157,13 @@ namespace TerrariaServerCS
         /// <param name="poLastServerOutput"></param>
         /// <returns>True if the command has completed</returns>
         protected abstract bool getIsCommandComplete(string psCommand, DataReceivedEventArgs poLastServerOutput);
+
+        /// <summary>
+        /// This method is called when a command is completed
+        /// </summary>
+        /// <param name="psCommand"></param>
+        /// <param name="poLastServerOutput"></param>
+        protected abstract void doCommandCompleteParent(string psCommand, DataReceivedEventArgs poLastServerOutput);
 
         public abstract void doCommand_StartServer(ref absTerrariaServerArguments poArgs);
         public abstract void doCommand_StopServer(bool pbSave);

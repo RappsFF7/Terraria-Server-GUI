@@ -26,13 +26,14 @@ namespace TerrariaServerCS
             // Check the various cases for the output
             Regex toCommandCompletePattern = null;
 
+            // Check for specific end of command output and process the command
             switch (psCommand)
             {
                 case "start":
                     toCommandCompletePattern = new Regex(".*server started.*");
                     if (tbReturn || toCommandCompletePattern.IsMatch(tsOutput))
                     {
-                        IsServerRunning = true;
+                        //IsServerRunning = true;
                         return true;
                     }
                     break;
@@ -40,7 +41,7 @@ namespace TerrariaServerCS
                 case "exit": case "exit-nosave":
                     if (tbReturn)
                     {
-                        IsServerRunning = false;
+                        //IsServerRunning = false;
                         return true;
                     }
                     break;
@@ -51,6 +52,25 @@ namespace TerrariaServerCS
 
             // No success condition was found, return false
             return false;
+        }
+
+        protected override void doCommandCompleteParent(string psCommand, System.Diagnostics.DataReceivedEventArgs poLastServerOuput)
+        {
+            // Check for specific end of command output and process the command
+            switch (psCommand)
+            {
+                case "start":
+                        IsServerRunning = true;
+                    break;
+
+                case "exit":
+                case "exit-nosave":
+                        IsServerRunning = false;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         public override void doCommand_StartServer(ref absTerrariaServerArguments poArgs)

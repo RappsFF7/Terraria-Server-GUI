@@ -61,6 +61,9 @@ namespace TerrariaServerGUI
             textBox_ServerPath.Text = moTerrariaServer.ServerExecutableLocation;
             
             // Initialize drop downs
+            //  force gui state drop down
+            (Enum.GetNames(typeof(enumFormState))).ToList().ForEach(s =>
+                toolStripMenuItem_ForceGuiState.DropDownItems.Add(new ToolStripMenuItem(s, null, toolStripComboBox_ForceGuiState_MenuItems_Click)));
             //  world creation size drop down
             comboBox_AutoCreateSize.DataSource = Enum.GetNames(typeof(TerrariaServerCS.enumTerrariaServerSize));
             //  server type drop down
@@ -277,6 +280,9 @@ namespace TerrariaServerGUI
         {
             if (psMessage == null) psMessage = "";
 
+            // Prefix the line with a timestamp
+            if (psMessage.Trim() != "") psMessage = DateTime.Now.ToString() + " - " + psMessage;
+
             // Log the message
             doLog(psMessage);
 
@@ -309,9 +315,6 @@ namespace TerrariaServerGUI
                 tsFile = moTerrariaServer.ServerStartArguments.TSG_LogFolder +
                     moTerrariaServer.ServerStartArguments.TSG_LogFilePrefix +
                     ".txt";
-
-                // Prefix the line with a timestamp
-                psMessage = DateTime.Now.ToString() + " - " + psMessage;
                 
                 try
                 {
@@ -363,17 +366,20 @@ namespace TerrariaServerGUI
 
         private void doUpdateStatus(string psMessage, int piPercentComplete)
         {
+            string tsMessage = psMessage;
+
             // Check for an error command
             if (piPercentComplete == -1)
                 doTSUpdateFormState(enumFormState.error);
 
             // Cap the parameters
-            if (psMessage.Length > 20) psMessage = psMessage.Substring(0, 17) + "...";
+            if (tsMessage.Length > 50) tsMessage = tsMessage.Substring(0, 47) + "...";
             if (piPercentComplete < 0) piPercentComplete = 0;
             if (piPercentComplete > 100) piPercentComplete = 100;
 
             // Update the GUI
-            toolStripLabel_StatusText.Text = psMessage;
+            toolStripLabel_StatusText.Text = tsMessage;
+            toolStripLabel_StatusText.ToolTipText = psMessage;
             toolStripProgressBar_Main.Value = piPercentComplete;
 
             // Hide the progress bar if the progress is not active
@@ -403,7 +409,7 @@ namespace TerrariaServerGUI
                     doUpdateStatus(psMessage, piPercentComplete);
                 });
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 if (!this.IsDisposed)
                     doUpdateStatus(psMessage, piPercentComplete);
@@ -795,6 +801,22 @@ namespace TerrariaServerGUI
             Process.Start("explorer.exe" , string.Format(@" ""{0}""",
                 Environment.CurrentDirectory)
             );
+        }
+
+        private void toolStripComboBox_ForceGuiState_MenuItems_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Parse the selected item
+                enumFormState toFormState = (enumFormState)Enum.Parse(typeof(enumFormState), sender.ToString());
+
+                // Update the form state
+                doUpdateFormState(toFormState);
+            }
+            catch (Exception toE)
+            {
+                doTSUpdateStatusError("error: " + sender.ToString());
+            }
         }
         #endregion
     }
