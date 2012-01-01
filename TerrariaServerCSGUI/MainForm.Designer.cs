@@ -72,6 +72,8 @@
             this.numericUpDown_AutosaveDelay = new System.Windows.Forms.NumericUpDown();
             this.checkBox_AutoSave = new System.Windows.Forms.CheckBox();
             this.tabPage_Logging = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBox_LogPercentageCollapsed = new System.Windows.Forms.CheckBox();
             this.label_LogError = new System.Windows.Forms.Label();
             this.numericUpDown_LogFileSizeLimit = new System.Windows.Forms.NumericUpDown();
             this.label_LogFileSizeLimitInfo = new System.Windows.Forms.Label();
@@ -109,8 +111,8 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
-            this.checkBox_LogPercentageCollapsed = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem_Help = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -597,6 +599,27 @@
             this.tabPage_Logging.Text = "Logging";
             this.tabPage_Logging.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(235, 80);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(251, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "(Percentages ouput by the server are not logged) /\\";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // checkBox_LogPercentageCollapsed
+            // 
+            this.checkBox_LogPercentageCollapsed.AutoSize = true;
+            this.checkBox_LogPercentageCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBox_LogPercentageCollapsed.Location = new System.Drawing.Point(327, 60);
+            this.checkBox_LogPercentageCollapsed.Name = "checkBox_LogPercentageCollapsed";
+            this.checkBox_LogPercentageCollapsed.Size = new System.Drawing.Size(159, 17);
+            this.checkBox_LogPercentageCollapsed.TabIndex = 13;
+            this.checkBox_LogPercentageCollapsed.Text = "Collapse Percentage Output";
+            this.checkBox_LogPercentageCollapsed.UseVisualStyleBackColor = true;
+            // 
             // label_LogError
             // 
             this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -771,7 +794,8 @@
             this.toolStrip_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton_File,
             this.toolStripButton_StartServer,
-            this.toolStripDropDownButton_Debug});
+            this.toolStripDropDownButton_Debug,
+            this.toolStripDropDownButton1});
             this.toolStrip_Header.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_Header.Name = "toolStrip_Header";
             this.toolStrip_Header.Size = new System.Drawing.Size(502, 25);
@@ -793,7 +817,7 @@
             // toolStripMenuItem_Exit
             // 
             this.toolStripMenuItem_Exit.Name = "toolStripMenuItem_Exit";
-            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(92, 22);
+            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
@@ -983,26 +1007,24 @@
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
             // 
-            // checkBox_LogPercentageCollapsed
+            // toolStripDropDownButton1
             // 
-            this.checkBox_LogPercentageCollapsed.AutoSize = true;
-            this.checkBox_LogPercentageCollapsed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.checkBox_LogPercentageCollapsed.Location = new System.Drawing.Point(327, 60);
-            this.checkBox_LogPercentageCollapsed.Name = "checkBox_LogPercentageCollapsed";
-            this.checkBox_LogPercentageCollapsed.Size = new System.Drawing.Size(159, 17);
-            this.checkBox_LogPercentageCollapsed.TabIndex = 13;
-            this.checkBox_LogPercentageCollapsed.Text = "Collapse Percentage Output";
-            this.checkBox_LogPercentageCollapsed.UseVisualStyleBackColor = true;
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_Help});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(45, 22);
+            this.toolStripDropDownButton1.Text = "Help";
+            this.toolStripDropDownButton1.ToolTipText = "toolStripDropDownButton_Help";
             // 
-            // label2
+            // toolStripMenuItem_Help
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(235, 80);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(251, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "(Percentages ouput by the server are not logged) /\\";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.toolStripMenuItem_Help.Name = "toolStripMenuItem_Help";
+            this.toolStripMenuItem_Help.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem_Help.Text = "Help";
+            this.toolStripMenuItem_Help.Click += new System.EventHandler(this.toolStripMenuItem_Help_Click);
             // 
             // MainForm
             // 
@@ -1013,7 +1035,7 @@
             this.Controls.Add(this.toolStripContainer_Main);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Terraria Server GUI";
+            this.Text = "Terraria Server GUI - Alpha 1.2.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
@@ -1137,6 +1159,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_ForceGuiState;
         private System.Windows.Forms.CheckBox checkBox_LogPercentageCollapsed;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Help;
     }
 }
 

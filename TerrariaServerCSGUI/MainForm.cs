@@ -182,7 +182,7 @@ namespace TerrariaServerGUI
             poArgs.Password = textBox_Password.Text;
             poArgs.MOTD = textBox_MODT.Text;
             poArgs.WorldPath = textBox_WorldPath.Text;
-            poArgs.AutoCreate = comboBox_ServerType.SelectedIndex + 1;
+            poArgs.AutoCreate = comboBox_AutoCreateSize.SelectedIndex + 1;
             poArgs.WorldName = textBox_WorldName.Text;
             poArgs.BanList = textBox_BanList.Text;
             poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
@@ -825,6 +825,12 @@ namespace TerrariaServerGUI
             {
                 doTSUpdateStatusError("error: " + sender.ToString());
             }
+        }
+
+        private void toolStripMenuItem_Help_Click(object sender, EventArgs e)
+        {
+            // Show the form
+            (new HelpForm()).Show();
         }
         #endregion
     }
