@@ -1,3 +1,8 @@
+#### Downloading
+***
+
+To get the application, go to the download section. You may be tempted to click the "Clone in Windows" or "ZIP" buttons... but those will get you a copy of the code, for which you would need to compile it before running. All tagged versions have a .zip file in the download section of the compiled (runnable) program.
+
 #### About
 ***
 
