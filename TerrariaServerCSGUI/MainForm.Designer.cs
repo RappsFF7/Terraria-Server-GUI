@@ -192,7 +192,7 @@
             // splitContainer_Main.Panel2
             // 
             this.splitContainer_Main.Panel2.Controls.Add(this.splitContainer_Console);
-            this.splitContainer_Main.Size = new System.Drawing.Size(502, 312);
+            this.splitContainer_Main.Size = new System.Drawing.Size(504, 307);
             this.splitContainer_Main.SplitterDistance = 189;
             this.splitContainer_Main.SplitterWidth = 1;
             this.splitContainer_Main.TabIndex = 2;
@@ -207,7 +207,7 @@
             this.tabControl_Main.Location = new System.Drawing.Point(0, 0);
             this.tabControl_Main.Name = "tabControl_Main";
             this.tabControl_Main.SelectedIndex = 0;
-            this.tabControl_Main.Size = new System.Drawing.Size(502, 189);
+            this.tabControl_Main.Size = new System.Drawing.Size(504, 189);
             this.tabControl_Main.TabIndex = 5;
             // 
             // tabPage_Startup
@@ -232,7 +232,7 @@
             this.tabPage_Startup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Startup.Name = "tabPage_Startup";
             this.tabPage_Startup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Startup.Size = new System.Drawing.Size(494, 163);
+            this.tabPage_Startup.Size = new System.Drawing.Size(496, 163);
             this.tabPage_Startup.TabIndex = 0;
             this.tabPage_Startup.Text = "Startup";
             this.tabPage_Startup.UseVisualStyleBackColor = true;
@@ -732,6 +732,8 @@
             // splitContainer_Console
             // 
             this.splitContainer_Console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer_Console.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer_Console.IsSplitterFixed = true;
             this.splitContainer_Console.Location = new System.Drawing.Point(0, 0);
             this.splitContainer_Console.Name = "splitContainer_Console";
             this.splitContainer_Console.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -744,9 +746,8 @@
             // 
             this.splitContainer_Console.Panel2.Controls.Add(this.textBox_Execute);
             this.splitContainer_Console.Panel2.Controls.Add(this.button_Execute);
-            this.splitContainer_Console.Size = new System.Drawing.Size(502, 122);
-            this.splitContainer_Console.SplitterDistance = 85;
-            this.splitContainer_Console.SplitterWidth = 1;
+            this.splitContainer_Console.Size = new System.Drawing.Size(504, 117);
+            this.splitContainer_Console.SplitterDistance = 81;
             this.splitContainer_Console.TabIndex = 3;
             // 
             // richTextBox_Console
@@ -756,32 +757,33 @@
             this.richTextBox_Console.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_Console.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_Console.Margin = new System.Windows.Forms.Padding(0);
+            this.richTextBox_Console.MinimumSize = new System.Drawing.Size(0, 20);
             this.richTextBox_Console.Name = "richTextBox_Console";
             this.richTextBox_Console.ReadOnly = true;
-            this.richTextBox_Console.Size = new System.Drawing.Size(502, 85);
+            this.richTextBox_Console.Size = new System.Drawing.Size(504, 81);
             this.richTextBox_Console.TabIndex = 0;
             this.richTextBox_Console.Text = "";
             // 
             // textBox_Execute
             // 
-            this.textBox_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Execute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_Execute.Location = new System.Drawing.Point(0, 2);
+            this.textBox_Execute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox_Execute.Location = new System.Drawing.Point(0, 0);
             this.textBox_Execute.Margin = new System.Windows.Forms.Padding(0, 2, 0, 4);
+            this.textBox_Execute.MinimumSize = new System.Drawing.Size(0, 20);
             this.textBox_Execute.Multiline = true;
             this.textBox_Execute.Name = "textBox_Execute";
-            this.textBox_Execute.Size = new System.Drawing.Size(412, 30);
+            this.textBox_Execute.Size = new System.Drawing.Size(414, 32);
             this.textBox_Execute.TabIndex = 1;
             this.textBox_Execute.TextChanged += new System.EventHandler(this.textBox_Execute_TextChanged);
             // 
             // button_Execute
             // 
-            this.button_Execute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Execute.Location = new System.Drawing.Point(412, 0);
+            this.button_Execute.Dock = System.Windows.Forms.DockStyle.Right;
+            this.button_Execute.Location = new System.Drawing.Point(414, 0);
             this.button_Execute.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.button_Execute.Name = "button_Execute";
-            this.button_Execute.Size = new System.Drawing.Size(90, 34);
+            this.button_Execute.Size = new System.Drawing.Size(90, 32);
             this.button_Execute.TabIndex = 2;
             this.button_Execute.Text = "Execute";
             this.button_Execute.UseVisualStyleBackColor = true;
@@ -798,7 +800,7 @@
             this.toolStripDropDownButton1});
             this.toolStrip_Header.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_Header.Name = "toolStrip_Header";
-            this.toolStrip_Header.Size = new System.Drawing.Size(502, 25);
+            this.toolStrip_Header.Size = new System.Drawing.Size(504, 25);
             this.toolStrip_Header.Stretch = true;
             this.toolStrip_Header.TabIndex = 1;
             this.toolStrip_Header.Text = "toolStrip_Header";
@@ -879,13 +881,13 @@
             // 
             this.toolStripContainer_Main.ContentPanel.AutoScroll = true;
             this.toolStripContainer_Main.ContentPanel.Controls.Add(this.splitContainer_Main);
-            this.toolStripContainer_Main.ContentPanel.Size = new System.Drawing.Size(502, 312);
+            this.toolStripContainer_Main.ContentPanel.Size = new System.Drawing.Size(504, 307);
             this.toolStripContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer_Main.LeftToolStripPanelVisible = false;
             this.toolStripContainer_Main.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer_Main.Name = "toolStripContainer_Main";
             this.toolStripContainer_Main.RightToolStripPanelVisible = false;
-            this.toolStripContainer_Main.Size = new System.Drawing.Size(502, 387);
+            this.toolStripContainer_Main.Size = new System.Drawing.Size(504, 382);
             this.toolStripContainer_Main.TabIndex = 3;
             this.toolStripContainer_Main.Text = "toolStripContainer1";
             // 
@@ -904,7 +906,7 @@
             this.toolStripProgressBar_Main});
             this.toolStrip_Footer.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_Footer.Name = "toolStrip_Footer";
-            this.toolStrip_Footer.Size = new System.Drawing.Size(502, 25);
+            this.toolStrip_Footer.Size = new System.Drawing.Size(504, 25);
             this.toolStrip_Footer.Stretch = true;
             this.toolStrip_Footer.TabIndex = 1;
             // 
@@ -943,7 +945,7 @@
             this.toolStripButton_ConfigFileDelete});
             this.toolStrip_Config.Location = new System.Drawing.Point(0, 25);
             this.toolStrip_Config.Name = "toolStrip_Config";
-            this.toolStrip_Config.Size = new System.Drawing.Size(502, 25);
+            this.toolStrip_Config.Size = new System.Drawing.Size(504, 25);
             this.toolStrip_Config.Stretch = true;
             this.toolStrip_Config.TabIndex = 2;
             // 
@@ -1031,9 +1033,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(502, 387);
+            this.ClientSize = new System.Drawing.Size(504, 382);
             this.Controls.Add(this.toolStripContainer_Main);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(520, 420);
             this.Name = "MainForm";
             this.Text = "Terraria Server GUI - Alpha 1.2.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

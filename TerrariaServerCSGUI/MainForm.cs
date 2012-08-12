@@ -159,6 +159,12 @@ namespace TerrariaServerGUI
 
             // Disable the save button as the most recent file info is now displayed in the form
             toolStripButton_ConfigFileSave.Enabled = false;
+
+            // Move the cursor for serveral text fields to the right (so you can see the filename)
+            textBox_ServerPath.SelectionStart = textBox_ServerPath.Text.Length;
+            textBox_World.SelectionStart = textBox_World.Text.Length;
+            textBox_WorldPath.SelectionStart = textBox_WorldPath.Text.Length;
+            textBox_LogFolder.SelectionStart = textBox_LogFolder.Text.Length;
         }
 
         private void saveArgumentsToObject(absTerrariaServerArguments poArgs)
