@@ -1038,7 +1038,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(520, 420);
             this.Name = "MainForm";
-            this.Text = "Terraria Server GUI - Alpha 1.2.1";
+            this.Text = "Terraria Server GUI - Alpha 1.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
