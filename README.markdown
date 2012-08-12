@@ -6,6 +6,13 @@ This application is written in .net framework 4 (which is only logical since the
 #### Releases
 ***
 
+##### _Alpha 1.3_
+
+Added ability for custom config file names (this appeared to be active, but the program ignored any user entered values).
+Changed long text fields to align as far left as possible when loading a config file (so the end of the field is visible without scrolling the text, which is typically the file name)
+Fixed world size option when creating a new world (it never saved your selection).
+Fixed issues with multiple config file saving and loading.
+
 ##### _Alpha 1.2_
 
 Added logging (but not all logging options are available), timestamps, debug menu (in case the GUI does not properly interpret the server output and change it's state for starting and stopping of the server), shortcut to config file folder
