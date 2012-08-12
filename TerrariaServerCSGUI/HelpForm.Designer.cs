@@ -48,7 +48,7 @@
             this.ClientSize = new System.Drawing.Size(828, 475);
             this.Controls.Add(this.webBrowser_Main);
             this.Name = "HelpForm";
-            this.Text = "Help";
+            this.Text = "Help (A Real Help Menu IS Planned, But For Now... GitHub Wiki)";
             this.Load += new System.EventHandler(this.Help_Load);
             this.ResumeLayout(false);
 

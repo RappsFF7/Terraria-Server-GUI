@@ -95,6 +95,8 @@
             this.toolStripButton_StartServer = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButton_Debug = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem_ForceGuiState = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem_Help = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer_Main = new System.Windows.Forms.ToolStripContainer();
             this.toolStrip_Footer = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_StatusIcon = new System.Windows.Forms.ToolStripButton();
@@ -111,8 +113,6 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.toolStripMenuItem_Help = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -773,7 +773,7 @@
             this.textBox_Execute.Name = "textBox_Execute";
             this.textBox_Execute.Size = new System.Drawing.Size(412, 30);
             this.textBox_Execute.TabIndex = 1;
-            this.textBox_Execute.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_Execute_KeyDown);
+            this.textBox_Execute.TextChanged += new System.EventHandler(this.textBox_Execute_TextChanged);
             // 
             // button_Execute
             // 
@@ -817,7 +817,7 @@
             // toolStripMenuItem_Exit
             // 
             this.toolStripMenuItem_Exit.Name = "toolStripMenuItem_Exit";
-            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem_Exit.Size = new System.Drawing.Size(92, 22);
             this.toolStripMenuItem_Exit.Text = "Exit";
             this.toolStripMenuItem_Exit.Click += new System.EventHandler(this.toolStripMenuItem_Exit_Click);
             // 
@@ -848,6 +848,25 @@
             this.toolStripMenuItem_ForceGuiState.Name = "toolStripMenuItem_ForceGuiState";
             this.toolStripMenuItem_ForceGuiState.Size = new System.Drawing.Size(154, 22);
             this.toolStripMenuItem_ForceGuiState.Text = "Force GUI State";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_Help});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(45, 22);
+            this.toolStripDropDownButton1.Text = "Help";
+            this.toolStripDropDownButton1.ToolTipText = "toolStripDropDownButton_Help";
+            // 
+            // toolStripMenuItem_Help
+            // 
+            this.toolStripMenuItem_Help.Name = "toolStripMenuItem_Help";
+            this.toolStripMenuItem_Help.Size = new System.Drawing.Size(99, 22);
+            this.toolStripMenuItem_Help.Text = "Help";
+            this.toolStripMenuItem_Help.Click += new System.EventHandler(this.toolStripMenuItem_Help_Click);
             // 
             // toolStripContainer_Main
             // 
@@ -1006,25 +1025,6 @@
             this.timer_Main.Enabled = true;
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_Help});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(45, 22);
-            this.toolStripDropDownButton1.Text = "Help";
-            this.toolStripDropDownButton1.ToolTipText = "toolStripDropDownButton_Help";
-            // 
-            // toolStripMenuItem_Help
-            // 
-            this.toolStripMenuItem_Help.Name = "toolStripMenuItem_Help";
-            this.toolStripMenuItem_Help.Size = new System.Drawing.Size(152, 22);
-            this.toolStripMenuItem_Help.Text = "Help";
-            this.toolStripMenuItem_Help.Click += new System.EventHandler(this.toolStripMenuItem_Help_Click);
             // 
             // MainForm
             // 

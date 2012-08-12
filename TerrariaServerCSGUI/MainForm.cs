@@ -190,7 +190,11 @@ namespace TerrariaServerGUI
 
         public void saveConfigFile()
         {
-            saveConfigFile("");
+            // If the config drop down has an item selected, use that filename
+            string tsFileName = (toolStripComboBox_ConfigFile.SelectedItem ?? "").ToString();
+
+            // Save the config file
+            saveConfigFile(tsFileName);
         }
 
         /// <summary>
@@ -200,12 +204,18 @@ namespace TerrariaServerGUI
         /// <param name="tsConfigFile"></param>
         private void saveConfigFile(string tsConfigFilePathAndName)
         {
-            string tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileName + "." +
-                moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention;
+            string tsConfigFile = Path.GetFileName(tsConfigFilePathAndName);
+            string tsExtension = Path.GetExtension(tsConfigFilePathAndName);
 
-            // Save to the selected file if possible
-            if (toolStripComboBox_ConfigFile.Selected)
-                tsConfigFile = toolStripComboBox_ConfigFile.Text;
+            // Check if the file name was specified
+            if (Path.GetFileNameWithoutExtension(tsConfigFilePathAndName).Length == 0)
+                tsConfigFile = moTerrariaServer.ServerStartArguments._DefaultConfigFileName;
+
+            // Check if the file extension was specified
+            tsExtension = (Path.HasExtension(tsConfigFilePathAndName) ? Path.GetExtension(tsConfigFile) : moTerrariaServer.ServerStartArguments._DefaultConfigFileExtention);
+
+            // Create the full file name
+            tsConfigFile = Path.ChangeExtension(tsConfigFile, tsExtension);
 
             // Save the form content to the arguments object
             saveArgumentsToObject(moTerrariaServer.ServerStartArguments);
@@ -601,14 +611,14 @@ namespace TerrariaServerGUI
             moTerrariaServer.doCommand(textBox_Execute.Text);
         }
 
-        private void textBox_Execute_KeyDown(object sender, KeyEventArgs e)
+        private void textBox_Execute_TextChanged(object sender, EventArgs e)
         {
-            switch (e.KeyCode)
+            string tsText = textBox_Execute.Text;
+
+            if (tsText.Contains(Environment.NewLine))
             {
-                // Send the command when enter is clicked
-                case Keys.Enter:
-                    button_Execute_Click(sender, null);
-                    break;
+                button_Execute_Click(sender, null);
+                textBox_Execute.Clear();
             }
         }
 

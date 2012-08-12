@@ -26,6 +26,9 @@ namespace TerrariaServerCS
             tsUrl = Path.GetFullPath(TerrariaServerCS.Properties.Resources.HelpDirectory + TerrariaServerCS.Properties.Resources.HelpHomepage);
             Uri.TryCreate(tsUrl, UriKind.RelativeOrAbsolute, out toUri);
 
+            // TODO create a help menu IN the program, for now redirect to the wikipedia page
+            Uri.TryCreate("https://github.com/RappsFF7/Terraria-Server-GUI/wiki", UriKind.Absolute, out toUri);
+
             // Navigate to the help page
             webBrowser_Main.Navigate(toUri);
         }
