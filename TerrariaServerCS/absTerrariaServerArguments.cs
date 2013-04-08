@@ -263,18 +263,26 @@ namespace TerrariaServerCS
         protected virtual string getGameLocationDefault()
         {
             char PS = Path.DirectorySeparatorChar;
+            string tsServerFile = "";
 
-            // Try to get the server path from Steam
-            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
-
-            // If found, transform to get server location
-            if (tsServerFile != "")
+            try
             {
-                // Convert the file path string to use the system's file separators
-                tsServerFile = new FileInfo(tsServerFile).FullName;
+                // Try to get the server path from Steam
+                tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
 
-                // Add the default path for the server
-                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}", PS, tsServerFile);
+                // If found, transform to get server location
+                if (tsServerFile != "")
+                {
+                    // Convert the file path string to use the system's file separators
+                    tsServerFile = new FileInfo(tsServerFile).FullName;
+
+                    // Add the default path for the server
+                    tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}", PS, tsServerFile);
+                }
+            }
+            catch
+            {
+                // Ignored, the game may not be installed (for instance, on a server)
             }
 
             // Return
