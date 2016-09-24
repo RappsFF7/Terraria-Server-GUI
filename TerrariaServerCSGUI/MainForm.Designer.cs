@@ -113,6 +113,10 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
+            this.comboBox_Lobby = new System.Windows.Forms.ComboBox();
+            this.label_Lobby = new System.Windows.Forms.Label();
+            this.checkBox_Difficulty = new System.Windows.Forms.CheckBox();
+            this.checkBox_UPNP = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -192,8 +196,8 @@
             // splitContainer_Main.Panel2
             // 
             this.splitContainer_Main.Panel2.Controls.Add(this.splitContainer_Console);
-            this.splitContainer_Main.Size = new System.Drawing.Size(504, 307);
-            this.splitContainer_Main.SplitterDistance = 189;
+            this.splitContainer_Main.Size = new System.Drawing.Size(504, 345);
+            this.splitContainer_Main.SplitterDistance = 205;
             this.splitContainer_Main.SplitterWidth = 1;
             this.splitContainer_Main.TabIndex = 2;
             // 
@@ -207,7 +211,7 @@
             this.tabControl_Main.Location = new System.Drawing.Point(0, 0);
             this.tabControl_Main.Name = "tabControl_Main";
             this.tabControl_Main.SelectedIndex = 0;
-            this.tabControl_Main.Size = new System.Drawing.Size(504, 189);
+            this.tabControl_Main.Size = new System.Drawing.Size(504, 205);
             this.tabControl_Main.TabIndex = 5;
             // 
             // tabPage_Startup
@@ -216,6 +220,7 @@
             this.tabPage_Startup.Controls.Add(this.textBox_Password);
             this.tabPage_Startup.Controls.Add(this.textBox_BanList);
             this.tabPage_Startup.Controls.Add(this.button_BanList);
+            this.tabPage_Startup.Controls.Add(this.checkBox_UPNP);
             this.tabPage_Startup.Controls.Add(this.checkBox_Secure);
             this.tabPage_Startup.Controls.Add(this.label_Port);
             this.tabPage_Startup.Controls.Add(this.numericUpDown_Port);
@@ -226,13 +231,15 @@
             this.tabPage_Startup.Controls.Add(this.button_World);
             this.tabPage_Startup.Controls.Add(this.button_ServerPath);
             this.tabPage_Startup.Controls.Add(this.textBox_ServerPath);
+            this.tabPage_Startup.Controls.Add(this.label_Lobby);
             this.tabPage_Startup.Controls.Add(this.label_ServerType);
+            this.tabPage_Startup.Controls.Add(this.comboBox_Lobby);
             this.tabPage_Startup.Controls.Add(this.numericUpDown_Players);
             this.tabPage_Startup.Controls.Add(this.comboBox_ServerType);
             this.tabPage_Startup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Startup.Name = "tabPage_Startup";
             this.tabPage_Startup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Startup.Size = new System.Drawing.Size(496, 163);
+            this.tabPage_Startup.Size = new System.Drawing.Size(496, 179);
             this.tabPage_Startup.TabIndex = 0;
             this.tabPage_Startup.Text = "Startup";
             this.tabPage_Startup.UseVisualStyleBackColor = true;
@@ -257,14 +264,14 @@
             // 
             // textBox_BanList
             // 
-            this.textBox_BanList.Location = new System.Drawing.Point(83, 137);
+            this.textBox_BanList.Location = new System.Drawing.Point(83, 153);
             this.textBox_BanList.Name = "textBox_BanList";
             this.textBox_BanList.Size = new System.Drawing.Size(234, 20);
             this.textBox_BanList.TabIndex = 18;
             // 
             // button_BanList
             // 
-            this.button_BanList.Location = new System.Drawing.Point(11, 134);
+            this.button_BanList.Location = new System.Drawing.Point(11, 150);
             this.button_BanList.Name = "button_BanList";
             this.button_BanList.Size = new System.Drawing.Size(66, 24);
             this.button_BanList.TabIndex = 19;
@@ -276,7 +283,7 @@
             // checkBox_Secure
             // 
             this.checkBox_Secure.AutoSize = true;
-            this.checkBox_Secure.Location = new System.Drawing.Point(323, 110);
+            this.checkBox_Secure.Location = new System.Drawing.Point(323, 137);
             this.checkBox_Secure.Name = "checkBox_Secure";
             this.checkBox_Secure.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBox_Secure.Size = new System.Drawing.Size(104, 17);
@@ -316,7 +323,7 @@
             this.textBox_MODT.Location = new System.Drawing.Point(83, 58);
             this.textBox_MODT.Multiline = true;
             this.textBox_MODT.Name = "textBox_MODT";
-            this.textBox_MODT.Size = new System.Drawing.Size(234, 73);
+            this.textBox_MODT.Size = new System.Drawing.Size(234, 89);
             this.textBox_MODT.TabIndex = 14;
             // 
             // label_MODT
@@ -418,6 +425,7 @@
             // 
             // tabPage_AutoCreation
             // 
+            this.tabPage_AutoCreation.Controls.Add(this.checkBox_Difficulty);
             this.tabPage_AutoCreation.Controls.Add(this.label_AutoCreateSize);
             this.tabPage_AutoCreation.Controls.Add(this.comboBox_AutoCreateSize);
             this.tabPage_AutoCreation.Controls.Add(this.textBox_WorldPath);
@@ -427,7 +435,7 @@
             this.tabPage_AutoCreation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_AutoCreation.Name = "tabPage_AutoCreation";
             this.tabPage_AutoCreation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_AutoCreation.Size = new System.Drawing.Size(496, 163);
+            this.tabPage_AutoCreation.Size = new System.Drawing.Size(496, 159);
             this.tabPage_AutoCreation.TabIndex = 1;
             this.tabPage_AutoCreation.Text = "AutoCreation";
             this.tabPage_AutoCreation.UseVisualStyleBackColor = true;
@@ -498,7 +506,7 @@
             this.tabPage_Backup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Backup.Name = "tabPage_Backup";
             this.tabPage_Backup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Backup.Size = new System.Drawing.Size(496, 163);
+            this.tabPage_Backup.Size = new System.Drawing.Size(496, 169);
             this.tabPage_Backup.TabIndex = 2;
             this.tabPage_Backup.Text = "Backup";
             this.tabPage_Backup.UseVisualStyleBackColor = true;
@@ -515,7 +523,7 @@
             // label_AutosaveTimeRemainingData
             // 
             this.label_AutosaveTimeRemainingData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_AutosaveTimeRemainingData.Location = new System.Drawing.Point(324, 30);
+            this.label_AutosaveTimeRemainingData.Location = new System.Drawing.Point(305, 30);
             this.label_AutosaveTimeRemainingData.Name = "label_AutosaveTimeRemainingData";
             this.label_AutosaveTimeRemainingData.Size = new System.Drawing.Size(164, 13);
             this.label_AutosaveTimeRemainingData.TabIndex = 4;
@@ -594,7 +602,7 @@
             this.tabPage_Logging.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Logging.Name = "tabPage_Logging";
             this.tabPage_Logging.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Logging.Size = new System.Drawing.Size(496, 163);
+            this.tabPage_Logging.Size = new System.Drawing.Size(496, 169);
             this.tabPage_Logging.TabIndex = 3;
             this.tabPage_Logging.Text = "Logging";
             this.tabPage_Logging.UseVisualStyleBackColor = true;
@@ -624,7 +632,7 @@
             // 
             this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.label_LogError.ForeColor = System.Drawing.Color.Red;
-            this.label_LogError.Location = new System.Drawing.Point(3, 147);
+            this.label_LogError.Location = new System.Drawing.Point(3, 153);
             this.label_LogError.Name = "label_LogError";
             this.label_LogError.Size = new System.Drawing.Size(490, 13);
             this.label_LogError.TabIndex = 12;
@@ -746,8 +754,8 @@
             // 
             this.splitContainer_Console.Panel2.Controls.Add(this.textBox_Execute);
             this.splitContainer_Console.Panel2.Controls.Add(this.button_Execute);
-            this.splitContainer_Console.Size = new System.Drawing.Size(504, 117);
-            this.splitContainer_Console.SplitterDistance = 81;
+            this.splitContainer_Console.Size = new System.Drawing.Size(504, 139);
+            this.splitContainer_Console.SplitterDistance = 85;
             this.splitContainer_Console.TabIndex = 3;
             // 
             // richTextBox_Console
@@ -760,7 +768,7 @@
             this.richTextBox_Console.MinimumSize = new System.Drawing.Size(0, 20);
             this.richTextBox_Console.Name = "richTextBox_Console";
             this.richTextBox_Console.ReadOnly = true;
-            this.richTextBox_Console.Size = new System.Drawing.Size(504, 81);
+            this.richTextBox_Console.Size = new System.Drawing.Size(504, 85);
             this.richTextBox_Console.TabIndex = 0;
             this.richTextBox_Console.Text = "";
             // 
@@ -773,7 +781,7 @@
             this.textBox_Execute.MinimumSize = new System.Drawing.Size(2, 20);
             this.textBox_Execute.Multiline = true;
             this.textBox_Execute.Name = "textBox_Execute";
-            this.textBox_Execute.Size = new System.Drawing.Size(414, 32);
+            this.textBox_Execute.Size = new System.Drawing.Size(414, 50);
             this.textBox_Execute.TabIndex = 1;
             this.textBox_Execute.TextChanged += new System.EventHandler(this.textBox_Execute_TextChanged);
             // 
@@ -783,7 +791,7 @@
             this.button_Execute.Location = new System.Drawing.Point(414, 0);
             this.button_Execute.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.button_Execute.Name = "button_Execute";
-            this.button_Execute.Size = new System.Drawing.Size(90, 32);
+            this.button_Execute.Size = new System.Drawing.Size(90, 50);
             this.button_Execute.TabIndex = 2;
             this.button_Execute.Text = "Execute";
             this.button_Execute.UseVisualStyleBackColor = true;
@@ -791,6 +799,7 @@
             // 
             // toolStrip_Header
             // 
+            this.toolStrip_Header.BackColor = System.Drawing.SystemColors.Control;
             this.toolStrip_Header.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip_Header.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip_Header.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -881,13 +890,13 @@
             // 
             this.toolStripContainer_Main.ContentPanel.AutoScroll = true;
             this.toolStripContainer_Main.ContentPanel.Controls.Add(this.splitContainer_Main);
-            this.toolStripContainer_Main.ContentPanel.Size = new System.Drawing.Size(504, 307);
+            this.toolStripContainer_Main.ContentPanel.Size = new System.Drawing.Size(504, 345);
             this.toolStripContainer_Main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer_Main.LeftToolStripPanelVisible = false;
             this.toolStripContainer_Main.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer_Main.Name = "toolStripContainer_Main";
             this.toolStripContainer_Main.RightToolStripPanelVisible = false;
-            this.toolStripContainer_Main.Size = new System.Drawing.Size(504, 382);
+            this.toolStripContainer_Main.Size = new System.Drawing.Size(504, 420);
             this.toolStripContainer_Main.TabIndex = 3;
             this.toolStripContainer_Main.Text = "toolStripContainer1";
             // 
@@ -1028,17 +1037,58 @@
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
             // 
+            // comboBox_Lobby
+            // 
+            this.comboBox_Lobby.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_Lobby.FormattingEnabled = true;
+            this.comboBox_Lobby.Location = new System.Drawing.Point(408, 110);
+            this.comboBox_Lobby.Name = "comboBox_Lobby";
+            this.comboBox_Lobby.Size = new System.Drawing.Size(71, 21);
+            this.comboBox_Lobby.TabIndex = 4;
+            // 
+            // label_Lobby
+            // 
+            this.label_Lobby.AutoSize = true;
+            this.label_Lobby.Location = new System.Drawing.Point(323, 113);
+            this.label_Lobby.Name = "label_Lobby";
+            this.label_Lobby.Size = new System.Drawing.Size(72, 13);
+            this.label_Lobby.TabIndex = 3;
+            this.label_Lobby.Text = "Steam Lobby:";
+            this.label_Lobby.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // checkBox_Difficulty
+            // 
+            this.checkBox_Difficulty.AutoSize = true;
+            this.checkBox_Difficulty.Location = new System.Drawing.Point(373, 33);
+            this.checkBox_Difficulty.Name = "checkBox_Difficulty";
+            this.checkBox_Difficulty.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox_Difficulty.Size = new System.Drawing.Size(86, 17);
+            this.checkBox_Difficulty.TabIndex = 19;
+            this.checkBox_Difficulty.Text = "Expert Mode";
+            this.checkBox_Difficulty.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_UPNP
+            // 
+            this.checkBox_UPNP.AutoSize = true;
+            this.checkBox_UPNP.Location = new System.Drawing.Point(323, 156);
+            this.checkBox_UPNP.Name = "checkBox_UPNP";
+            this.checkBox_UPNP.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox_UPNP.Size = new System.Drawing.Size(73, 17);
+            this.checkBox_UPNP.TabIndex = 17;
+            this.checkBox_UPNP.Text = "No UPNP";
+            this.checkBox_UPNP.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(504, 382);
+            this.ClientSize = new System.Drawing.Size(504, 420);
             this.Controls.Add(this.toolStripContainer_Main);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(520, 420);
             this.Name = "MainForm";
-            this.Text = "Terraria Server GUI - Alpha 1.3.1";
+            this.Text = "Terraria Server GUI - Alpha 1.4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
@@ -1164,6 +1214,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Help;
+        private System.Windows.Forms.Label label_Lobby;
+        private System.Windows.Forms.ComboBox comboBox_Lobby;
+        private System.Windows.Forms.CheckBox checkBox_Difficulty;
+        private System.Windows.Forms.CheckBox checkBox_UPNP;
     }
 }
 

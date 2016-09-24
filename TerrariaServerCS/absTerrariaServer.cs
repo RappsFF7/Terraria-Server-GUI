@@ -80,14 +80,14 @@ namespace TerrariaServerCS
         /// <summary>
         /// Start up the terraria server
         /// </summary>
-        public void run(string psConfigFile)
+        public void run()
         {
             // Start the server with the start arguments
             absTerrariaServerArguments toArgs = ServerStartArguments;
             doCommand_StartServer(ref toArgs);
 
             // Setup the process
-            TerrariaServerProcess.StartInfo.Arguments = toArgs.getArgumentsForCmd(psConfigFile);
+            TerrariaServerProcess.StartInfo.Arguments = toArgs.getArgumentsForCmd();
             TerrariaServerProcess.StartInfo.CreateNoWindow = true;
             TerrariaServerProcess.StartInfo.UseShellExecute = false;
             TerrariaServerProcess.StartInfo.RedirectStandardOutput = true;

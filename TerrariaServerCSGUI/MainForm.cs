@@ -24,6 +24,12 @@ namespace TerrariaServerGUI
             starting,
             error
         }
+
+        private enum enumTheme
+        {
+            Default,
+            Red
+        }
         #endregion
 
         #region events & delegates
@@ -53,6 +59,8 @@ namespace TerrariaServerGUI
             // Load drop downs
             comboBox_ServerType.DataSource = Enum.GetNames(typeof(enumTerrariaServer));
             comboBox_ServerType.SelectedIndex = 0;
+            comboBox_Lobby.DataSource = Enum.GetNames(typeof(enumSteamLobby));
+            comboBox_Lobby.SelectedIndex = 0;
 
             // Initialize the server object (to get the default server path)
             initializeServerObject((enumTerrariaServer)Enum.Parse(typeof(enumTerrariaServer), comboBox_ServerType.SelectedItem.ToString()));
@@ -129,6 +137,9 @@ namespace TerrariaServerGUI
             textBox_WorldName.TextChanged += saveableOption_OnChange;
             textBox_WorldPath.TextChanged += saveableOption_OnChange;
             comboBox_AutoCreateSize.SelectedIndexChanged += saveableOption_OnChange;
+            comboBox_Lobby.SelectedIndexChanged += saveableOption_OnChange;
+            checkBox_Difficulty.CheckedChanged += saveableOption_OnChange;
+            checkBox_UPNP.CheckedChanged += saveableOption_OnChange;
         }
 
         private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
@@ -156,6 +167,9 @@ namespace TerrariaServerGUI
             textBox_WorldName.Text = poArgs.WorldName;
             textBox_BanList.Text = poArgs.BanList;
             checkBox_Secure.Checked = (poArgs.Secure == 0 ? false : true);
+            checkBox_Difficulty.Checked = (poArgs.Difficulty == 0 ? false : true);
+            checkBox_UPNP.Checked = poArgs.NoUPNP;
+            comboBox_Lobby.SelectedIndex = comboBox_Lobby.FindString(poArgs.Lobby);
 
             // Disable the save button as the most recent file info is now displayed in the form
             toolStripButton_ConfigFileSave.Enabled = false;
@@ -192,6 +206,14 @@ namespace TerrariaServerGUI
             poArgs.WorldName = textBox_WorldName.Text;
             poArgs.BanList = textBox_BanList.Text;
             poArgs.Secure = (checkBox_Secure.Checked ? 1 : 0);
+            poArgs.Difficulty = (checkBox_Difficulty.Checked ? 1 : 0);
+            poArgs.NoUPNP = checkBox_UPNP.Checked;
+            poArgs.Lobby = comboBox_Lobby.SelectedValue.ToString();
+
+            // The steam value is based on the lobby choice
+            enumSteamLobby lobbyEnum = (enumSteamLobby)
+                Enum.Parse(typeof(enumSteamLobby), comboBox_Lobby.SelectedValue.ToString());
+            poArgs.Steam = (lobbyEnum == enumSteamLobby.NoSteamSupport ? false : true);
         }
 
         public void saveConfigFile()
@@ -551,6 +573,22 @@ namespace TerrariaServerGUI
                     psControl.Text = openFileDialog_Main.FileName;
             }
         }
+
+        /// <summary>
+        /// Not used yet, hard to make it look good since this program wasn't designed for color :/
+        /// </summary>
+        private void setTheme(enumTheme theme)
+        {
+            switch(theme)
+            {
+                case enumTheme.Default:
+                    toolStrip_Header.BackColor = System.Drawing.SystemColors.Control;
+                    break;
+                case enumTheme.Red:
+                    toolStrip_Header.BackColor = System.Drawing.SystemColors.Control;
+                    break;
+            }
+        }
         #endregion
 
         #region events - callbacks
@@ -642,7 +680,7 @@ namespace TerrariaServerGUI
                 saveConfigFile();
 
                 // Run the server
-                moTerrariaServer.run(toolStripComboBox_ConfigFile.Text);
+                moTerrariaServer.run();
 
                 // Set the form state
                 doTSUpdateFormState(enumFormState.starting);

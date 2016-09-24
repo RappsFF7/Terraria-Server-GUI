@@ -38,6 +38,10 @@ namespace TerrariaServerCS
             WorldName = "World";
             BanList = "banlist.txt";
             Secure = 1;
+            Difficulty = 0;
+            NoUPNP = false;
+            Steam = false;
+            Lobby = "friends";
         }
     }
 }

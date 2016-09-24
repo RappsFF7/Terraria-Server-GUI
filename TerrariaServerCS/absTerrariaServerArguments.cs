@@ -28,6 +28,13 @@ namespace TerrariaServerCS
         Overwrite,
         New_File
     }
+
+    public enum enumSteamLobby
+    {
+        NoSteamSupport = 0,
+        Friends,
+        Private
+    }
     #endregion
 
     public abstract class absTerrariaServerArguments
@@ -51,6 +58,11 @@ namespace TerrariaServerCS
         #endregion
 
         #region properties - gui server config file parameters
+        /// <summary>
+        /// The location of this configuration file
+        /// </summary>
+        public string TSG_ConfigPath { set; get; }
+
         /// <summary>
         /// The location of the server executable
         /// </summary>
@@ -165,6 +177,30 @@ namespace TerrariaServerCS
         /// Usage: secure {1 | 0}
         /// </summary>
         public int Secure { get; set; }
+
+        /// <summary>
+        /// Sets world difficulty when using -autocreate. Options 0 (normal), 1 (expert)
+        /// Usage: difficulty {1 | 0}
+        /// </summary>
+        public int Difficulty { get; set; }
+
+        /// <summary>
+        /// Disables automatic universal plug and play
+        /// Usage: difficulty {true | false}
+        /// </summary>
+        public Boolean NoUPNP { get; set; }
+
+        /// <summary>
+        /// Enables Steam support
+        /// Usage: difficulty {true | false}
+        /// </summary>
+        public Boolean Steam { get; set; }
+
+        /// <summary>
+        /// Allows friends to join the server or sets it to private if Steam is enabled
+        /// Usage: difficulty {friends | private}
+        /// </summary>
+        public string Lobby { get; set; }
         #endregion
 
         protected absTerrariaServerArguments()
@@ -191,13 +227,17 @@ namespace TerrariaServerCS
         /// Creates an argument string that can be used when starting the server
         /// </summary>
         /// <returns></returns>
-        public string getArgumentsForCmd(string psConfigFile)
+        public string getArgumentsForCmd()
         {
             string tsResult = "";
 
             // Create a command to read from the config file
-            if (psConfigFile.Trim().Length > 0)
-                tsResult = string.Format("-config {0}", psConfigFile);
+            if (TSG_ConfigPath.Trim().Length > 0)
+                tsResult = string.Format("-config {0} {1} -lobby {2} {3}"
+                    , "\"" +TSG_ConfigPath + "\""
+                    , (Steam ? "-steam" : "")
+                    , Lobby
+                    , (NoUPNP ? "-noupnp" : ""));
 
             return tsResult;
         }
@@ -246,11 +286,14 @@ namespace TerrariaServerCS
                     }
                 }
             }
+            
+            TSG_ConfigPath = psFile;
         }
 
         public virtual void saveToFile(string psFile)
         {
             File.WriteAllText(psFile, getArgumentsForFile());
+            TSG_ConfigPath = psFile;
         }
         #endregion
 
@@ -263,26 +306,18 @@ namespace TerrariaServerCS
         protected virtual string getGameLocationDefault()
         {
             char PS = Path.DirectorySeparatorChar;
-            string tsServerFile = "";
 
-            try
+            // Try to get the server path from Steam
+            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
+
+            // If found, transform to get server location
+            if (tsServerFile != "")
             {
-                // Try to get the server path from Steam
-                tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
+                // Convert the file path string to use the system's file separators
+                tsServerFile = new FileInfo(tsServerFile).FullName;
 
-                // If found, transform to get server location
-                if (tsServerFile != "")
-                {
-                    // Convert the file path string to use the system's file separators
-                    tsServerFile = new FileInfo(tsServerFile).FullName;
-
-                    // Add the default path for the server
-                    tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}", PS, tsServerFile);
-                }
-            }
-            catch
-            {
-                // Ignored, the game may not be installed (for instance, on a server)
+                // Add the default path for the server
+                tsServerFile = string.Format(@"{1}{0}steamapps{0}common{0}terraria{0}", PS, tsServerFile);
             }
 
             // Return

@@ -1,20 +1,19 @@
 #### Downloading
 ***
 
-Thanks to GitHub removing the download section, it has become neccessary to add compiled/binary files (finished product) to the code repository. This is highly frowned upon, but the only solution without an external download source. The latest stable release will be in the "release" folder (full path: <root>\TerrariaServerCSGUI\bin\Release\) which can be found by downloading the latest code (you can use the "zip" download option). 
+To get the application, go to the download section. You may be tempted to click the "Clone in Windows" or "ZIP" buttons... but those will get you a copy of the code, for which you would need to compile it before running. All tagged versions have a .zip file in the download section of the compiled (runnable) program.
 
 #### About
 ***
 
-This application is written in .net framework 4 client profile (which is only logical since the game and server are in .net framework 4). I am using an express edition of Visual Studios 2012 (Visual Studios 2010 can go die in a fire) which is what the solution file is saved as.
-
-#### Issues
-***
-
-Something is preventing me from comitting a .htm file, so the help menu will not work :/
+This application is written in .net framework 4 (which is only logical since the server is also in .net framework 4). I am using an express edition of Visual Studios 2010 (though I'd much prefer an express of 2008 after working in 2010 for a while now) which is what the solution file is saved as.
 
 #### Releases
 ***
+
+##### _Alpha 1.4_
+
+Added new settings (hard mode, noupnp, steam, lobby)
 
 ##### _Alpha 1.3_
 
