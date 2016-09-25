@@ -41,7 +41,7 @@ namespace TerrariaServerCS
             Difficulty = 0;
             NoUPNP = false;
             Steam = false;
-            Lobby = "friends";
+            Lobby = enumSteamLobby.NoSteamSupport.ToString();
         }
     }
 }
