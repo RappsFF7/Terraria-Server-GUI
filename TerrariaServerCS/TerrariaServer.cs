@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,8 +15,24 @@ namespace TerrariaServerCS
         protected override bool getIsCommandComplete(string psCommand, System.Diagnostics.DataReceivedEventArgs poLastServerOutput)
         {
             bool tbReturn = false;
-            string tsOutput = "";
-            
+            string tsOutput;
+
+            // Possibly new solution
+            // Problems: Terraria server accepts input (probably for a cancel on startup) while the server is still starting up, 
+            //   this logic will incorrectly return true before the startup is complete
+            /*
+            foreach (ProcessThread thread in TerrariaServerProcess.Threads)
+            {
+                if (thread.ThreadState == ThreadState.Wait
+                    && thread.WaitReason == ThreadWaitReason.UserRequest)
+                {
+                    tbReturn = true;
+                }
+            }
+
+            return tbReturn;
+            */
+
             // If the server output's null, the command is always complete
             if (poLastServerOutput.Data == null)
                 tbReturn = true;
@@ -23,21 +40,19 @@ namespace TerrariaServerCS
             // Filter the output
             tsOutput = (poLastServerOutput.Data == null ? "" : poLastServerOutput.Data.ToLower());
 
-            // Check the various cases for the output
-            Regex toCommandCompletePattern = null;
-
             // Check for specific end of command output and process the command
+            Console.WriteLine("Command: [" + psCommand + "] Output [" + tsOutput + "]");
             switch (psCommand)
             {
                 case "start":
-                    toCommandCompletePattern = new Regex(".*server started.*");
-                    if (tbReturn || toCommandCompletePattern.IsMatch(tsOutput))
+                    if (tbReturn || new Regex(".*listening on port.*").IsMatch(tsOutput))
                     {
                         //IsServerRunning = true;
                         return true;
                     }
                     break;
 
+                // This check is no longer necessary because the server outputs a null line when these commands end
                 case "exit": case "exit-nosave":
                     if (tbReturn)
                     {
