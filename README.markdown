@@ -1,7 +1,7 @@
 #### Downloading
 ***
 
-To get the application, go to the download section. You may be tempted to click the "Clone in Windows" or "ZIP" buttons... but those will get you a copy of the code, for which you would need to compile it before running. All tagged versions have a .zip file in the download section of the compiled (runnable) program.
+To get the application, go to the releases section. Decide on the release you want, and download the .zip file with the program name (TerrariaServerGUI_<Version>.zip).
 
 #### About
 ***
@@ -13,7 +13,7 @@ This application is written in .net framework 4 (which is only logical since the
 
 ##### _Alpha 1.4_
 
-Added new settings (hard mode, noupnp, steam, lobby)
+Added new settings (expert mode, noupnp, steam, steam lobby)
 
 ##### _Alpha 1.3_
 
