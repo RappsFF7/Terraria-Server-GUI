@@ -101,6 +101,9 @@ namespace TerrariaServerGUI
 
             // Clear the log error text
             label_LogError.Text = "";
+
+            // Handle startup command line args
+            initializeCommandArgs();
         }
 
         private void initializeServerObject(enumTerrariaServer toServerType)
@@ -140,6 +143,31 @@ namespace TerrariaServerGUI
             comboBox_Lobby.SelectedIndexChanged += saveableOption_OnChange;
             checkBox_Difficulty.CheckedChanged += saveableOption_OnChange;
             checkBox_UPNP.CheckedChanged += saveableOption_OnChange;
+        }
+
+        private void initializeCommandArgs()
+        {
+            // First argument is the path of the executable, so we ignore it
+            string[] args = Environment.GetCommandLineArgs();
+            for (int n = 1; n < args.Length; n++)
+            {
+                string key = args[n];
+                string val = (n + 1 < args.Length ? args[++n] : null);
+                switch (key.ToLower())
+                {
+                    case "-start":
+                        toolStripComboBox_ConfigFile.Text = val;
+                        if (toolStripComboBox_ConfigFile.Text == val) { 
+                            doTSOutput(val);
+                        } else {
+                            doTSOutput("Unable to find: " + val);
+                        }
+                        break;
+                    default:
+                        doTSOutput("Unknown argument: " + key);
+                        break;
+                }
+            }
         }
 
         private void loadArgumentsToForm(absTerrariaServerArguments poArgs)
@@ -216,7 +244,7 @@ namespace TerrariaServerGUI
             poArgs.Steam = (lobbyEnum == enumSteamLobby.NoSteamSupport ? false : true);
         }
 
-        public void saveConfigFile()
+        private void saveConfigFile()
         {
             // If the config drop down has an item selected, use that filename
             string tsFileName = (toolStripComboBox_ConfigFile.SelectedItem ?? "").ToString();

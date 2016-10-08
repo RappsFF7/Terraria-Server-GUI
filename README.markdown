@@ -6,10 +6,14 @@ To get the application, go to the releases section. Decide on the release you wa
 #### About
 ***
 
-This application is written in .net framework 4 (which is only logical since the server is also in .net framework 4). I am using an express edition of Visual Studios 2010 (though I'd much prefer an express of 2008 after working in 2010 for a while now) which is what the solution file is saved as.
+This application is written in .net framework 4 (which is only logical since the server is also in .net framework 4)
 
 #### Releases
 ***
+
+##### _Alpha 1.5_
+
+Added command line startup option (-start <config filename>)
 
 ##### _Alpha 1.4_
 

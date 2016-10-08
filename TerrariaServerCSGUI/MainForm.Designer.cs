@@ -44,6 +44,7 @@
             this.textBox_Password = new System.Windows.Forms.TextBox();
             this.textBox_BanList = new System.Windows.Forms.TextBox();
             this.button_BanList = new System.Windows.Forms.Button();
+            this.checkBox_UPNP = new System.Windows.Forms.CheckBox();
             this.checkBox_Secure = new System.Windows.Forms.CheckBox();
             this.label_Port = new System.Windows.Forms.Label();
             this.numericUpDown_Port = new System.Windows.Forms.NumericUpDown();
@@ -54,10 +55,13 @@
             this.button_World = new System.Windows.Forms.Button();
             this.button_ServerPath = new System.Windows.Forms.Button();
             this.textBox_ServerPath = new System.Windows.Forms.TextBox();
+            this.label_Lobby = new System.Windows.Forms.Label();
             this.label_ServerType = new System.Windows.Forms.Label();
+            this.comboBox_Lobby = new System.Windows.Forms.ComboBox();
             this.numericUpDown_Players = new System.Windows.Forms.NumericUpDown();
             this.comboBox_ServerType = new System.Windows.Forms.ComboBox();
             this.tabPage_AutoCreation = new System.Windows.Forms.TabPage();
+            this.checkBox_Difficulty = new System.Windows.Forms.CheckBox();
             this.label_AutoCreateSize = new System.Windows.Forms.Label();
             this.comboBox_AutoCreateSize = new System.Windows.Forms.ComboBox();
             this.textBox_WorldPath = new System.Windows.Forms.TextBox();
@@ -113,10 +117,6 @@
             this.saveFileDialog_Config = new System.Windows.Forms.SaveFileDialog();
             this.timer_Autosave = new System.Windows.Forms.Timer(this.components);
             this.timer_Main = new System.Windows.Forms.Timer(this.components);
-            this.comboBox_Lobby = new System.Windows.Forms.ComboBox();
-            this.label_Lobby = new System.Windows.Forms.Label();
-            this.checkBox_Difficulty = new System.Windows.Forms.CheckBox();
-            this.checkBox_UPNP = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_Main)).BeginInit();
             this.splitContainer_Main.Panel1.SuspendLayout();
             this.splitContainer_Main.Panel2.SuspendLayout();
@@ -280,6 +280,17 @@
             this.button_BanList.UseVisualStyleBackColor = true;
             this.button_BanList.Click += new System.EventHandler(this.button_BanList_Click);
             // 
+            // checkBox_UPNP
+            // 
+            this.checkBox_UPNP.AutoSize = true;
+            this.checkBox_UPNP.Location = new System.Drawing.Point(323, 156);
+            this.checkBox_UPNP.Name = "checkBox_UPNP";
+            this.checkBox_UPNP.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox_UPNP.Size = new System.Drawing.Size(73, 17);
+            this.checkBox_UPNP.TabIndex = 17;
+            this.checkBox_UPNP.Text = "No UPNP";
+            this.checkBox_UPNP.UseVisualStyleBackColor = true;
+            // 
             // checkBox_Secure
             // 
             this.checkBox_Secure.AutoSize = true;
@@ -382,6 +393,16 @@
             this.textBox_ServerPath.Size = new System.Drawing.Size(234, 20);
             this.textBox_ServerPath.TabIndex = 1;
             // 
+            // label_Lobby
+            // 
+            this.label_Lobby.AutoSize = true;
+            this.label_Lobby.Location = new System.Drawing.Point(323, 113);
+            this.label_Lobby.Name = "label_Lobby";
+            this.label_Lobby.Size = new System.Drawing.Size(72, 13);
+            this.label_Lobby.TabIndex = 3;
+            this.label_Lobby.Text = "Steam Lobby:";
+            this.label_Lobby.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label_ServerType
             // 
             this.label_ServerType.AutoSize = true;
@@ -391,6 +412,15 @@
             this.label_ServerType.TabIndex = 3;
             this.label_ServerType.Text = "Server Type:";
             this.label_ServerType.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBox_Lobby
+            // 
+            this.comboBox_Lobby.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_Lobby.FormattingEnabled = true;
+            this.comboBox_Lobby.Location = new System.Drawing.Point(408, 110);
+            this.comboBox_Lobby.Name = "comboBox_Lobby";
+            this.comboBox_Lobby.Size = new System.Drawing.Size(71, 21);
+            this.comboBox_Lobby.TabIndex = 4;
             // 
             // numericUpDown_Players
             // 
@@ -435,10 +465,21 @@
             this.tabPage_AutoCreation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_AutoCreation.Name = "tabPage_AutoCreation";
             this.tabPage_AutoCreation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_AutoCreation.Size = new System.Drawing.Size(496, 159);
+            this.tabPage_AutoCreation.Size = new System.Drawing.Size(496, 179);
             this.tabPage_AutoCreation.TabIndex = 1;
             this.tabPage_AutoCreation.Text = "AutoCreation";
             this.tabPage_AutoCreation.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Difficulty
+            // 
+            this.checkBox_Difficulty.AutoSize = true;
+            this.checkBox_Difficulty.Location = new System.Drawing.Point(373, 33);
+            this.checkBox_Difficulty.Name = "checkBox_Difficulty";
+            this.checkBox_Difficulty.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBox_Difficulty.Size = new System.Drawing.Size(86, 17);
+            this.checkBox_Difficulty.TabIndex = 19;
+            this.checkBox_Difficulty.Text = "Expert Mode";
+            this.checkBox_Difficulty.UseVisualStyleBackColor = true;
             // 
             // label_AutoCreateSize
             // 
@@ -506,7 +547,7 @@
             this.tabPage_Backup.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Backup.Name = "tabPage_Backup";
             this.tabPage_Backup.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Backup.Size = new System.Drawing.Size(496, 169);
+            this.tabPage_Backup.Size = new System.Drawing.Size(496, 179);
             this.tabPage_Backup.TabIndex = 2;
             this.tabPage_Backup.Text = "Backup";
             this.tabPage_Backup.UseVisualStyleBackColor = true;
@@ -602,7 +643,7 @@
             this.tabPage_Logging.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Logging.Name = "tabPage_Logging";
             this.tabPage_Logging.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Logging.Size = new System.Drawing.Size(496, 169);
+            this.tabPage_Logging.Size = new System.Drawing.Size(496, 179);
             this.tabPage_Logging.TabIndex = 3;
             this.tabPage_Logging.Text = "Logging";
             this.tabPage_Logging.UseVisualStyleBackColor = true;
@@ -632,7 +673,7 @@
             // 
             this.label_LogError.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.label_LogError.ForeColor = System.Drawing.Color.Red;
-            this.label_LogError.Location = new System.Drawing.Point(3, 153);
+            this.label_LogError.Location = new System.Drawing.Point(3, 163);
             this.label_LogError.Name = "label_LogError";
             this.label_LogError.Size = new System.Drawing.Size(490, 13);
             this.label_LogError.TabIndex = 12;
@@ -1037,47 +1078,6 @@
             this.timer_Main.Interval = 1000;
             this.timer_Main.Tick += new System.EventHandler(this.timer_Main_Tick);
             // 
-            // comboBox_Lobby
-            // 
-            this.comboBox_Lobby.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_Lobby.FormattingEnabled = true;
-            this.comboBox_Lobby.Location = new System.Drawing.Point(408, 110);
-            this.comboBox_Lobby.Name = "comboBox_Lobby";
-            this.comboBox_Lobby.Size = new System.Drawing.Size(71, 21);
-            this.comboBox_Lobby.TabIndex = 4;
-            // 
-            // label_Lobby
-            // 
-            this.label_Lobby.AutoSize = true;
-            this.label_Lobby.Location = new System.Drawing.Point(323, 113);
-            this.label_Lobby.Name = "label_Lobby";
-            this.label_Lobby.Size = new System.Drawing.Size(72, 13);
-            this.label_Lobby.TabIndex = 3;
-            this.label_Lobby.Text = "Steam Lobby:";
-            this.label_Lobby.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // checkBox_Difficulty
-            // 
-            this.checkBox_Difficulty.AutoSize = true;
-            this.checkBox_Difficulty.Location = new System.Drawing.Point(373, 33);
-            this.checkBox_Difficulty.Name = "checkBox_Difficulty";
-            this.checkBox_Difficulty.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox_Difficulty.Size = new System.Drawing.Size(86, 17);
-            this.checkBox_Difficulty.TabIndex = 19;
-            this.checkBox_Difficulty.Text = "Expert Mode";
-            this.checkBox_Difficulty.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_UPNP
-            // 
-            this.checkBox_UPNP.AutoSize = true;
-            this.checkBox_UPNP.Location = new System.Drawing.Point(323, 156);
-            this.checkBox_UPNP.Name = "checkBox_UPNP";
-            this.checkBox_UPNP.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox_UPNP.Size = new System.Drawing.Size(73, 17);
-            this.checkBox_UPNP.TabIndex = 17;
-            this.checkBox_UPNP.Text = "No UPNP";
-            this.checkBox_UPNP.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1088,7 +1088,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(520, 420);
             this.Name = "MainForm";
-            this.Text = "Terraria Server GUI - Alpha 1.4";
+            this.Text = "Terraria Server GUI - Alpha 1.5";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer_Main.Panel1.ResumeLayout(false);
             this.splitContainer_Main.Panel2.ResumeLayout(false);
