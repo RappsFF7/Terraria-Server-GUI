@@ -158,7 +158,8 @@ namespace TerrariaServerGUI
                     case "-start":
                         toolStripComboBox_ConfigFile.Text = val;
                         if (toolStripComboBox_ConfigFile.Text == val) { 
-                            doTSOutput(val);
+                            doTSOutput("Auto-Starting : " + val);
+                            toolStripButton_StartServer.PerformClick();
                         } else {
                             doTSOutput("Unable to find: " + val);
                         }
