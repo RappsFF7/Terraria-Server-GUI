@@ -14,6 +14,7 @@ This application is written in .net framework 4 (which is only logical since the
 ##### _Alpha 1.5_
 
 Added command line startup option (-start <config filename>)
+1.5.1 - Fixes an issue with the application crashing on startup if Steam isn't installed
 
 ##### _Alpha 1.4_
 
