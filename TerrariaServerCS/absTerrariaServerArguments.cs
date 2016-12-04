@@ -308,7 +308,7 @@ namespace TerrariaServerCS
             char PS = Path.DirectorySeparatorChar;
 
             // Try to get the server path from Steam
-            string tsServerFile = Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "").ToString();
+            string tsServerFile = (Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", "") ?? "").ToString();
 
             // If found, transform to get server location
             if (tsServerFile != "")
